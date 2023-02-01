@@ -9,3 +9,8 @@ En este proyecto se implementará una herramienta de generación automática de 
 
 ### PIVOTAL
 https://www.pivotaltracker.com/n/projects/2592073
+
+### TECNOLOGÍAS
+- Unity 2021.3.9f1
+- PyAudioAnalysis
+- PyAudio
