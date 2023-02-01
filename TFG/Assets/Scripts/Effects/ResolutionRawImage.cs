@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class ResolutionRawImage : MonoBehaviour
 {
     public enum resLvl { Low = 0, Medium = 1, High = 2 }
-    public resLvl res = resLvl.High;
+    resLvl res = resLvl.High;
     public RenderTexture[] renderTexts;
     RawImage raw;
     int i;
@@ -19,7 +19,7 @@ public class ResolutionRawImage : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButtonDown(1))
         {
             i++;
             raw.texture = renderTexts[i%3];
