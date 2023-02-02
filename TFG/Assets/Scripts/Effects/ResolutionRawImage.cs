@@ -11,12 +11,14 @@ public class ResolutionRawImage : MonoBehaviour
     public RenderTexture[] renderTexts;
     RawImage raw;
     int i;
+
     void Start()
     {
         raw = gameObject.GetComponent<RawImage>();        
         i = Convert.ToInt32(res);
         raw.texture = renderTexts[i];
     }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(1))

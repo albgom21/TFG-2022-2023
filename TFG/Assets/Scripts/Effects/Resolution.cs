@@ -19,6 +19,7 @@ public class Resolution : MonoBehaviour
         i = Convert.ToInt32(res);
         cam.targetTexture = renderTexts[i];
     }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(1))
