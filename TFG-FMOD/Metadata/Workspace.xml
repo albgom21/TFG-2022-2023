@@ -2,31 +2,31 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="Workspace" id="{4c6510a2-78b2-4a47-8cda-2a00eab12c8c}">
 		<relationship name="masterEventFolder">
-			<destination>{82075870-a2d1-4624-8cf7-9321ec5c04c3}</destination>
+			<destination>{f7b8b168-d70a-475f-a23e-72b225a09d88}</destination>
 		</relationship>
 		<relationship name="masterTagFolder">
-			<destination>{76d7b061-8f77-449a-b53e-7a4eae20dab8}</destination>
+			<destination>{a8f34337-192b-456b-9a58-b2e976612700}</destination>
 		</relationship>
 		<relationship name="masterEffectPresetFolder">
-			<destination>{781b27dd-f686-4f5b-9fa2-857740c5a2b2}</destination>
+			<destination>{55f0061a-dca7-4bc2-8942-693c8d73d50b}</destination>
 		</relationship>
 		<relationship name="masterParameterPresetFolder">
-			<destination>{2a0a5f6c-f5fd-4546-a8c2-1c615fca418f}</destination>
+			<destination>{2f0a1e6b-8ec8-4da0-8a90-a511ff981ac6}</destination>
 		</relationship>
 		<relationship name="masterBankFolder">
-			<destination>{61c8877c-3173-4337-bd1d-a468cc8cc38b}</destination>
+			<destination>{6c2e9b8d-e0b7-4be2-b5f7-5cfc0ee5b805}</destination>
 		</relationship>
 		<relationship name="masterSandboxFolder">
-			<destination>{214b89eb-6e99-4d5a-a23d-81f006fe9f3f}</destination>
+			<destination>{913b4ac5-2d1b-41b7-9e33-3c1b21da93ea}</destination>
 		</relationship>
 		<relationship name="masterAssetFolder">
-			<destination>{05ac43a0-e770-4fcd-bed8-45338f5c63a0}</destination>
+			<destination>{9984d332-fc31-4512-9c69-e76a42e0ef22}</destination>
 		</relationship>
 		<relationship name="mixer">
-			<destination>{5b46c49b-043d-4a7d-a6e4-ad5c4e4781e5}</destination>
+			<destination>{1486fab6-c56f-424d-af72-eef4e54b6884}</destination>
 		</relationship>
 		<relationship name="profilerSessionFolder">
-			<destination>{193e5896-f6c0-41e9-9139-c7aaccebee00}</destination>
+			<destination>{44dc4325-37ec-45b0-acc1-9e4354299133}</destination>
 		</relationship>
 		<relationship name="platforms">
 			<destination>{936fa862-f319-4f8f-bcf1-3e27a27935fe}</destination>
