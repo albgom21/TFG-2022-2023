@@ -1,31 +1,32 @@
 import librosa
+import librosa.display
 import sklearn
 import numpy as np
 import matplotlib.pyplot as plt
 
-filename = '200-BPM.wav'
-y, sr = librosa.load(filename)
-print("El sample rate es: ", sr)
+# filename = '200-BPM.wav'
+# y, sr = librosa.load(filename)
+# print("El sample rate es: ", sr)
 
-stft = librosa.stft(y)
-frequencies = librosa.fft_frequencies(sr=sr)
+# stft = librosa.stft(y)
+# frequencies = librosa.fft_frequencies(sr=sr)
 
-print("Las frecuencias presentes en el archivo de audio son:", frequencies)
-bpm = librosa.beat.tempo(y=y, sr=sr)
-print("El BPM estimado es:", bpm[0], "beats por minuto.")
+# print("Las frecuencias presentes en el archivo de audio son:", frequencies)
+# bpm = librosa.beat.tempo(y=y, sr=sr)
+# print("El BPM estimado es:", bpm[0], "beats por minuto.")
 
 # tono = librosa.hz_to_midi(librosa.pitch_tuning(y, sr))
 # nota = librosa.midi_to_note(tono)
 # print("El tono principal del archivo de audio es:", nota)
 
-#Cargar una señal
+# Cargar una señal
 x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
 x.shape # Tamaño
 librosa.get_duration(x, sr) # duracion
 
-# Load a file and resample to 11 KHz
-filename = librosa.ex('200-BPM.wav')
-y, sr = librosa.load(filename, sr=11025)
+# Load a file and resample to 11 KHz ------------------------------DA ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# filename = librosa.ex('200-BPM.wav')
+# y, sr = librosa.load(filename, sr=11025)
 
 
 #--------------------FUNCIONES PARA EXTRACCIÓN DE CARACTERÍSTICAS-------------------------------
@@ -138,3 +139,19 @@ def melSpectogram(x):
     logS = librosa.amplitude_to_db(S)
     plt.figure(figsize=(15, 5))
     librosa.display.specshow(logS, sr=sr, x_axis='time', y_axis='mel');
+
+def constantQTransform():
+    fmin = librosa.midi_to_hz(36)
+    C = librosa.cqt(x, sr=sr, fmin=fmin, n_bins=72)
+    logC = librosa.amplitude_to_db(abs(C))
+    plt.figure(figsize=(15, 5))
+    librosa.display.specshow(logC, sr=sr, x_axis='time', y_axis='cqt_note', fmin=fmin, cmap='coolwarm')
+    plt.show()
+
+def melFrequencyCepstralCoefficients():
+    mfccs = librosa.feature.mfcc(x, sr=sr)
+    print(mfccs.shape)
+    librosa.display.specshow(mfccs, sr=sr, x_axis='time')
+    plt.show()
+
+melFrequencyCepstralCoefficients()
