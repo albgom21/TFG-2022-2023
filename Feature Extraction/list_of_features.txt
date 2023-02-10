@@ -18,15 +18,14 @@ IMPLEMENTADAS (FALTA PROBAR Y DARLE UN SENTIDO):
 	-librosa.cqt
 
 	-Mel Frequency Cepstral Coefficients (MFCCs)
-	
+
+	-Caracteristicas Espectrales
+		# Centroide espectral (Spectral Centroid)
+		# Ancho de Banda espectral (Spectral Bandwidth) FALTA SABER CUÁL ES LA VARIABLE "t"
+		# Contraste Espectral (Spectral Contrast)
+		# Desplazamiento espectral (Spectral Rolloff) FALTA SABER CUÁL ES LA VARIABLE "t"
+
 
 FALTA POR IMPLEMENTAR:
 -Segmentación
 	# Como realizarla
-
-
--Caracteristicas Espectrales
-	# Centroide espectral (Spectral Centroid)
-	# Ancho de Banda espectral (Spectral Bandwidth)
-	# Contraste Espectral (Spectral Contrast)
-	# Desplazamiento espectral (Spectral Rolloff)

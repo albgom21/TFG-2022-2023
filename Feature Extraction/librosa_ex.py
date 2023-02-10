@@ -154,4 +154,44 @@ def melFrequencyCepstralCoefficients():
     librosa.display.specshow(mfccs, sr=sr, x_axis='time')
     plt.show()
 
-melFrequencyCepstralCoefficients()
+def normalize(x, axis=0):
+    return sklearn.preprocessing.minmax_scale(x, axis=axis)
+
+def spectralCentroid():
+    spectral_centroids = librosa.feature.spectral_centroid(x, sr=sr)[0]
+    print(spectral_centroids.shape)
+    frames = range(len(spectral_centroids))
+    t = librosa.frames_to_time(frames)
+    librosa.display.waveshow(x, sr=sr, alpha=0.4)
+    plt.plot(t, normalize(spectral_centroids), color='r'); # normalizacion para proposito de visualizacion
+    plt.show()
+
+
+def spectralBandwidth():
+    # spectral_bandwidth_2 = librosa.feature.spectral_bandwidth(x+0.01, sr=sr)[0]
+    # spectral_bandwidth_3 = librosa.feature.spectral_bandwidth(x+0.01, sr=sr, p=3)[0]
+    # spectral_bandwidth_4 = librosa.feature.spectral_bandwidth(x+0.01, sr=sr, p=4)[0]
+    # librosa.display.waveshow(x, sr=sr, alpha=0.4)
+    # plt.plot(x, normalize(spectral_bandwidth_2), color='r')
+    # plt.plot(x, normalize(spectral_bandwidth_3), color='g')
+    # plt.plot(x, normalize(spectral_bandwidth_4), color='y')
+    # plt.legend(('p = 2', 'p = 3', 'p = 4'))
+    # plt.show()
+    return
+
+def spectralContrast():
+    spectral_contrast = librosa.feature.spectral_contrast(x, sr=sr)
+    print(spectral_contrast.shape)
+    plt.imshow(normalize(spectral_contrast, axis=1), aspect='auto', origin='lower', cmap='coolwarm');
+    plt.show()
+
+
+def spectralRolloff():
+    # spectral_rolloff = librosa.feature.spectral_rolloff(x+0.01, sr=sr)[0]
+    # librosa.display.waveplot(x, sr=sr, alpha=0.4)
+    # plt.plot(t, normalize(spectral_rolloff), color='r')
+    # plt.show()
+    return
+
+
+
