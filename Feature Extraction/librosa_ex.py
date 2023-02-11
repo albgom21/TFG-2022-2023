@@ -19,15 +19,52 @@ import matplotlib.pyplot as plt
 # nota = librosa.midi_to_note(tono)
 # print("El tono principal del archivo de audio es:", nota)
 
-# Cargar una señal
-x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
-x.shape # Tamaño
-librosa.get_duration(x, sr) # duracion
+
 
 # Load a file and resample to 11 KHz ------------------------------DA ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # filename = librosa.ex('200-BPM.wav')
 # y, sr = librosa.load(filename, sr=11025)
 
+def main():
+    # # Cargar una señal
+    # x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
+    # x.shape # Tamaño
+    # librosa.get_duration(x, sr) # duracion
+
+    # Carga la canción en un array de muestras
+    filename = "200-BPM.wav"
+    samples, sr = librosa.load(filename)
+
+ 
+ 
+
+main()
+
+
+def tempogram(samples, sr):
+    # Calcular el tempograma
+    tempogram = librosa.feature.tempogram(y=samples, sr=sr, hop_length=512)
+
+    # Graficar el tempograma
+    plt.imshow(tempogram, origin='lower', aspect='auto', cmap='inferno')
+    plt.title("Tempograma de la canción")
+    plt.xlabel("Tiempo (frames)")
+    plt.ylabel("Frecuencia (bpm)")
+    plt.show() 
+
+'''
+Devuelve los instantes en segundos donde se producen los beats
+'''
+def beat_times(samples, sr):
+    # Calcular el tempo (BPM) y los frames de los beats
+    tempo, beats = librosa.beat.beat_track(y=samples, sr=sr)
+
+    # Convertir los frames de los beats a tiempos en segundos
+    beat_times = librosa.frames_to_time(beats, sr=sr)
+
+   # Imprimir los tiempos de los beats en segundos
+    for time in beat_times:
+        print(time)
 
 #--------------------FUNCIONES PARA EXTRACCIÓN DE CARACTERÍSTICAS-------------------------------
 '''
@@ -67,7 +104,7 @@ def energy(x):
 '''
 root-mean-square energy (RMSE)
 '''
-def rmse():
+def rmse(x):
     hop_length = 256 # tamaño del incremento
     frame_length = 512 # tamaño del segmento
     rmse = librosa.feature.rms(x, frame_length=frame_length, hop_length=hop_length, center=True)
@@ -77,7 +114,7 @@ def rmse():
 '''
 Gráfica de la Energía y Rmse junto a la onda
 '''
-def graphic_energy_and_rmse():
+def graphic_energy_and_rmse(x, sr):
     hop_length = 256   # tamaño del incremento
     frame_length = 512 # tamaño del segmento
     frames = range(len(energy))
@@ -109,7 +146,7 @@ def zero_crossing_interval(x):
 '''
 STFT - Transformada corta de Fourier (Short-Time Fourier Transform)
 '''
-def stft():
+def stft(x, sr):
     hop_length = 512 #incremento
     n_fft = 2048 #Tamaño del segmento
 
@@ -126,7 +163,7 @@ Un espectrograma es simplemente la magnitud al cuadrado de la STFT (Short-time F
 La percepción humana de la intensidad del sonido es de naturaleza logarítmica.
 Por lo tanto, a menudo nos interesa la amplitud en esacala logaritmica (db)
 '''
-def spectogram(X):
+def spectogram(X, sr):
     S = librosa.amplitude_to_db(abs(X))
     plt.figure(figsize=(15, 5))
     librosa.display.specshow(S, sr=sr, x_axis='time', y_axis='linear')
@@ -134,13 +171,25 @@ def spectogram(X):
 '''
 La escala Mel relaciona la frecuencia percibida, o tono, de un tono puro con su frecuencia medida real.
 '''
-def melSpectogram(x):
+def melSpectogram(x, sr):
     S = librosa.feature.melspectrogram(x, sr=sr, n_fft=4096, hop_length=256)
     logS = librosa.amplitude_to_db(S)
     plt.figure(figsize=(15, 5))
-    librosa.display.specshow(logS, sr=sr, x_axis='time', y_axis='mel');
+    librosa.display.specshow(logS, sr=sr, x_axis='time', y_axis='mel')
 
-def constantQTransform():
+    # OTRA FORMA
+    # # Compute the mel-scaled spectrogram
+    # melody = librosa.feature.melspectrogram(x, sr=sr)
+    # # Convert the spectrogram to decibels
+    # db_melody = librosa.amplitude_to_db(melody, ref=np.max)
+    # # Plot the spectrogram
+    # librosa.display.specshow(db_melody, sr=sr, x_axis='time', y_axis='mel')
+    # plt.colorbar(format='%+2.0f dB')
+    # plt.title('Mel-frequency spectrogram')
+    # plt.tight_layout()
+    # plt.show()
+
+def constantQTransform(x, sr):
     fmin = librosa.midi_to_hz(36)
     C = librosa.cqt(x, sr=sr, fmin=fmin, n_bins=72)
     logC = librosa.amplitude_to_db(abs(C))
@@ -148,7 +197,7 @@ def constantQTransform():
     librosa.display.specshow(logC, sr=sr, x_axis='time', y_axis='cqt_note', fmin=fmin, cmap='coolwarm')
     plt.show()
 
-def melFrequencyCepstralCoefficients():
+def melFrequencyCepstralCoefficients(x, sr):
     mfccs = librosa.feature.mfcc(x, sr=sr)
     print(mfccs.shape)
     librosa.display.specshow(mfccs, sr=sr, x_axis='time')
@@ -157,7 +206,7 @@ def melFrequencyCepstralCoefficients():
 def normalize(x, axis=0):
     return sklearn.preprocessing.minmax_scale(x, axis=axis)
 
-def spectralCentroid():
+def spectralCentroid(x, sr):
     spectral_centroids = librosa.feature.spectral_centroid(x, sr=sr)[0]
     print(spectral_centroids.shape)
     frames = range(len(spectral_centroids))
@@ -179,7 +228,7 @@ def spectralBandwidth():
     # plt.show()
     return
 
-def spectralContrast():
+def spectralContrast(x, sr):
     spectral_contrast = librosa.feature.spectral_contrast(x, sr=sr)
     print(spectral_contrast.shape)
     plt.imshow(normalize(spectral_contrast, axis=1), aspect='auto', origin='lower', cmap='coolwarm');
@@ -192,6 +241,3 @@ def spectralRolloff():
     # plt.plot(t, normalize(spectral_rolloff), color='r')
     # plt.show()
     return
-
-
-
