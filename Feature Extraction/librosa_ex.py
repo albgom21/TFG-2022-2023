@@ -1,6 +1,7 @@
 import librosa
 import librosa.display
 import sklearn
+import sklearn.preprocessing
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -20,11 +21,23 @@ import matplotlib.pyplot as plt
 # print("El tono principal del archivo de audio es:", nota)
 
 
-
 # Load a file and resample to 11 KHz ------------------------------DA ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # filename = librosa.ex('200-BPM.wav')
 # y, sr = librosa.load(filename, sr=11025)
 
+'''
+Muestra un tempograma
+
+Un tempograma es una representación gráfica de la estructura temporal de una canción,
+donde los beats se representan como picos en el gráfico. Los picos más altos representan
+beats más fuertes y los picos más bajos representan beats más débiles.
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
+
+'''
 def tempogram(samples, sr):
     # Calcular el tempograma
     tempogram = librosa.feature.tempogram(y=samples, sr=sr, hop_length=512)
@@ -37,18 +50,36 @@ def tempogram(samples, sr):
     plt.show() 
 
 '''
-Función para obtener la onda y la frecuencia de muestreo de un archivo de audio
+Carga un archivo de audio para obtener los samples y su frecuencia de muestreo
+
+Parametros
+----------
+filename : cadena que representa la ruta del audio
+
+Returns
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
 '''
 def loadWave(filename):
-    wave, sample_rate = librosa.load(filename)
-    return wave, sample_rate
+    samples, sr = librosa.load(filename)
+    return samples, sr
 
 #--------------------FUNCIONES PARA EXTRACCIÓN DE CARACTERÍSTICAS-------------------------------
 '''
-Devuelve los Pulos Por Minuto (BPM) de una onda
-Devuelve los instantes en segundos donde se producen los beats 
+Obtener beats a lo largo del tiempo
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
+
+Returns
+----------
+bpm : Pulsos Por Minuto (BPM) de una onda
+beat_times: los instantes en segundos donde se producen los beats 
 '''
-def get_bits_per_minute(samples, sr):  #ESTA ABAJO DUPLICAO +-l.64
+def get_beats_in_timeline(samples, sr):  
     # Calcular el tempo (BPM) y los frames de los beats
     bpm, beats = librosa.beat.beat_track(y=samples, sr=sr)
     # Convertir los frames de los beats a tiempos en segundos
@@ -56,25 +87,47 @@ def get_bits_per_minute(samples, sr):  #ESTA ABAJO DUPLICAO +-l.64
     return bpm, beat_times
 
 '''
-Devuelve un array de bool indicando cuándo pasa la onda por 0
-Devuelve el número de veces que la señal cruza el eje horizontal por cero.
+Obtener beats a lo largo del tiempo
+
+Parametros
+----------
+samples : muestras del audio
+ini : inicio de la muestra para analizar
+fin : fin de la muestra para analizar
+Returns
+----------
+zero_crossings : array de bool indicando cuándo pasa la onda por 0
+total_crossings : número de veces que la señal cruza el eje horizontal por cero en el rango dado
 '''
-def zero_crossing(wave, ini = 0, fin = 0):
-    if (fin == 0): fin = wave.shape[0]
-    zero_crossings = librosa.zero_crossings(wave[ini:fin], pad = False)
+def zero_crossing(samples, ini = 0, fin = 0):
+    if (fin == 0): fin = samples.shape(0) 
+    zero_crossings = librosa.zero_crossings(samples[ini:fin], pad = False)
     total_crossings = sum(zero_crossings)
     return zero_crossings, total_crossings
 
 #------------------------------------LA REVISIÓN DE MÉTODOS VA POR AQUÍ-------------------------------------------
 '''
 Calculo del zero crossing en toda una muestra
-El zero crossing rate indica el numero de veces que la señal cruza el eje horizontal por cero.
-'''
-def zero_crossing_interval(x):
-    zcrs = librosa.feature.zero_crossing_rate(x)
-    return zcrs
+
+El zero crossing rate indica el cuando la señal cruza el eje horizontal por cero en frames
+
+Parametros
+----------
+samples : muestras del audio
+
+Returns
+----------
+zcrs : array de bool indicando cuándo pasa la onda por 0
 
 '''
+def zero_crossing_interval(samples):
+    zcrs = librosa.feature.zero_crossing_rate(samples)
+    return zcrs
+
+
+'''
+--------SE PUEDE QUITAR PORQUE SE OBTIENEN POR SEPARADO CON OTRAS FUNCIONES---------
+
 Función simple que construye un vector de característica bidimensional a partir de una señal,
 calculando el numero de cruces por cero de la señal y el centroide del espectro
 
@@ -90,7 +143,16 @@ def extract_features(signal):
 
 
 '''
+--------COMPROBAR QUE FUNCIONE CON UN ARRAY YA QUE LA TABLA NO SE USARÁ--------------
 Escalamiento de las caracteristicas, normalizar características a un rango común (-1, 1)
+
+Parametros
+----------
+feature_table : tabla con las caracteríticas del audio
+
+Returns
+----------
+training_features : tabla de características normalizada
 '''
 def feature_scaling(feature_table):
     scaler = sklearn.preprocessing.MinMaxScaler(feature_range=(-1, 1))
@@ -98,36 +160,52 @@ def feature_scaling(feature_table):
     return training_features
 
 '''
-La Energia de una señal corresponde a suma total de las magnitudes de la señal
+Calcular la energia por segmentos pequeños
+
+La energia de una señal corresponde a suma total de las magnitudes de la señal
+
+Parametros
+----------
+samples : muestras del audio
+
+Returns
+----------
+energy : array de frames con su energía
 '''
-def energy(x):
-    #Calcular el la energia por segmentos pequeños (short-time) usando list comprehension:
-    hop_length = 256 # tamaño del incremento
-    frame_length = 512 # tamaño del segmento
-    energy = np.array([
-    sum(abs(x[i:i+frame_length]**2)) for i in range(0, len(x), hop_length)])
+def energy(samples):
+    hop_length = 256    # tamaño del incremento
+    frame_length = 512  # tamaño del segmento
+    energy = np.array([sum(abs(samples[i:i+frame_length]**2)) for i in range(0, len(samples), hop_length)])
     return energy
 
 '''
 root-mean-square energy (RMSE)
+
+Parametros
+----------
+samples : muestras del audio
+
+Returns
+----------
+rmse : array de frames con su RMSE
 '''
-def rmse(x):
-    hop_length = 256 # tamaño del incremento
+def rmse(samples):
+    hop_length = 256   # tamaño del incremento
     frame_length = 512 # tamaño del segmento
-    rmse = librosa.feature.rms(x, frame_length=frame_length, hop_length=hop_length, center=True)
+    rmse = librosa.feature.rms(samples, frame_length=frame_length, hop_length=hop_length, center=True)
     return rmse
 
 
 '''
 Gráfica de la Energía y Rmse junto a la onda
 '''
-def graphic_energy_and_rmse(x, sr):
+def graphic_energy_and_rmse(x, sr, energy, rmse):
     hop_length = 256   # tamaño del incremento
     frame_length = 512 # tamaño del segmento
     frames = range(len(energy))
     t = librosa.frames_to_time(frames, sr=sr, hop_length=hop_length)
     plt.figure(figsize=(14, 5))
-    librosa.display.waveplot(x, sr=sr, alpha=0.4)       # mostrar onda
+    librosa.display.waveshow(x, sr=sr, alpha=0.4)       # mostrar onda
     plt.plot(t, energy/energy.max(), 'r--')             # normalizada para la visualizacion
     plt.plot(t[:len(rmse)], rmse/rmse.max(), color='g') # normalizada para la visualizacion
     plt.legend(('Energia', 'RMSE'))
@@ -244,11 +322,45 @@ def main():
     # Carga la canción en un array de muestras
     filename = "200-BPM.wav"
     samples, sr = librosa.load(filename)
-    tempogram(samples, sr)
+    # spectral_centroid(samples,sr)
+    print(energy(samples))
 
 
-filename = "200-BPM.wav"
-wave, sample_rate = loadWave(filename)
+'''
+Muestra la onda del audio y el centroide espectral.
+El centroide del espectro en el audio es una medida que indica la posición media de las frecuencias presentes en una señal de audio.
+Es una medida de la tonalidad o el color de la señal.
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
+'''
+def spectral_centroid(samples, sr):
+    # Calcular el centroide espectral
+    spectral_centroids = librosa.feature.spectral_centroid(samples, sr)[0]
+
+    # Calcular el tiempo en segundos
+    times = librosa.frames_to_time(np.arange(len(spectral_centroids)), sr=sr)
+
+    # Crear la figura
+    plt.figure()
+
+    # Agregar la onda del audio como primer subplot
+    plt.subplot(2, 1, 1)
+    librosa.display.waveshow(samples, sr=sr)
+
+    # Agregar el centroide espectral como segundo subplot
+    plt.subplot(2, 1, 2)
+    plt.plot(times, spectral_centroids, c="red")
+
+    # Mostrar la figura
+    plt.tight_layout()
+    plt.show()
+
+
+# filename = "200-BPM.wav"
+# wave, sample_rate = loadWave(filename)
 
 def pruebaBeats():
     bpm, beats = get_bits_per_minute(wave, sample_rate)
@@ -265,6 +377,7 @@ def pruebaPasoPorCeros():
     zero_crossing, total_crossings = zero_crossing(wave)
     print("Total corssings: ", total_crossings)
 
+main()
 
-print(zero_crossing(wave)[1])
-print(sum(zero_crossing_interval(wave)))
+# print(zero_crossing(wave)[1])
+# print(sum(zero_crossing_interval(wave)))
