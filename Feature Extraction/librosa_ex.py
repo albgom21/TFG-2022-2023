@@ -25,26 +25,10 @@ import matplotlib.pyplot as plt
 # filename = librosa.ex('200-BPM.wav')
 # y, sr = librosa.load(filename, sr=11025)
 
-def main():
-    # # Cargar una señal
-    # x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
-    # x.shape # Tamaño
-    # librosa.get_duration(x, sr) # duracion
-
-    # Carga la canción en un array de muestras
-    filename = "200-BPM.wav"
-    samples, sr = librosa.load(filename)
-
- 
- 
-
-main()
-
-
 def tempogram(samples, sr):
     # Calcular el tempograma
     tempogram = librosa.feature.tempogram(y=samples, sr=sr, hop_length=512)
-
+    print(tempogram)
     # Graficar el tempograma
     plt.imshow(tempogram, origin='lower', aspect='auto', cmap='inferno')
     plt.title("Tempograma de la canción")
@@ -53,20 +37,43 @@ def tempogram(samples, sr):
     plt.show() 
 
 '''
-Devuelve los instantes en segundos donde se producen los beats
+Función para obtener la onda y la frecuencia de muestreo de un archivo de audio
 '''
-def beat_times(samples, sr):
-    # Calcular el tempo (BPM) y los frames de los beats
-    tempo, beats = librosa.beat.beat_track(y=samples, sr=sr)
-
-    # Convertir los frames de los beats a tiempos en segundos
-    beat_times = librosa.frames_to_time(beats, sr=sr)
-
-   # Imprimir los tiempos de los beats en segundos
-    for time in beat_times:
-        print(time)
+def loadWave(filename):
+    wave, sample_rate = librosa.load(filename)
+    return wave, sample_rate
 
 #--------------------FUNCIONES PARA EXTRACCIÓN DE CARACTERÍSTICAS-------------------------------
+'''
+Devuelve los Pulos Por Minuto (BPM) de una onda
+Devuelve los instantes en segundos donde se producen los beats 
+'''
+def get_bits_per_minute(samples, sr):  #ESTA ABAJO DUPLICAO +-l.64
+    # Calcular el tempo (BPM) y los frames de los beats
+    bpm, beats = librosa.beat.beat_track(y=samples, sr=sr)
+    # Convertir los frames de los beats a tiempos en segundos
+    beat_times = librosa.frames_to_time(beats, sr=sr)
+    return bpm, beat_times
+
+'''
+Devuelve un array de bool indicando cuándo pasa la onda por 0
+Devuelve el número de veces que la señal cruza el eje horizontal por cero.
+'''
+def zero_crossing(wave, ini = 0, fin = 0):
+    if (fin == 0): fin = wave.shape[0]
+    zero_crossings = librosa.zero_crossings(wave[ini:fin], pad = False)
+    total_crossings = sum(zero_crossings)
+    return zero_crossings, total_crossings
+
+#------------------------------------LA REVISIÓN DE MÉTODOS VA POR AQUÍ-------------------------------------------
+'''
+Calculo del zero crossing en toda una muestra
+El zero crossing rate indica el numero de veces que la señal cruza el eje horizontal por cero.
+'''
+def zero_crossing_interval(x):
+    zcrs = librosa.feature.zero_crossing_rate(x)
+    return zcrs
+
 '''
 Función simple que construye un vector de característica bidimensional a partir de una señal,
 calculando el numero de cruces por cero de la señal y el centroide del espectro
@@ -126,22 +133,6 @@ def graphic_energy_and_rmse(x, sr):
     plt.legend(('Energia', 'RMSE'))
 
 
-'''
-Calculo del zero crossing en un intervalo
-El zero crossing rate indica el numero de veces que la señal cruza el eje horizontal por cero.
-'''
-def zero_crossing(x, ini, fin):
-    zero_crossings = librosa.zero_crossings(x[ini:fin], pad=False)
-    return sum(zero_crossings)
-
-
-'''
-Calculo del zero crossing en toda una muestra
-El zero crossing rate indica el numero de veces que la señal cruza el eje horizontal por cero.
-'''
-def zero_crossing_interval(x):
-    zcrs = librosa.feature.zero_crossing_rate(x)
-    return zcrs
 
 '''
 STFT - Transformada corta de Fourier (Short-Time Fourier Transform)
@@ -241,3 +232,39 @@ def spectralRolloff():
     # plt.plot(t, normalize(spectral_rolloff), color='r')
     # plt.show()
     return
+
+#-----------------------------PRUEBAS----------------------------------
+
+def main():
+    # # Cargar una señal
+    # x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
+    # x.shape # Tamaño
+    # librosa.get_duration(x, sr) # duracion
+
+    # Carga la canción en un array de muestras
+    filename = "200-BPM.wav"
+    samples, sr = librosa.load(filename)
+    tempogram(samples, sr)
+
+
+filename = "200-BPM.wav"
+wave, sample_rate = loadWave(filename)
+
+def pruebaBeats():
+    bpm, beats = get_bits_per_minute(wave, sample_rate)
+    print(bpm)
+    librosa.display.waveshow(wave)
+    plt.ylim(-1,1)
+    plt.tight_layout()
+    array_y = np.zeros(beats.shape)
+    plt.plot(beats, array_y, 'r+')
+    plt.grid()
+    plt.show()
+
+def pruebaPasoPorCeros():
+    zero_crossing, total_crossings = zero_crossing(wave)
+    print("Total corssings: ", total_crossings)
+
+
+print(zero_crossing(wave)[1])
+print(sum(zero_crossing_interval(wave)))
