@@ -61,7 +61,7 @@ Returns
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
-def loadWave(filename):
+def load_Wave(filename):
     samples, sr = librosa.load(filename)
     return samples, sr
 
@@ -198,14 +198,21 @@ def rmse(samples):
 
 '''
 Gráfica de la Energía y Rmse junto a la onda
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
+energy : array de frames con su energía
+rmse : array de frames con su RMSE
 '''
-def graphic_energy_and_rmse(x, sr, energy, rmse):
+def graphic_energy_and_rmse(samples, sr, energy, rmse):
     hop_length = 256   # tamaño del incremento
     frame_length = 512 # tamaño del segmento
     frames = range(len(energy))
     t = librosa.frames_to_time(frames, sr=sr, hop_length=hop_length)
     plt.figure(figsize=(14, 5))
-    librosa.display.waveshow(x, sr=sr, alpha=0.4)       # mostrar onda
+    librosa.display.waveshow(samples, sr=sr, alpha=0.4) # mostrar onda
     plt.plot(t, energy/energy.max(), 'r--')             # normalizada para la visualizacion
     plt.plot(t[:len(rmse)], rmse/rmse.max(), color='g') # normalizada para la visualizacion
     plt.legend(('Energia', 'RMSE'))
@@ -214,34 +221,57 @@ def graphic_energy_and_rmse(x, sr, energy, rmse):
 
 '''
 STFT - Transformada corta de Fourier (Short-Time Fourier Transform)
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
+
+Returns
+----------
+X : matriz en dos dimensiones que representa la energía de la señal en diferentes frecuencias a lo largo del tiempo (segmentos)
 '''
-def stft(x, sr):
+def stft(samples, sr):
     hop_length = 512 #incremento
-    n_fft = 2048 #Tamaño del segmento
+    n_fft = 2048     #Tamaño del segmento
 
     # Para convertir el tamaño del segmento y el incremento en segundos
     float(hop_length)/sr # [=] segundos
     float(n_fft)/sr # [=] segundos
 
-    X = librosa.stft(x, n_fft=n_fft, hop_length=hop_length)
+    X = librosa.stft(samples, n_fft=n_fft, hop_length=hop_length)
     return X
 
 '''
-El Espectrograma muestra la intensidad de las frecuencias a lo largo del tiempo.
+Muestra el espectrograma del audio
+
+El espectrograma muestra la intensidad de las frecuencias a lo largo del tiempo.
 Un espectrograma es simplemente la magnitud al cuadrado de la STFT (Short-time Fourier Transform)
 La percepción humana de la intensidad del sonido es de naturaleza logarítmica.
 Por lo tanto, a menudo nos interesa la amplitud en esacala logaritmica (db)
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
 '''
-def spectogram(X, sr):
-    S = librosa.amplitude_to_db(abs(X))
+def spectogram(samples, sr):
+    S = librosa.amplitude_to_db(abs(samples))
     plt.figure(figsize=(15, 5))
     librosa.display.specshow(S, sr=sr, x_axis='time', y_axis='linear')
 
 '''
+Muestra el Mel-espectrograma del audio
+
 La escala Mel relaciona la frecuencia percibida, o tono, de un tono puro con su frecuencia medida real.
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
 '''
-def melSpectogram(x, sr):
-    S = librosa.feature.melspectrogram(x, sr=sr, n_fft=4096, hop_length=256)
+def mel_Spectogram(samples, sr):
+    S = librosa.feature.melspectrogram(samples, sr=sr, n_fft=4096, hop_length=256)
     logS = librosa.amplitude_to_db(S)
     plt.figure(figsize=(15, 5))
     librosa.display.specshow(logS, sr=sr, x_axis='time', y_axis='mel')
@@ -257,77 +287,55 @@ def melSpectogram(x, sr):
     # plt.title('Mel-frequency spectrogram')
     # plt.tight_layout()
     # plt.show()
+'''
+Muestra Constant-Q transform
 
-def constantQTransform(x, sr):
+A diferencia de la transformada de Fourier, pero similar a la escala mel, 
+la constant-Q transform utiliza un eje de frecuencia espaciado logaritmicamente.
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
+'''
+def constant_Q_Transform(samples, sr):
     fmin = librosa.midi_to_hz(36)
-    C = librosa.cqt(x, sr=sr, fmin=fmin, n_bins=72)
+    C = librosa.cqt(samples, sr=sr, fmin=fmin, n_bins=72)
     logC = librosa.amplitude_to_db(abs(C))
     plt.figure(figsize=(15, 5))
     librosa.display.specshow(logC, sr=sr, x_axis='time', y_axis='cqt_note', fmin=fmin, cmap='coolwarm')
     plt.show()
 
-def melFrequencyCepstralCoefficients(x, sr):
-    mfccs = librosa.feature.mfcc(x, sr=sr)
+'''
+Muestra MFCCs
+
+Los Coeﬁcientes Cepstrales en las Frecuencias de Mel o MFCCs son coeﬁcientes
+para la representación del habla basados en la percepción auditiva humana
+A menudo se usa para describir el timbre.
+Limpia la señal de ruido.
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
+'''
+def mel_Frequency_Cepstral_Coefficients(samples, sr):
+    mfccs = librosa.feature.mfcc(samples, sr=sr)
     print(mfccs.shape)
     librosa.display.specshow(mfccs, sr=sr, x_axis='time')
     plt.show()
 
+
+'''
+Normalizar datos para la visualizacion con la onda de audio
+'''
 def normalize(x, axis=0):
     return sklearn.preprocessing.minmax_scale(x, axis=axis)
 
-def spectralCentroid(x, sr):
-    spectral_centroids = librosa.feature.spectral_centroid(x, sr=sr)[0]
-    print(spectral_centroids.shape)
-    frames = range(len(spectral_centroids))
-    t = librosa.frames_to_time(frames)
-    librosa.display.waveshow(x, sr=sr, alpha=0.4)
-    plt.plot(t, normalize(spectral_centroids), color='r'); # normalizacion para proposito de visualizacion
-    plt.show()
-
-
-def spectralBandwidth():
-    # spectral_bandwidth_2 = librosa.feature.spectral_bandwidth(x+0.01, sr=sr)[0]
-    # spectral_bandwidth_3 = librosa.feature.spectral_bandwidth(x+0.01, sr=sr, p=3)[0]
-    # spectral_bandwidth_4 = librosa.feature.spectral_bandwidth(x+0.01, sr=sr, p=4)[0]
-    # librosa.display.waveshow(x, sr=sr, alpha=0.4)
-    # plt.plot(x, normalize(spectral_bandwidth_2), color='r')
-    # plt.plot(x, normalize(spectral_bandwidth_3), color='g')
-    # plt.plot(x, normalize(spectral_bandwidth_4), color='y')
-    # plt.legend(('p = 2', 'p = 3', 'p = 4'))
-    # plt.show()
-    return
-
-def spectralContrast(x, sr):
-    spectral_contrast = librosa.feature.spectral_contrast(x, sr=sr)
-    print(spectral_contrast.shape)
-    plt.imshow(normalize(spectral_contrast, axis=1), aspect='auto', origin='lower', cmap='coolwarm');
-    plt.show()
-
-
-def spectralRolloff():
-    # spectral_rolloff = librosa.feature.spectral_rolloff(x+0.01, sr=sr)[0]
-    # librosa.display.waveplot(x, sr=sr, alpha=0.4)
-    # plt.plot(t, normalize(spectral_rolloff), color='r')
-    # plt.show()
-    return
-
-#-----------------------------PRUEBAS----------------------------------
-
-def main():
-    # # Cargar una señal
-    # x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
-    # x.shape # Tamaño
-    # librosa.get_duration(x, sr) # duracion
-
-    # Carga la canción en un array de muestras
-    filename = "200-BPM.wav"
-    samples, sr = librosa.load(filename)
-    # spectral_centroid(samples,sr)
-    print(energy(samples))
-
 
 '''
-Muestra la onda del audio y el centroide espectral.
+Muestra la onda del audio y el centroide espectral en una misma gráfica.
+
 El centroide del espectro en el audio es una medida que indica la posición media de las frecuencias presentes en una señal de audio.
 Es una medida de la tonalidad o el color de la señal.
 
@@ -336,7 +344,28 @@ Parametros
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
-def spectral_centroid(samples, sr):
+def spectral_centroid_v1(samples, sr):
+    spectral_centroids = librosa.feature.spectral_centroid(samples, sr=sr)[0] # samples+0.01 para evitar fallos en silencios
+    print(spectral_centroids.shape)
+    frames = range(len(spectral_centroids))
+    t = librosa.frames_to_time(frames)
+    librosa.display.waveshow(x, sr=sr, alpha=0.4)
+    plt.plot(t, normalize(spectral_centroids), color='r'); # normalizacion para proposito de visualizacion
+    plt.show()
+
+
+'''
+Muestra la onda del audio y el centroide espectral en dos gráficas.
+
+El centroide del espectro en el audio es una medida que indica la posición media de las frecuencias presentes en una señal de audio.
+Es una medida de la tonalidad o el color de la señal.
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
+'''
+def spectral_centroid_v2(samples, sr):
     # Calcular el centroide espectral
     spectral_centroids = librosa.feature.spectral_centroid(samples, sr)[0]
 
@@ -359,6 +388,79 @@ def spectral_centroid(samples, sr):
     plt.show()
 
 
+'''
+Muestra el Ancho de Banda Espectral 
+
+El Ancho de Banda Espectral es una medida de la amplitud de las frecuencias que componen una señal de audio.
+Específicamente, se refiere a la medida de la anchura de la distribución de energía espectral de la señal de audio.
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
+
+'''
+def spectral_Bandwidth(samples, sr):
+    # spectral_bandwidth_2 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr)[0]
+    # spectral_bandwidth_3 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr, p=3)[0]
+    # spectral_bandwidth_4 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr, p=4)[0]
+    # librosa.display.waveshow(samples, sr=sr, alpha=0.4)
+    # plt.plot(samples, normalize(spectral_bandwidth_2), color='r')
+    # plt.plot(samples, normalize(spectral_bandwidth_3), color='g')
+    # plt.plot(samples, normalize(spectral_bandwidth_4), color='y')
+    # plt.legend(('p = 2', 'p = 3', 'p = 4'))
+    # plt.show()
+    
+'''
+Muestra el Contraste Espectral
+
+El Spectral contrast considera los picos espectrales, y los 'valles' espectrales, y sus diferencias en cada sub-banda de frecuencia.
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
+'''
+def spectral_Contrast(samples, sr):
+    spectral_contrast = librosa.feature.spectral_contrast(samples, sr=sr)
+    print(spectral_contrast.shape)
+    plt.imshow(normalize(spectral_contrast, axis=1), aspect='auto', origin='lower', cmap='coolwarm');
+    plt.show()
+
+
+'''
+Muestra el Rolloff
+
+El Spectral Rolloff es la frecuencia por debajo de la cual un porcentaje específico de la energía espectral total se encuentra, normalmente el 85%
+
+Parametros
+----------
+samples : muestras del audio
+sr : frecuencia del audio (Sample Rate)
+'''
+def spectral_Roll_off(samples, sr):
+    # spectral_rolloff = librosa.feature.spectral_rolloff(samples+0.01, sr=sr)[0]
+    # librosa.display.waveplot(samples, sr=sr, alpha=0.4)
+    # plt.plot(t, normalize(spectral_rolloff), color='r')
+    # plt.show()
+
+
+#-----------------------------PRUEBAS----------------------------------
+
+def main():
+    # # Cargar una señal
+    # x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
+    # x.shape # Tamaño
+    # librosa.get_duration(x, sr) # duracion
+
+    # Carga la canción en un array de muestras
+    filename = "200-BPM.wav"
+    samples, sr = librosa.load(filename)
+    # spectral_centroid(samples,sr)
+    print(energy(samples))
+
+main()
+
 # filename = "200-BPM.wav"
 # wave, sample_rate = loadWave(filename)
 
@@ -376,8 +478,6 @@ def pruebaBeats():
 def pruebaPasoPorCeros():
     zero_crossing, total_crossings = zero_crossing(wave)
     print("Total corssings: ", total_crossings)
-
-main()
 
 # print(zero_crossing(wave)[1])
 # print(sum(zero_crossing_interval(wave)))
