@@ -349,7 +349,7 @@ def spectral_centroid_v1(samples, sr):
     print(spectral_centroids.shape)
     frames = range(len(spectral_centroids))
     t = librosa.frames_to_time(frames)
-    librosa.display.waveshow(x, sr=sr, alpha=0.4)
+    librosa.display.waveshow(samples, sr=sr, alpha=0.4)
     plt.plot(t, normalize(spectral_centroids), color='r'); # normalizacion para proposito de visualizacion
     plt.show()
 
@@ -401,15 +401,15 @@ sr : frecuencia del audio (Sample Rate)
 
 '''
 def spectral_Bandwidth(samples, sr):
-    # spectral_bandwidth_2 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr)[0]
-    # spectral_bandwidth_3 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr, p=3)[0]
-    # spectral_bandwidth_4 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr, p=4)[0]
-    # librosa.display.waveshow(samples, sr=sr, alpha=0.4)
-    # plt.plot(samples, normalize(spectral_bandwidth_2), color='r')
-    # plt.plot(samples, normalize(spectral_bandwidth_3), color='g')
-    # plt.plot(samples, normalize(spectral_bandwidth_4), color='y')
-    # plt.legend(('p = 2', 'p = 3', 'p = 4'))
-    # plt.show()
+    spectral_bandwidth_2 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr)[0]
+    spectral_bandwidth_3 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr, p=3)[0]
+    spectral_bandwidth_4 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr, p=4)[0]
+    librosa.display.waveshow(samples, sr=sr, alpha=0.4)
+    plt.plot(samples, normalize(spectral_bandwidth_2), color='r')
+    plt.plot(samples, normalize(spectral_bandwidth_3), color='g')
+    plt.plot(samples, normalize(spectral_bandwidth_4), color='y')
+    plt.legend(('p = 2', 'p = 3', 'p = 4'))
+    plt.show()
     
 '''
 Muestra el Contraste Espectral
@@ -439,13 +439,27 @@ samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
 def spectral_Roll_off(samples, sr):
-    # spectral_rolloff = librosa.feature.spectral_rolloff(samples+0.01, sr=sr)[0]
-    # librosa.display.waveplot(samples, sr=sr, alpha=0.4)
-    # plt.plot(t, normalize(spectral_rolloff), color='r')
-    # plt.show()
+    spectral_rolloff = librosa.feature.spectral_rolloff(samples+0.01, sr=sr)[0]
+    librosa.display.waveshow(samples, sr=sr, alpha=0.4)
+    plt.plot(t, normalize(spectral_rolloff), color='r')
+    plt.show()
 
 
 #-----------------------------PRUEBAS----------------------------------
+
+def pruebaBeats(samples, sr):
+    print("INI")
+    bpm, beats = get_beats_in_timeline(samples, sr)
+    np.savetxt('beats.txt', beats)
+    print("FIN")
+    # print(bpm)
+    # librosa.display.waveshow(samples)
+    # plt.ylim(-1,1)
+    # plt.tight_layout()
+    # array_y = np.zeros(beats.shape)
+    # plt.plot(beats, array_y, 'r+')
+    # plt.grid()
+    # plt.show()
 
 def main():
     # # Cargar una señal
@@ -456,28 +470,20 @@ def main():
     # Carga la canción en un array de muestras
     filename = "200-BPM.wav"
     samples, sr = librosa.load(filename)
+    pruebaBeats(samples, sr)
+
     # spectral_centroid(samples,sr)
-    print(energy(samples))
+    # print(energy(samples))
 
 main()
 
-# filename = "200-BPM.wav"
-# wave, sample_rate = loadWave(filename)
 
-def pruebaBeats():
-    bpm, beats = get_bits_per_minute(wave, sample_rate)
-    print(bpm)
-    librosa.display.waveshow(wave)
-    plt.ylim(-1,1)
-    plt.tight_layout()
-    array_y = np.zeros(beats.shape)
-    plt.plot(beats, array_y, 'r+')
-    plt.grid()
-    plt.show()
 
-def pruebaPasoPorCeros():
-    zero_crossing, total_crossings = zero_crossing(wave)
-    print("Total corssings: ", total_crossings)
+
+    
+# def pruebaPasoPorCeros():
+#     zero_crossing, total_crossings = zero_crossing(wave)
+#     print("Total corssings: ", total_crossings)
 
 # print(zero_crossing(wave)[1])
 # print(sum(zero_crossing_interval(wave)))

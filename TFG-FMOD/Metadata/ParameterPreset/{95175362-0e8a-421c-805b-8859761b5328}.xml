@@ -5,7 +5,7 @@
 			<value>Profundidad</value>
 		</property>
 		<relationship name="folder">
-			<destination>{2a0a5f6c-f5fd-4546-a8c2-1c615fca418f}</destination>
+			<destination>{2f0a1e6b-8ec8-4da0-8a90-a511ff981ac6}</destination>
 		</relationship>
 		<relationship name="parameter">
 			<destination>{bdee54cd-2cad-4281-817c-1419e5135ca6}</destination>
