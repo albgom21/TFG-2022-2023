@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{bb1e50cb-1f65-45de-9716-fac38ffd5370}">
+		<property name="assetPath">
+			<value>Musicas/200-BPM.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>147.6324716553288</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{0207d274-2195-446d-b66f-44fafed8ea08}</destination>
+		</relationship>
+	</object>
+</objects>

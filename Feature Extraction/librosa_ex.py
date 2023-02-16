@@ -450,6 +450,7 @@ def spectral_Roll_off(samples, sr):
 def pruebaBeats(samples, sr):
     print("INI")
     bpm, beats = get_beats_in_timeline(samples, sr)
+    np.set_printoptions(precision=2, suppress=True)
     np.savetxt('beats.txt', beats)
     print("FIN")
     # print(bpm)
