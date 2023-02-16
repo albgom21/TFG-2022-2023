@@ -343,15 +343,26 @@ Parametros
 ----------
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
+
+Return
+----------
+matriz : 
 '''
-def spectral_centroid_v1(samples, sr):
-    spectral_centroids = librosa.feature.spectral_centroid(samples, sr=sr)[0] # samples+0.01 para evitar fallos en silencios
-    print(spectral_centroids.shape)
+def spectral_centroid_v1(samples, sr, show = False):
+    spectral_centroids = librosa.feature.spectral_centroid(samples+0.01, sr)[0] # samples+0.01 para evitar fallos en silencios
+    # print(spectral_centroids.shape)
     frames = range(len(spectral_centroids))
     t = librosa.frames_to_time(frames)
     librosa.display.waveshow(samples, sr=sr, alpha=0.4)
-    plt.plot(t, normalize(spectral_centroids), color='r'); # normalizacion para proposito de visualizacion
-    plt.show()
+    norm_spect_cent = normalize(spectral_centroids)
+
+    if(show):
+        plt.plot(t, norm_spect_cent, color='r'); # normalizacion para proposito de visualizacion
+        plt.show()
+
+    # Combinar los dos arrays en una matriz bidimensional
+    matriz = np.column_stack((t, norm_spect_cent))
+    return matriz
 
 
 '''
@@ -441,6 +452,8 @@ sr : frecuencia del audio (Sample Rate)
 def spectral_Roll_off(samples, sr):
     spectral_rolloff = librosa.feature.spectral_rolloff(samples+0.01, sr=sr)[0]
     librosa.display.waveshow(samples, sr=sr, alpha=0.4)
+    frames = range(len(spectral_rolloff))
+    t = librosa.frames_to_time(frames)
     plt.plot(t, normalize(spectral_rolloff), color='r')
     plt.show()
 
@@ -450,8 +463,7 @@ def spectral_Roll_off(samples, sr):
 def pruebaBeats(samples, sr):
     print("INI")
     bpm, beats = get_beats_in_timeline(samples, sr)
-    np.set_printoptions(precision=2, suppress=True)
-    np.savetxt('beats.txt', beats)
+    np.savetxt('beats.txt', beats, fmt='%.3f')
     print("FIN")
     # print(bpm)
     # librosa.display.waveshow(samples)
@@ -462,6 +474,16 @@ def pruebaBeats(samples, sr):
     # plt.grid()
     # plt.show()
 
+
+'''
+Devuelve los valores del centroide espectral que coinciden con el tiempo
+en los que se encuentran los beats 
+'''
+def sc_optimo(sc, beats):
+   mascara_fila = np.isin(sc[:,0], beats)
+   filtrada = sc[:,1][mascara_fila]
+   return filtrada
+
 def main():
     # # Cargar una señal
     # x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
@@ -471,7 +493,12 @@ def main():
     # Carga la canción en un array de muestras
     filename = "200-BPM.wav"
     samples, sr = librosa.load(filename)
-    pruebaBeats(samples, sr)
+    # pruebaBeats(samples, sr)
+    bpm, beats = get_beats_in_timeline(samples, sr)
+    sc = spectral_centroid_v1(samples, sr)
+    # np.savetxt('sc.txt', matriz, fmt='%.3f')
+    resultado = sc_optimo(sc, beats)
+    np.savetxt('scopt.txt', resultado, fmt='%.3f')
 
     # spectral_centroid(samples,sr)
     # print(energy(samples))

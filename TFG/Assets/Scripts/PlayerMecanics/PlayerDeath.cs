@@ -18,6 +18,10 @@ public class PlayerDeath : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == 7) playerTr.position = originalPosition;
+        if (collision.gameObject.layer == 7) //Capa de enemigos
+        {
+            playerTr.position = originalPosition;
+            GetComponentInParent<RestartMusic>().restartMusic();
+        }
     }
 }
