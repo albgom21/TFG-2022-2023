@@ -15,7 +15,7 @@ public class ReadTxt : MonoBehaviour
     List<float> beats = new List<float>();
     List<float> scopt = new List<float>();
 
-    void Start()
+    void Awake()
     {
         readBeats(rutaBeats);
         readSpectralCentroidOpt(rutaSC);
