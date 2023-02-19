@@ -193,8 +193,10 @@ def rmse(samples):
     hop_length = 256   # tamaño del incremento
     frame_length = 512 # tamaño del segmento
     rmse = librosa.feature.rms(samples, frame_length=frame_length, hop_length=hop_length, center=True)
-    return rmse
+    tiempo_sec = librosa.times_like(rmse)
 
+    matriz = np.column_stack((tiempo_sec, rmse[0]))
+    return matriz
 
 '''
 Gráfica de la Energía y Rmse junto a la onda
@@ -484,6 +486,15 @@ def sc_optimo(sc, beats):
    filtrada = sc[:,1][mascara_fila]
    return filtrada
 
+'''
+Devuelve los valores del RMSE que coinciden con el tiempo
+en los que se encuentran los beats 
+'''
+def rmse_optimo(rmse, beats):
+   mascara_fila = np.isin(rmse[:,0], beats)
+   filtrada = rmse[:,1][mascara_fila]
+   return filtrada
+
 def main():
     # # Cargar una señal
     # x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
@@ -493,12 +504,23 @@ def main():
     # Carga la canción en un array de muestras
     filename = "200-BPM.wav"
     samples, sr = librosa.load(filename)
+    # print(sr)
+    np_sr = np.array([sr])
+    np.savetxt('sr.txt', np_sr, fmt='%.0f')
+    # r = rmse(samples)
+    # bpm, beats = get_beats_in_timeline(samples, sr)
+    # ropt = rmse_optimo(r,beats)
+    # np.savetxt('rmse.txt', ropt, fmt='%.3f')
+    # np.savetxt('samples.txt', samples, fmt='%.3f')
+
+
     # pruebaBeats(samples, sr)
-    bpm, beats = get_beats_in_timeline(samples, sr)
-    sc = spectral_centroid_v1(samples, sr)
+    
+    # bpm, beats = get_beats_in_timeline(samples, sr)
+    # sc = spectral_centroid_v1(samples, sr)
     # np.savetxt('sc.txt', matriz, fmt='%.3f')
-    resultado = sc_optimo(sc, beats)
-    np.savetxt('scopt.txt', resultado, fmt='%.3f')
+    # resultado = sc_optimo(sc, beats)
+    # np.savetxt('scopt.txt', resultado, fmt='%.3f')
 
     # spectral_centroid(samples,sr)
     # print(energy(samples))

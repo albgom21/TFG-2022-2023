@@ -15,10 +15,10 @@ MonoBehaviour:
   Path: ../FMOD/ProyectoFmod/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638121492817840955
+  lastModified: 638124383126887218
   FileSizes:
   - Name: Desktop
-    Value: 804
+    Value: 848
   Exists: 1
 --- !u!114 &-3590119474389208461
 MonoBehaviour:
@@ -35,10 +35,10 @@ MonoBehaviour:
   Path: ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank
   Name: MyBank
   StudioPath: bank:/MyBank
-  lastModified: 638121492818489256
+  lastModified: 638124383131342478
   FileSizes:
   - Name: Desktop
-    Value: 1255680
+    Value: 1358080
   Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -58,13 +58,41 @@ MonoBehaviour:
   - {fileID: -3590119474389208461}
   EditorEvents:
   - {fileID: 3892847793135880954}
+  - {fileID: 2655805121491990121}
   EditorParameters: []
   MasterBanks:
   - {fileID: 5841276630604082360}
   StringsBanks:
   - {fileID: -4696034774660939940}
-  cacheTime: 638121492818489256
+  cacheTime: 638124383131342478
   cacheVersion: 131601
+--- !u!114 &2655805121491990121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/MUSICA 2
+  m_EditorClassIdentifier: 
+  Path: event:/MUSICA 2
+  Guid:
+    Data1: 1798390460
+    Data2: 1119017537
+    Data3: -786585161
+    Data4: -1609049652
+  Banks:
+  - {fileID: -3590119474389208461}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 13000
 --- !u!114 &3892847793135880954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,7 +135,7 @@ MonoBehaviour:
   Path: ../FMOD/ProyectoFmod/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638121492817731254
+  lastModified: 638124383126767534
   FileSizes:
   - Name: Desktop
     Value: 1036

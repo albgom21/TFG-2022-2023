@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 public class ReadTxt : MonoBehaviour
 {
@@ -11,14 +12,23 @@ public class ReadTxt : MonoBehaviour
 
     string rutaBeats = "Assets/Txt/beats.txt";
     string rutaSC = "Assets/Txt/scopt.txt"; 
+    string rutaRMSE = "Assets/Txt/rmse.txt"; 
+    string rutaSamples = "Assets/Txt/samples.txt"; 
+    string rutaSr = "Assets/Txt/sr.txt";
 
     List<float> beats = new List<float>();
     List<float> scopt = new List<float>();
+    List<float> rmse = new List<float>();
+    List<float> samples = new List<float>();
+    int sr;
 
     void Awake()
     {
         readBeats(rutaBeats);
         readSpectralCentroidOpt(rutaSC);
+        readRMSE(rutaRMSE);
+        readSamples(rutaSamples);
+        readSr(rutaSr);
     }
 
     private void readBeats(string ruta)
@@ -56,6 +66,49 @@ public class ReadTxt : MonoBehaviour
             Debug.LogError("El archivo de texto para SCOPT no existe en la ruta especificada.");
     }
 
+    private void readRMSE(string ruta)
+    {
+        // Lectura por líneas y luego palabras
+        if (File.Exists(ruta))
+        {
+            string[] lines = File.ReadAllLines(ruta);
+
+            foreach (string line in lines)
+                rmse.Add(float.Parse(line) / 1000.0f);
+
+        }
+        else
+            Debug.LogError("El archivo de texto para RMSE no existe en la ruta especificada.");
+    }
+
+    private void readSamples(string ruta)
+    {
+        // Lectura por líneas y luego palabras
+        if (File.Exists(ruta))
+        {
+            string[] lines = File.ReadAllLines(ruta);
+
+            foreach (string line in lines)
+                samples.Add(float.Parse(line) / 1000.0f);
+
+        }
+        else
+            Debug.LogError("El archivo de texto para SAMPLES no existe en la ruta especificada.");
+    }
+
+    private void readSr(string ruta)
+    {
+        // Lectura por líneas y luego palabras
+        if (File.Exists(ruta))
+        {
+            string[] lines = File.ReadAllLines(ruta);
+
+            sr = int.Parse(lines[0]);
+        }
+        else
+            Debug.LogError("El archivo de texto para SR no existe en la ruta especificada.");
+    }
+
     public List<float> getBeatsInTime()
     {
         return beats;
@@ -63,5 +116,17 @@ public class ReadTxt : MonoBehaviour
     public List<float> getScopt()
     {
         return scopt;
+    }
+    public List<float> getRMSE()
+    {
+        return rmse;
+    }
+    public List<float> getSamples()
+    {
+        return samples;
+    }
+    public int getSr()
+    {
+        return sr;
     }
 }
