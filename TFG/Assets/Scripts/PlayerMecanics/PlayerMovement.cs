@@ -48,5 +48,8 @@ public class PlayerMovement : MonoBehaviour
         sprite.rotation = Quaternion.Euler(rotation);
     }
 
-    
+    public float getPlayerSpeed()
+    {
+        return speed;
+    }
 }
