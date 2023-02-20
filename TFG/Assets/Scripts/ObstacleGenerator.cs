@@ -53,6 +53,11 @@ public class ObstacleGenerator : MonoBehaviour
         return multiplierX;
     }
 
+    public int getMultiplierY()
+    {
+        return multiplierY;
+    }
+
     public GameObject getFeatures()
     {
         return features;
