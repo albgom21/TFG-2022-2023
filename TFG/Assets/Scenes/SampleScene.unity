@@ -284,7 +284,6 @@ MonoBehaviour:
   groundPrefab: {fileID: 2973858885463788473, guid: 39b046f95bfe0cd41ac6c70c86a52018, type: 3}
   features: {fileID: 1277446150}
   contenedor: {fileID: 1962388977}
-  multiplierX: 15
   multiplierY: 10
 --- !u!4 &307103658
 Transform:

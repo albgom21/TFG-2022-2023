@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using UnityEngine;
 
 public class ObstacleGenerator : MonoBehaviour
@@ -28,7 +27,7 @@ public class ObstacleGenerator : MonoBehaviour
         for (int i = 0; i < beats.Count(); i++)
         {
             float x = beats[i] * multiplierX;
-            float y = scopt[i] * multiplierY;
+            int y = (int)(scopt[i] * 10 - 1);
 
             if (y > 0 && i > 0)
             {
@@ -51,7 +50,7 @@ public class ObstacleGenerator : MonoBehaviour
         //}
     }
 
-    public int getMultiplierX()
+    public float getMultiplierX()
     {
         return multiplierX;
     }
