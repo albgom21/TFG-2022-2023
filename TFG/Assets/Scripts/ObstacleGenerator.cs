@@ -10,7 +10,8 @@ public class ObstacleGenerator : MonoBehaviour
     [SerializeField] private GameObject groundPrefab;
     [SerializeField] private GameObject features;
     [SerializeField] private Transform contenedor;
-    [SerializeField] private int multiplierX, multiplierY;
+    [SerializeField] private int multiplierY;
+    private float multiplierX;
 
     //public int BPM;
     //public float finalLevel;
@@ -21,6 +22,8 @@ public class ObstacleGenerator : MonoBehaviour
         float height = transform.localScale.y;
         List<float> beats = features.GetComponent<ReadTxt>().getBeatsInTime();
         List<float> scopt = features.GetComponent<ReadTxt>().getScopt();
+
+        multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
 
         for (int i = 0; i < beats.Count(); i++)
         {
