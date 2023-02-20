@@ -10,6 +10,9 @@ public class ObstacleGenerator : MonoBehaviour
     [SerializeField] private GameObject features;
     [SerializeField] private Transform contenedor;
     [SerializeField] private int multiplierY;
+    [SerializeField] private Sprite ini;
+    [SerializeField] private Sprite mid;
+    [SerializeField] private Sprite fin;
     private float multiplierX;
 
     //public int BPM;
@@ -34,12 +37,30 @@ public class ObstacleGenerator : MonoBehaviour
                 int distance = (int)(beats[i] * multiplierX - beats[i - 1] * multiplierX);
                 int count = distance / (int)width;
                 for (int j = 0; j < count; j++)
+                {
+                    if(j == 0)
+                        groundPrefab.GetComponent<SpriteRenderer>().sprite = fin;
+                    else if (j == count-1)
+                        groundPrefab.GetComponent<SpriteRenderer>().sprite = ini;
+                    else
+                        groundPrefab.GetComponent<SpriteRenderer>().sprite = mid;
+
                     Instantiate(groundPrefab, new Vector3(x - width * j, y - height, 0), transform.rotation);
+                }
             }
             else if (i == 0)
             {
                 for (int j = 0; j < 10; j++)
+                {
+                    if (j == 0)
+                        groundPrefab.GetComponent<SpriteRenderer>().sprite = fin;
+                    else if (j == 9)
+                        groundPrefab.GetComponent<SpriteRenderer>().sprite = ini;
+                    else
+                        groundPrefab.GetComponent<SpriteRenderer>().sprite = mid;
+
                     Instantiate(groundPrefab, new Vector3(x - width * j, y - height, 0), transform.rotation);
+                }
             }
             Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, contenedor);
         }
