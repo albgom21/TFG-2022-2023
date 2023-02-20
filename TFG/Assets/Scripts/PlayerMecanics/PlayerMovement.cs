@@ -4,28 +4,27 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed;
-
-    public Transform groundCheckTransform;
-    public float groundCheckRadius;
-    public LayerMask groundMask;
-    public Transform sprite;
-
-    Rigidbody2D rb;
+    [SerializeField] private float speed;
+    [SerializeField] private Transform groundCheckTransform;
+    [SerializeField] private float groundCheckRadius;
+    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private Transform sprite;
+    [SerializeField] private GameObject obstacleGenerator;
+    private Rigidbody2D rb;
 
     void Start()
     {
+        float startingY = obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[0] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierX();
         rb = GetComponent<Rigidbody2D>();
+        transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
     }
 
     void Update()
     {
         transform.position += Vector3.right * speed * Time.deltaTime;
 
-        if (OnGround())
-        {
+        if (OnGround()) {
             Unrotate();
-
             //Jump
             if (Input.GetMouseButton(0))
             {
@@ -33,10 +32,7 @@ public class PlayerMovement : MonoBehaviour
                 rb.AddForce(Vector2.up * 26.6581f, ForceMode2D.Impulse);
             }
         }
-        else
-        {
-            sprite.Rotate(Vector3.back * 2);
-        }
+        else sprite.Rotate(Vector3.back * 2);
     }
 
 
