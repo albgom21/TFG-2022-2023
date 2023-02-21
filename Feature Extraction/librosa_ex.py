@@ -1,3 +1,4 @@
+import os
 import librosa
 import librosa.display
 import sklearn
@@ -38,6 +39,8 @@ samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 
 '''
+
+
 def tempogram(samples, sr):
     # Calcular el tempograma
     tempogram = librosa.feature.tempogram(y=samples, sr=sr, hop_length=512)
@@ -47,7 +50,8 @@ def tempogram(samples, sr):
     plt.title("Tempograma de la canción")
     plt.xlabel("Tiempo (frames)")
     plt.ylabel("Frecuencia (bpm)")
-    plt.show() 
+    plt.show()
+
 
 '''
 Carga un archivo de audio para obtener los samples y su frecuencia de muestreo
@@ -61,9 +65,12 @@ Returns
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
+
+
 def load_Wave(filename):
     samples, sr = librosa.load(filename)
     return samples, sr
+
 
 #--------------------FUNCIONES PARA EXTRACCIÓN DE CARACTERÍSTICAS-------------------------------
 '''
@@ -79,12 +86,15 @@ Returns
 bpm : Pulsos Por Minuto (BPM) de una onda
 beat_times: los instantes en segundos donde se producen los beats 
 '''
-def get_beats_in_timeline(samples, sr):  
+
+
+def get_beats_in_timeline(samples, sr):
     # Calcular el tempo (BPM) y los frames de los beats
     bpm, beats = librosa.beat.beat_track(y=samples, sr=sr)
     # Convertir los frames de los beats a tiempos en segundos
     beat_times = librosa.frames_to_time(beats, sr=sr)
     return bpm, beat_times
+
 
 '''
 Obtener beats a lo largo del tiempo
@@ -99,11 +109,15 @@ Returns
 zero_crossings : array de bool indicando cuándo pasa la onda por 0
 total_crossings : número de veces que la señal cruza el eje horizontal por cero en el rango dado
 '''
-def zero_crossing(samples, ini = 0, fin = 0):
-    if (fin == 0): fin = samples.shape(0) 
-    zero_crossings = librosa.zero_crossings(samples[ini:fin], pad = False)
+
+
+def zero_crossing(samples, ini=0, fin=0):
+    if (fin == 0):
+        fin = samples.shape(0)
+    zero_crossings = librosa.zero_crossings(samples[ini:fin], pad=False)
     total_crossings = sum(zero_crossings)
     return zero_crossings, total_crossings
+
 
 #------------------------------------LA REVISIÓN DE MÉTODOS VA POR AQUÍ-------------------------------------------
 '''
@@ -120,6 +134,8 @@ Returns
 zcrs : array de bool indicando cuándo pasa la onda por 0
 
 '''
+
+
 def zero_crossing_interval(samples):
     zcrs = librosa.feature.zero_crossing_rate(samples)
     return zcrs
@@ -135,10 +151,14 @@ Si queremos agregar todos los vectores de características entre
 las señales de una colección, podemos usar una list comprehension de la siguiente manera:
 kick_features = np.array([extract_features(x) for x in kick_signals])
 '''
+
+
 def extract_features(signal):
     return [
-        librosa.feature.zero_crossing_rate(signal)[0, 0], # Numero de cruces por cero
-        librosa.feature.spectral_centroid(signal)[0, 0],  # Centroide del espectro
+        librosa.feature.zero_crossing_rate(
+            signal)[0, 0],  # Numero de cruces por cero
+        librosa.feature.spectral_centroid(
+            signal)[0, 0],  # Centroide del espectro
     ]
 
 
@@ -154,10 +174,13 @@ Returns
 ----------
 training_features : tabla de características normalizada
 '''
+
+
 def feature_scaling(feature_table):
     scaler = sklearn.preprocessing.MinMaxScaler(feature_range=(-1, 1))
     training_features = scaler.fit_transform(feature_table)
     return training_features
+
 
 '''
 Calcular la energia por segmentos pequeños
@@ -172,11 +195,15 @@ Returns
 ----------
 energy : array de frames con su energía
 '''
+
+
 def energy(samples):
     hop_length = 256    # tamaño del incremento
     frame_length = 512  # tamaño del segmento
-    energy = np.array([sum(abs(samples[i:i+frame_length]**2)) for i in range(0, len(samples), hop_length)])
+    energy = np.array([sum(abs(samples[i:i+frame_length]**2))
+                      for i in range(0, len(samples), hop_length)])
     return energy
+
 
 '''
 root-mean-square energy (RMSE)
@@ -189,14 +216,18 @@ Returns
 ----------
 rmse : array de frames con su RMSE
 '''
+
+
 def rmse(samples):
     hop_length = 256   # tamaño del incremento
-    frame_length = 512 # tamaño del segmento
-    rmse = librosa.feature.rms(samples, frame_length=frame_length, hop_length=hop_length, center=True)
+    frame_length = 512  # tamaño del segmento
+    rmse = librosa.feature.rms(
+        y=samples, frame_length=frame_length, hop_length=hop_length, center=True)
     tiempo_sec = librosa.times_like(rmse)
 
     matriz = np.column_stack((tiempo_sec, rmse[0]))
     return matriz
+
 
 '''
 Gráfica de la Energía y Rmse junto a la onda
@@ -208,17 +239,20 @@ sr : frecuencia del audio (Sample Rate)
 energy : array de frames con su energía
 rmse : array de frames con su RMSE
 '''
+
+
 def graphic_energy_and_rmse(samples, sr, energy, rmse):
     hop_length = 256   # tamaño del incremento
-    frame_length = 512 # tamaño del segmento
+    frame_length = 512  # tamaño del segmento
     frames = range(len(energy))
     t = librosa.frames_to_time(frames, sr=sr, hop_length=hop_length)
     plt.figure(figsize=(14, 5))
-    librosa.display.waveshow(samples, sr=sr, alpha=0.4) # mostrar onda
-    plt.plot(t, energy/energy.max(), 'r--')             # normalizada para la visualizacion
-    plt.plot(t[:len(rmse)], rmse/rmse.max(), color='g') # normalizada para la visualizacion
+    librosa.display.waveshow(samples, sr=sr, alpha=0.4)  # mostrar onda
+    # normalizada para la visualizacion
+    plt.plot(t, energy/energy.max(), 'r--')
+    # normalizada para la visualizacion
+    plt.plot(t[:len(rmse)], rmse/rmse.max(), color='g')
     plt.legend(('Energia', 'RMSE'))
-
 
 
 '''
@@ -233,16 +267,19 @@ Returns
 ----------
 X : matriz en dos dimensiones que representa la energía de la señal en diferentes frecuencias a lo largo del tiempo (segmentos)
 '''
+
+
 def stft(samples, sr):
-    hop_length = 512 #incremento
-    n_fft = 2048     #Tamaño del segmento
+    hop_length = 512  # incremento
+    n_fft = 2048  # Tamaño del segmento
 
     # Para convertir el tamaño del segmento y el incremento en segundos
-    float(hop_length)/sr # [=] segundos
-    float(n_fft)/sr # [=] segundos
+    float(hop_length)/sr  # [=] segundos
+    float(n_fft)/sr  # [=] segundos
 
     X = librosa.stft(samples, n_fft=n_fft, hop_length=hop_length)
     return X
+
 
 '''
 Muestra el espectrograma del audio
@@ -257,10 +294,13 @@ Parametros
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
+
+
 def spectogram(samples, sr):
     S = librosa.amplitude_to_db(abs(samples))
     plt.figure(figsize=(15, 5))
     librosa.display.specshow(S, sr=sr, x_axis='time', y_axis='linear')
+
 
 '''
 Muestra el Mel-espectrograma del audio
@@ -272,11 +312,15 @@ Parametros
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
+
+
 def mel_Spectogram(samples, sr):
-    S = librosa.feature.melspectrogram(samples, sr=sr, n_fft=4096, hop_length=256)
+    S = librosa.feature.melspectrogram(
+        samples, sr=sr, n_fft=4096, hop_length=256)
     logS = librosa.amplitude_to_db(S)
     plt.figure(figsize=(15, 5))
     librosa.display.specshow(logS, sr=sr, x_axis='time', y_axis='mel')
+
 
     # OTRA FORMA
     # # Compute the mel-scaled spectrogram
@@ -300,13 +344,17 @@ Parametros
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
+
+
 def constant_Q_Transform(samples, sr):
     fmin = librosa.midi_to_hz(36)
     C = librosa.cqt(samples, sr=sr, fmin=fmin, n_bins=72)
     logC = librosa.amplitude_to_db(abs(C))
     plt.figure(figsize=(15, 5))
-    librosa.display.specshow(logC, sr=sr, x_axis='time', y_axis='cqt_note', fmin=fmin, cmap='coolwarm')
+    librosa.display.specshow(logC, sr=sr, x_axis='time',
+                             y_axis='cqt_note', fmin=fmin, cmap='coolwarm')
     plt.show()
+
 
 '''
 Muestra MFCCs
@@ -321,6 +369,8 @@ Parametros
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
+
+
 def mel_Frequency_Cepstral_Coefficients(samples, sr):
     mfccs = librosa.feature.mfcc(samples, sr=sr)
     print(mfccs.shape)
@@ -331,6 +381,8 @@ def mel_Frequency_Cepstral_Coefficients(samples, sr):
 '''
 Normalizar datos para la visualizacion con la onda de audio
 '''
+
+
 def normalize(x, axis=0):
     return sklearn.preprocessing.minmax_scale(x, axis=axis)
 
@@ -350,8 +402,11 @@ Return
 ----------
 matriz : 
 '''
-def spectral_centroid_v1(samples, sr, show = False):
-    spectral_centroids = librosa.feature.spectral_centroid(samples+0.01, sr)[0] # samples+0.01 para evitar fallos en silencios
+
+
+def spectral_centroid_v1(samples, sr, show=False):
+    spectral_centroids = librosa.feature.spectral_centroid(
+        y=samples+0.01, sr=sr)[0]  # samples+0.01 para evitar fallos en silencios
     # print(spectral_centroids.shape)
     frames = range(len(spectral_centroids))
     t = librosa.frames_to_time(frames)
@@ -359,7 +414,8 @@ def spectral_centroid_v1(samples, sr, show = False):
     norm_spect_cent = normalize(spectral_centroids)
 
     if(show):
-        plt.plot(t, norm_spect_cent, color='r'); # normalizacion para proposito de visualizacion
+        # normalizacion para proposito de visualizacion
+        plt.plot(t, norm_spect_cent, color='r')
         plt.show()
 
     # Combinar los dos arrays en una matriz bidimensional
@@ -378,6 +434,8 @@ Parametros
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
+
+
 def spectral_centroid_v2(samples, sr):
     # Calcular el centroide espectral
     spectral_centroids = librosa.feature.spectral_centroid(samples, sr)[0]
@@ -413,17 +471,23 @@ samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 
 '''
+
+
 def spectral_Bandwidth(samples, sr):
-    spectral_bandwidth_2 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr)[0]
-    spectral_bandwidth_3 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr, p=3)[0]
-    spectral_bandwidth_4 = librosa.feature.spectral_bandwidth(samples+0.01, sr=sr, p=4)[0]
+    spectral_bandwidth_2 = librosa.feature.spectral_bandwidth(
+        samples+0.01, sr=sr)[0]
+    spectral_bandwidth_3 = librosa.feature.spectral_bandwidth(
+        samples+0.01, sr=sr, p=3)[0]
+    spectral_bandwidth_4 = librosa.feature.spectral_bandwidth(
+        samples+0.01, sr=sr, p=4)[0]
     librosa.display.waveshow(samples, sr=sr, alpha=0.4)
     plt.plot(samples, normalize(spectral_bandwidth_2), color='r')
     plt.plot(samples, normalize(spectral_bandwidth_3), color='g')
     plt.plot(samples, normalize(spectral_bandwidth_4), color='y')
     plt.legend(('p = 2', 'p = 3', 'p = 4'))
     plt.show()
-    
+
+
 '''
 Muestra el Contraste Espectral
 
@@ -434,10 +498,13 @@ Parametros
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
+
+
 def spectral_Contrast(samples, sr):
     spectral_contrast = librosa.feature.spectral_contrast(samples, sr=sr)
     print(spectral_contrast.shape)
-    plt.imshow(normalize(spectral_contrast, axis=1), aspect='auto', origin='lower', cmap='coolwarm');
+    plt.imshow(normalize(spectral_contrast, axis=1),
+               aspect='auto', origin='lower', cmap='coolwarm')
     plt.show()
 
 
@@ -451,6 +518,8 @@ Parametros
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
+
+
 def spectral_Roll_off(samples, sr):
     spectral_rolloff = librosa.feature.spectral_rolloff(samples+0.01, sr=sr)[0]
     librosa.display.waveshow(samples, sr=sr, alpha=0.4)
@@ -481,41 +550,90 @@ def pruebaBeats(samples, sr):
 Devuelve los valores del centroide espectral que coinciden con el tiempo
 en los que se encuentran los beats 
 '''
+
+
 def sc_optimo(sc, beats):
-   mascara_fila = np.isin(sc[:,0], beats)
-   filtrada = sc[:,1][mascara_fila]
+   mascara_fila = np.isin(sc[:, 0], beats)
+   filtrada = sc[:, 1][mascara_fila]
    return filtrada
+
 
 '''
 Devuelve los valores del RMSE que coinciden con el tiempo
 en los que se encuentran los beats 
 '''
+
+
 def rmse_optimo(rmse, beats):
-   mascara_fila = np.isin(rmse[:,0], beats)
-   filtrada = rmse[:,1][mascara_fila]
+   mascara_fila = np.isin(rmse[:, 0], beats)
+   filtrada = rmse[:, 1][mascara_fila]
    return filtrada
 
+
+def features_to_txt(filename):
+    # Carga la canción en un array de muestras
+    samples, sr = librosa.load(filename)
+
+    # Sample rate
+    np_sr = np.array([sr])
+
+    # Beats
+    bpm, beats = get_beats_in_timeline(samples, sr)
+
+    # Spectral centroid
+    sc = spectral_centroid_v1(samples, sr)
+    scopt = sc_optimo(sc, beats)
+
+    # Rmse
+    r = rmse(samples)
+    ropt = rmse_optimo(r, beats)
+
+    name = os.path.splitext(filename)[0]
+    np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
+    np.savetxt(name + '_sr.txt', np_sr, fmt='%.0f')
+    np.savetxt(name + '_beats.txt', beats, fmt='%.3f')
+    np.savetxt(name + '_rmse.txt', ropt, fmt='%.3f')
+    np.savetxt(name + '_scopt.txt', scopt, fmt='%.3f')
+
+    # Ruta de la carpeta de origen
+    ruta_origen = './'
+
+    # Ruta de la carpeta de destino
+    ruta_destino = '../TFG/Assets/Txt/'
+
+    # Recorre los archivos de la carpeta de origen
+    for archivo in os.listdir(ruta_origen):
+        # Verifica que el archivo sea un archivo de texto
+        if archivo.endswith('.txt'):
+            # Obtiene la ruta completa del archivo de origen
+            ruta_archivo_origen = os.path.join(ruta_origen, archivo)
+            # Obtiene la ruta completa del archivo de destino
+            ruta_archivo_destino = os.path.join(ruta_destino, archivo)
+            # Mueve el archivo de origen al archivo de destino
+            os.replace(ruta_archivo_origen, ruta_archivo_destino)
+
+
 def main():
+    features_to_txt('200-BPM.wav')
     # # Cargar una señal
     # x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
     # x.shape # Tamaño
     # librosa.get_duration(x, sr) # duracion
 
     # Carga la canción en un array de muestras
-    filename = "200-BPM.wav"
-    samples, sr = librosa.load(filename)
-    # print(sr)
-    np_sr = np.array([sr])
-    np.savetxt('sr.txt', np_sr, fmt='%.0f')
+    # filename = "200-BPM.wav"
+    # samples, sr = librosa.load(filename)
+    # # print(sr)
+    # np_sr = np.array([sr])
+    # np.savetxt('sr.txt', np_sr, fmt='%.0f')
     # r = rmse(samples)
     # bpm, beats = get_beats_in_timeline(samples, sr)
     # ropt = rmse_optimo(r,beats)
     # np.savetxt('rmse.txt', ropt, fmt='%.3f')
     # np.savetxt('samples.txt', samples, fmt='%.3f')
 
-
     # pruebaBeats(samples, sr)
-    
+
     # bpm, beats = get_beats_in_timeline(samples, sr)
     # sc = spectral_centroid_v1(samples, sr)
     # np.savetxt('sc.txt', matriz, fmt='%.3f')
@@ -525,12 +643,10 @@ def main():
     # spectral_centroid(samples,sr)
     # print(energy(samples))
 
+
 main()
 
 
-
-
-    
 # def pruebaPasoPorCeros():
 #     zero_crossing, total_crossings = zero_crossing(wave)
 #     print("Total corssings: ", total_crossings)

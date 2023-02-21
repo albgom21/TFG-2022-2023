@@ -6,15 +6,12 @@ using System;
 
 public class ReadTxt : MonoBehaviour
 {
-   /*
-    Clase para leer las características del audio extraidas por el programa de Python
-   */
-
-    string rutaBeats = "Assets/Txt/beats.txt";
-    string rutaSC = "Assets/Txt/scopt.txt"; 
-    string rutaRMSE = "Assets/Txt/rmse.txt"; 
-    string rutaSamples = "Assets/Txt/samples.txt"; 
-    string rutaSr = "Assets/Txt/sr.txt";
+    /*
+     Clase para leer las características del audio extraidas por el programa de Python
+    */
+    public string song = "200-BPM";
+    string path= "Assets/Txt/";
+    string rutaBeats,rutaSC, rutaRMSE, rutaSamples, rutaSr;
 
     List<float> beats = new List<float>();
     List<float> scopt = new List<float>();
@@ -24,6 +21,12 @@ public class ReadTxt : MonoBehaviour
 
     void Awake()
     {
+        rutaBeats = path + song + "_beats.txt";
+        rutaSC = path + song + "_scopt.txt";
+        rutaRMSE = path + song + "_rmse.txt";
+        rutaSamples = path + song + "_samples.txt";
+        rutaSr = path + song + "_sr.txt";
+
         readBeats(rutaBeats);
         readSpectralCentroidOpt(rutaSC);
         readRMSE(rutaRMSE);
