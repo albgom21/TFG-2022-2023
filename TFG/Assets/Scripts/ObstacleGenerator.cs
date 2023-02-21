@@ -36,14 +36,13 @@ public class ObstacleGenerator : MonoBehaviour
             {
                 int distance = (int)(beats[i] * multiplierX - beats[i - 1] * multiplierX);
                 int count = distance / (int)width;
+                int prevY = (int)(scopt[i - 1] * 10 - 1);
+                if (y - prevY == 2) count--;
                 for (int j = 0; j < count; j++)
                 {
-                    if(j == 0)
-                        groundPrefab.GetComponent<SpriteRenderer>().sprite = fin;
-                    else if (j == count-1)
-                        groundPrefab.GetComponent<SpriteRenderer>().sprite = ini;
-                    else
-                        groundPrefab.GetComponent<SpriteRenderer>().sprite = mid;
+                    if (j == 0) groundPrefab.GetComponent<SpriteRenderer>().sprite = fin;
+                    else if (j == count - 1) groundPrefab.GetComponent<SpriteRenderer>().sprite = ini;
+                    else groundPrefab.GetComponent<SpriteRenderer>().sprite = mid;
 
                     Instantiate(groundPrefab, new Vector3(x - width * j, y - height, 0), transform.rotation);
                 }

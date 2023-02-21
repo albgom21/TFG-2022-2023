@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        float startingY = obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[0] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY();
+        int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[0] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY() - 1);
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
     }
@@ -23,7 +23,8 @@ public class PlayerMovement : MonoBehaviour
     {
         transform.position += Vector3.right * speed * Time.deltaTime;
 
-        if (OnGround()) {
+        if (OnGround())
+        {
             Unrotate();
             //Jump
             if (Input.GetMouseButton(0))
