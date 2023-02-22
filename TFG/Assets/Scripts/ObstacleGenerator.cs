@@ -34,30 +34,20 @@ public class ObstacleGenerator : MonoBehaviour
 
             if (y > 0 && i > 0)
             {
-                int distance = (int)(beats[i] * multiplierX - beats[i - 1] * multiplierX);
-                int count = distance / (int)width;
+                float prevX = beats[i-1] * multiplierX;
+                float distance = x - prevX;
                 int prevY = (int)(scopt[i - 1] * 10 - 1);
-                if (y - prevY == 2) count--;
-                for (int j = 0; j < count; j++)
-                {
-                    if (j == 0) groundPrefab.GetComponent<SpriteRenderer>().sprite = fin;
-                    else if (j == count - 1) groundPrefab.GetComponent<SpriteRenderer>().sprite = ini;
-                    else groundPrefab.GetComponent<SpriteRenderer>().sprite = mid;
-
-                    Instantiate(groundPrefab, new Vector3(x - width * j, y - height, 0), transform.rotation);
-                }
+                //if (y - prevY == 2) distance--;
+                GameObject ground = Instantiate(groundPrefab, new Vector3(prevX + distance/2, y - height, 0), transform.rotation);
+                ground.transform.localScale = new Vector3(distance - 1, ground.transform.localScale.y, ground.transform.localScale.z);
             }
             else if (i == 0)
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    if (j == 0)
-                        groundPrefab.GetComponent<SpriteRenderer>().sprite = fin;
-                    else if (j == 9)
-                        groundPrefab.GetComponent<SpriteRenderer>().sprite = ini;
-                    else
-                        groundPrefab.GetComponent<SpriteRenderer>().sprite = mid;
-
+                    if (j == 0) groundPrefab.GetComponent<SpriteRenderer>().sprite = fin;
+                    else if (j == 9) groundPrefab.GetComponent<SpriteRenderer>().sprite = ini;
+                    else groundPrefab.GetComponent<SpriteRenderer>().sprite = mid;
                     Instantiate(groundPrefab, new Vector3(x - width * j, y - height, 0), transform.rotation);
                 }
             }
