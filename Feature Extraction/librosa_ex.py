@@ -586,12 +586,20 @@ def features_to_txt(filename):
     r = rmse(samples)
     ropt = rmse_optimo(r, beats)
 
+    # Graves
+    g = graves(samples, sr)
+
+    # Agudos 
+    a = agudos(samples, sr)
+
     name = os.path.splitext(filename)[0]
     np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
     np.savetxt(name + '_sr.txt', np_sr, fmt='%.0f')
     np.savetxt(name + '_beats.txt', beats, fmt='%.3f')
     np.savetxt(name + '_rmse.txt', ropt, fmt='%.3f')
     np.savetxt(name + '_scopt.txt', scopt, fmt='%.3f')
+    np.savetxt(name + '_graves.txt', g, fmt='%.3f')
+    np.savetxt(name + '_agudos.txt', a, fmt='%.3f')
 
     # Ruta de la carpeta de origen
     ruta_origen = './'
@@ -610,14 +618,127 @@ def features_to_txt(filename):
             # Mueve el archivo de origen al archivo de destino
             os.replace(ruta_archivo_origen, ruta_archivo_destino)
 
+def graves(y,sr):
+    # Configurar los parámetros de la transformada de Fourier
+    n_fft = 2048
+    hop_length = 512
+
+    # Calcular la matriz del espectrograma
+    spec = np.abs(librosa.stft(y, n_fft=n_fft, hop_length=hop_length))**2
+
+    # Calcular la frecuencia correspondiente a cada fila del espectrograma
+    freqs = librosa.core.fft_frequencies(sr=sr, n_fft=n_fft)
+
+    # Configurar la frecuencia máxima para considerar un componente como grave
+    high_freq = 200
+
+    # Buscar los índices correspondientes a las frecuencias graves
+    low_idx = np.where(freqs <= high_freq)[0]
+
+    # Calcular la magnitud del espectro para las frecuencias graves en cada cuadro de tiempo
+    low_mag = np.mean(spec[low_idx], axis=0)
+
+    # Convertir a decibelios
+    low_db = librosa.amplitude_to_db(low_mag, ref=np.max)
+
+    # Encontrar los cuadros de tiempo en los que la magnitud de las frecuencias graves supera un umbral
+    low_threshold = np.max(low_db) - 30
+    low_mask = low_db > low_threshold
+
+    # Calcular los tiempos correspondientes a los cuadros de tiempo
+    low_time = librosa.frames_to_time(np.arange(len(low_mask)), sr=sr, hop_length=hop_length)
+
+    # Crear la matriz de tiempos y valores de los componentes graves
+    graves_time_value = np.column_stack((low_time, low_db))
+
+    return graves_time_value
+
+
+def agudos(y, sr):
+
+    # Calcular la transformada de Fourier de corto tiempo
+    n_fft = 2048
+    hop_length = 512
+    stft = librosa.stft(y, n_fft=n_fft, hop_length=hop_length)
+
+    # Calcular los valores de frecuencia correspondientes a cada fila de la matriz STFT
+    freqs = librosa.fft_frequencies(sr=sr, n_fft=n_fft)
+
+    # Definir las frecuencias de corte para los componentes agudos
+    low_freq = 2000
+    high_freq = freqs.max()
+
+    # Crear una máscara para los componentes agudos
+    mask = np.logical_and(freqs >= low_freq, freqs <= high_freq)
+
+    # Aplicar la máscara a la matriz STFT para obtener los componentes agudos
+    stft_high = stft[mask, :]
+
+    # Calcular la energía de los componentes agudos en cada cuadro de tiempo
+    energy_high = librosa.core.amplitude_to_db(np.abs(stft_high))
+
+    # Calcular el umbral para detectar los componentes agudos
+    threshold = np.median(energy_high)
+
+    # Crear una matriz de tiempo y valor para los componentes agudos
+    time_frames = librosa.frames_to_time(np.arange(energy_high.shape[1]), sr=sr, hop_length=hop_length)
+    agudos_time_value = np.array([np.array([time_frames[i], np.max(energy_high[:, i])]) for i in range(energy_high.shape[1]) if np.max(energy_high[:, i]) > threshold])
+
+    # Graficar los componentes agudos
+    # plt.plot(agudos_time_value[:, 0], agudos_time_value[:, 1], 'bo', markersize=3)
+    # plt.plot(graves_time_value[:, 0], graves_time_value[:, 1], 'xr', markersize=3)
+
+    # # Configurar la gráfica
+    # plt.xlabel('Tiempo (segundos)')
+    # plt.ylabel('Valor de los componentes agudos (dB)')
+    # plt.title('Componentes agudos y graves del audio')
+    # plt.show()
+    return agudos_time_value
+
+'''
+Dada una matriz con la primera columna de tiempos, devuelve una nueva matriz cada x seg
+'''
+def filtroSeg(matriz_original, seg):
+    # Obtener el vector de tiempo correspondiente a la matriz original
+    tiempo_original = matriz_original[:, 0]
+
+    # Crear un nuevo vector de tiempo con los tiempos que quieres muestrear (en este ejemplo, cada 0.5 segundos)
+    tiempo_nuevo = np.arange(tiempo_original[0], tiempo_original[-1], seg)
+
+    # Buscar los índices correspondientes en la matriz original
+    indices_nuevos = np.argmin(np.abs(tiempo_original[:, None] - tiempo_nuevo), axis=0)
+
+    # Crear la nueva matriz con los valores correspondientes
+    matriz_nueva = matriz_original[indices_nuevos, :]
+    return matriz_nueva
 
 def main():
-    features_to_txt('200-BPM.wav')
+  
+    filename = "200-BPM.wav"
+    samples, sr = librosa.load(filename)
+    # agudos_ = agudos(samples,sr)
+    # np.savetxt('agudos.txt',agudos_, fmt='%.3f')
+    # f = filtroSeg(agudos_,0.5)
+    # np.savetxt('agudosFiltrados.txt',f, fmt='%.3f')
+    # graves_ = graves(samples,sr)
+    
+    # # Graficar los componentes agudos
+    # plt.plot(agudos_[:, 0], agudos_[:, 1], 'bo', markersize=3)
+    # plt.plot(graves_[:, 0], graves_[:, 1], 'xr', markersize=3)
+
+    # # Configurar la gráfica
+    # plt.xlabel('Tiempo (segundos)')
+    # plt.ylabel('Valor de los componentes agudos (dB)')
+    # plt.title('Componentes agudos y graves del audio')
+    # plt.show()
+
+    
+    # features_to_txt('200-BPM.wav')
+    
     # Cargar una señal
     # x.shape # Tamaño
     # librosa.get_duration(x, sr) # duracion
 
-    # Carga la canción en un array de muestras
     # filename = "200-BPM.wav"
     # samples, sr = librosa.load(filename)
     # # print(sr)
