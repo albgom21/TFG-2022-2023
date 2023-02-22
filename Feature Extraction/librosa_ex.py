@@ -40,7 +40,6 @@ sr : frecuencia del audio (Sample Rate)
 
 '''
 
-
 def tempogram(samples, sr):
     # Calcular el tempograma
     tempogram = librosa.feature.tempogram(y=samples, sr=sr, hop_length=512)
@@ -65,7 +64,6 @@ Returns
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
-
 
 def load_Wave(filename):
     samples, sr = librosa.load(filename)
@@ -536,14 +534,14 @@ def pruebaBeats(samples, sr):
     bpm, beats = get_beats_in_timeline(samples, sr)
     np.savetxt('beats.txt', beats, fmt='%.3f')
     print("FIN")
-    # print(bpm)
-    # librosa.display.waveshow(samples)
-    # plt.ylim(-1,1)
-    # plt.tight_layout()
-    # array_y = np.zeros(beats.shape)
-    # plt.plot(beats, array_y, 'r+')
-    # plt.grid()
-    # plt.show()
+    print(bpm)
+    librosa.display.waveshow(samples)
+    plt.ylim(-1,1)
+    plt.tight_layout()
+    array_y = np.zeros(beats.shape)
+    plt.plot(beats, array_y, 'r+')
+    plt.grid()
+    plt.show()
 
 
 '''
@@ -615,8 +613,7 @@ def features_to_txt(filename):
 
 def main():
     features_to_txt('200-BPM.wav')
-    # # Cargar una señal
-    # x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
+    # Cargar una señal
     # x.shape # Tamaño
     # librosa.get_duration(x, sr) # duracion
 
@@ -647,9 +644,6 @@ def main():
 main()
 
 
-# def pruebaPasoPorCeros():
-#     zero_crossing, total_crossings = zero_crossing(wave)
-#     print("Total corssings: ", total_crossings)
-
-# print(zero_crossing(wave)[1])
-# print(sum(zero_crossing_interval(wave)))
+def pruebaAlvaro():
+    x, sr = librosa.load('200-BPM.wav') # frecuencia de muestreo
+    pruebaBeats(x,sr)
