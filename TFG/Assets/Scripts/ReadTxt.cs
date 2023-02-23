@@ -9,32 +9,49 @@ public class ReadTxt : MonoBehaviour
     /*
      Clase para leer las características del audio extraidas por el programa de Python
     */
-    public string song = "200-BPM";
-    string path= "Assets/Txt/";
-    string rutaBeats,rutaSC, rutaRMSE, rutaSamples, rutaSr;
 
-    List<float> beats = new List<float>();
-    List<float> scopt = new List<float>();
-    List<float> rmse = new List<float>();
-    List<float> samples = new List<float>();
-    int sr;
+    // RUTAS
+    public string song = "200-BPM";         // Título del audio analizado
+    string path = "Assets/Txt/";            // Ruta dentro del proyecto donde se guardan los txt
+    string rutaBeats, rutaSC, rutaRMSE,     // Nombre de cada característica en los txt
+           rutaSamples, rutaSr, rutaAgudos,
+           rutaGraves;
+
+
+    // ESTRUCTURAS DE DATOS PARA GUARDAS LAS CARACTERÍSTICAS
+    List<float> beats = new List<float>();      // Tiempo en seg cuando se producen los beats
+    List<float> scopt = new List<float>();      // Valor del centroide espectral en los instantes en los que hay beats
+    List<float> rmse = new List<float>();       // Valor del RMSE en los instantes en los que hay beats
+    List<float> samples = new List<float>();    // Valor de las muestras del audio
+
+    float[,] matriz_agudos;                     // Tiempo y valor en db de los agudos
+    float[,] matriz_graves;                     // Tiempo y valor en db de los graves
+
+    int sr;                                     // Sample rate (Frecuencia de muestreo)    
 
     void Awake()
     {
+        // Crear las rutas de los txt
         rutaBeats = path + song + "_beats.txt";
         rutaSC = path + song + "_scopt.txt";
         rutaRMSE = path + song + "_rmse.txt";
         rutaSamples = path + song + "_samples.txt";
         rutaSr = path + song + "_sr.txt";
+        rutaAgudos = path + song + "_agudos.txt";
+        rutaGraves = path + song + "_graves.txt";
 
-        readBeats(rutaBeats);
-        readSpectralCentroidOpt(rutaSC);
-        readRMSE(rutaRMSE);
-        readSamples(rutaSamples);
-        readSr(rutaSr);
+        // Leer y almacenar las caracteristicas del audio
+        readFeature(ref beats, rutaBeats);
+        readFeature(ref scopt, rutaSC);
+        readFeature(ref rmse, rutaRMSE);
+        readFeature(ref samples, rutaSamples);
+        readInt(ref sr, rutaSr);
+        readMatriz(matriz_agudos, rutaAgudos);
+        readMatriz(matriz_graves, rutaGraves);
     }
 
-    private void readBeats(string ruta)
+    // Lee una caracterísitca de audio que este en un txt, con una valor float por fila
+    private void readFeature(ref List<float> lista, string ruta)
     {
         // Lectura por líneas y luego palabras
         if (File.Exists(ruta))
@@ -42,76 +59,60 @@ public class ReadTxt : MonoBehaviour
             string[] lines = File.ReadAllLines(ruta);
 
             foreach (string line in lines)
-                beats.Add(float.Parse(line) / 1000.0f);
-        
+                lista.Add(float.Parse(line) / 1000.0f);
+
         }
         else
-            Debug.LogError("El archivo de texto para BEATS no existe en la ruta especificada.");
+            Debug.LogError("El archivo de texto para leer una FEATURE no existe en la ruta especificada: " + ruta);
     }
 
-    private void readSpectralCentroidOpt(string ruta)
+    // Lee una caracterísitca de audio que este en un txt, siendo esta un único int
+    private void readInt(ref int n, string ruta)
     {
         // Lectura por líneas y luego palabras
         if (File.Exists(ruta))
         {
             string[] lines = File.ReadAllLines(ruta);
+            n = int.Parse(lines[0]);
+        }
+        else
+            Debug.LogError("El archivo de texto para leer un INT no existe en la ruta especificada: " + ruta);
+    }
 
-            foreach (string line in lines)
+    // Lee una caracterísitca de audio que este en un txt, con la forma de una matriz bidimensional,
+    // las filas compuestas por un valor float separado por un espacio seguido del otro valor float
+    // el cambio de fila viene dado por cambio de linea \n
+    private void readMatriz(float[,] matriz, string ruta)
+    {
+        if (File.Exists(ruta))
+        {
+            string texto = File.ReadAllText(ruta);
+            string[] lineas = texto.Split('\n');
+            int filas = lineas.Length;
+            int columnas = lineas[0].Split(' ').Length;
+            matriz = new float[filas, columnas];
+
+            for (int i = 0; i < filas; i++)
             {
-                //string[] words = line.Split(' ');
-                //foreach (string word in words)
-                //    beats.Add(float.Parse(line) / 1000.0f);
-             
-                scopt.Add(float.Parse(line) / 1000.0f);
+                string[] numeros = lineas[i].Split(' ');
+                for (int j = 0; j < columnas; j++)
+                {
+                    if (numeros.Length != columnas) // Línea vacía o incompleta, salta esa iteración del bucle
+                        continue;
+                    matriz[i, j] = float.Parse(numeros[j]) / 1000.0f;
+                }
             }
         }
         else
-            Debug.LogError("El archivo de texto para SCOPT no existe en la ruta especificada.");
+            Debug.LogError("El archivo de texto para leer una MATRIZ no existe en la ruta especificada: " + ruta);
+
+        // Escribir los valores de la matriz
+        //for (int i = 0; i < matriz.GetLength(0); i++)
+        //    for (int j = 0; j < matriz.GetLength(1); j++)
+        //        Debug.Log(matriz[i, j] + " ");
     }
 
-    private void readRMSE(string ruta)
-    {
-        // Lectura por líneas y luego palabras
-        if (File.Exists(ruta))
-        {
-            string[] lines = File.ReadAllLines(ruta);
-
-            foreach (string line in lines)
-                rmse.Add(float.Parse(line) / 1000.0f);
-
-        }
-        else
-            Debug.LogError("El archivo de texto para RMSE no existe en la ruta especificada.");
-    }
-
-    private void readSamples(string ruta)
-    {
-        // Lectura por líneas y luego palabras
-        if (File.Exists(ruta))
-        {
-            string[] lines = File.ReadAllLines(ruta);
-
-            foreach (string line in lines)
-                samples.Add(float.Parse(line) / 1000.0f);
-
-        }
-        else
-            Debug.LogError("El archivo de texto para SAMPLES no existe en la ruta especificada.");
-    }
-
-    private void readSr(string ruta)
-    {
-        // Lectura por líneas y luego palabras
-        if (File.Exists(ruta))
-        {
-            string[] lines = File.ReadAllLines(ruta);
-
-            sr = int.Parse(lines[0]);
-        }
-        else
-            Debug.LogError("El archivo de texto para SR no existe en la ruta especificada.");
-    }
-
+    // Getters
     public List<float> getBeatsInTime()
     {
         return beats;
@@ -131,5 +132,13 @@ public class ReadTxt : MonoBehaviour
     public int getSr()
     {
         return sr;
+    }
+    public float[,] getAgudos()
+    {
+        return matriz_agudos;
+    }
+    public float[,] getGraves()
+    {
+        return matriz_graves;
     }
 }
