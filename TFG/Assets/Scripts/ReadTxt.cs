@@ -46,8 +46,8 @@ public class ReadTxt : MonoBehaviour
         readFeature(ref rmse, rutaRMSE);
         readFeature(ref samples, rutaSamples);
         readInt(ref sr, rutaSr);
-        readMatriz(matriz_agudos, rutaAgudos);
-        readMatriz(matriz_graves, rutaGraves);
+        readMatriz(ref matriz_agudos, rutaAgudos);
+        readMatriz(ref matriz_graves, rutaGraves);
     }
 
     // Lee una caracterísitca de audio que este en un txt, con una valor float por fila
@@ -82,7 +82,7 @@ public class ReadTxt : MonoBehaviour
     // Lee una caracterísitca de audio que este en un txt, con la forma de una matriz bidimensional,
     // las filas compuestas por un valor float separado por un espacio seguido del otro valor float
     // el cambio de fila viene dado por cambio de linea \n
-    private void readMatriz(float[,] matriz, string ruta)
+    private void readMatriz(ref float[,] matriz, string ruta)
     {
         if (File.Exists(ruta))
         {
