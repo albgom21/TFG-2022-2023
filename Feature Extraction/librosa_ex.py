@@ -588,9 +588,16 @@ def features_to_txt(filename):
 
     # Graves
     g = graves(samples, sr)
+    g = filtroSeg(g, 0.5)
+    gTiempo = g[:, 0]
+    gValorNorm = normalize(g[:, 1])
+
 
     # Agudos 
     a = agudos(samples, sr)
+    a = filtroSeg(a, 0.5)
+    aTiempo = a[:, 0]
+    aValorNorm = normalize(a[:, 1])
 
     name = os.path.splitext(filename)[0]
     np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
@@ -598,8 +605,10 @@ def features_to_txt(filename):
     np.savetxt(name + '_beats.txt', beats, fmt='%.3f')
     np.savetxt(name + '_rmse.txt', ropt, fmt='%.3f')
     np.savetxt(name + '_scopt.txt', scopt, fmt='%.3f')
-    np.savetxt(name + '_graves.txt', g, fmt='%.3f')
-    np.savetxt(name + '_agudos.txt', a, fmt='%.3f')
+    np.savetxt(name + '_gravesTiempo.txt', gTiempo, fmt='%.3f')
+    np.savetxt(name + '_gravesValorNorm.txt', gValorNorm, fmt='%.3f')
+    np.savetxt(name + '_agudosTiempo.txt', aTiempo, fmt='%.3f')
+    np.savetxt(name + '_agudosValorNorm.txt', aValorNorm, fmt='%.3f')
 
     # Ruta de la carpeta de origen
     ruta_origen = './'
@@ -714,8 +723,8 @@ def filtroSeg(matriz_original, seg):
 
 def main():
   
-    filename = "200-BPM.wav"
-    samples, sr = librosa.load(filename)
+    # filename = "200-BPM.wav"
+    # samples, sr = librosa.load(filename)
     # agudos_ = agudos(samples,sr)
     # np.savetxt('agudos.txt',agudos_, fmt='%.3f')
     # f = filtroSeg(agudos_,0.5)
@@ -733,7 +742,7 @@ def main():
     # plt.show()
 
     
-    # features_to_txt('200-BPM.wav')
+    features_to_txt('200-BPM.wav')
     
     # Cargar una señal
     # x.shape # Tamaño
