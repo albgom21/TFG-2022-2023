@@ -9,47 +9,43 @@ public class GravesAgudos : MonoBehaviour
     public Image img_agudo;
     public ReadTxt input;
 
-    private float[,] graves;
-    private float[,] agudos;
+    private List<float> agudosTiempo = new List<float>();
+    private List<float> gravesTiempo = new List<float>();
+    private List<float> agudosValoresNorm = new List<float>();
+    private List<float> gravesValoresNorm = new List<float>();
 
-    int rows = 0;
-    int cols = 0;
+    int contA = 0;
+    int contG = 0;
 
     void Start()
     {
-        graves = input.getGraves();
-        agudos = input.getAgudos();
+        gravesTiempo = input.getGravesTiempo();
+        gravesValoresNorm = input.getGravesValoresNorm();
 
-        for (int i = 0; i < graves.GetLength(0); i++)
-        {
-            for (int j = 0; j < graves.GetLength(1); j++)
-            {
-                if (j == 0)
-                {
-                    Debug.Log("TIEMPO: " + graves[i, j]);
-                    Invoke("ChangeSize", graves[i, j]);
-                }
-            }
-        }
+        foreach (float time in gravesTiempo)
+            Invoke("ChangeSizeGrave", time);
 
+        agudosTiempo = input.getAgudosTiempo();
+        agudosValoresNorm = input.getAgudosValoresNorm();
+
+        foreach (float time in agudosTiempo)
+            Invoke("ChangeSizeAgudo", time);
     }
     
-    private void ChangeSize()
+    private void ChangeSizeAgudo()
     {
-        img_grave.transform.localScale = new Vector3(graves[rows, cols], graves[rows, cols], img_grave.transform.localScale.z);
-        if (cols + 1 >= graves.GetLength(1))
-        {
-            rows++;
-            cols = 0;
-        }
-        else
-            cols++;
-        Debug.Log("x: " + graves[rows, cols]);
+        img_agudo.transform.localScale = new Vector3(agudosValoresNorm[contA], agudosValoresNorm[contA], img_agudo.transform.localScale.z);
+        Debug.Log("x: " + agudosValoresNorm[contA]);
+        contA++;
+    }
 
+    private void ChangeSizeGrave()
+    {
+        img_grave.transform.localScale = new Vector3(gravesValoresNorm[contG], gravesValoresNorm[contG], img_grave.transform.localScale.z);
+        contG++;
     }
 
     private void Update()
     {
-
     }
 }

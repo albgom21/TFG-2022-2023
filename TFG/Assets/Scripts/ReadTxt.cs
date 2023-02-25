@@ -14,8 +14,9 @@ public class ReadTxt : MonoBehaviour
     public string song = "200-BPM";         // Título del audio analizado
     string path = "Assets/Txt/";            // Ruta dentro del proyecto donde se guardan los txt
     string rutaBeats, rutaSC, rutaRMSE,     // Nombre de cada característica en los txt
-           rutaSamples, rutaSr, rutaAgudos,
-           rutaGraves;
+           rutaSamples, rutaSr,
+           rutaAgudosTiempo, rutaAgudosValoresNorm, rutaAgudos,
+           rutaGravesTiempo, rutaGravesValoresNorm, rutaGraves;
 
 
     // ESTRUCTURAS DE DATOS PARA GUARDAS LAS CARACTERÍSTICAS
@@ -23,6 +24,10 @@ public class ReadTxt : MonoBehaviour
     List<float> scopt = new List<float>();      // Valor del centroide espectral en los instantes en los que hay beats
     List<float> rmse = new List<float>();       // Valor del RMSE en los instantes en los que hay beats
     List<float> samples = new List<float>();    // Valor de las muestras del audio
+    List<float> agudosTiempo = new List<float>();   
+    List<float> gravesTiempo = new List<float>();   
+    List<float> agudosValoresNorm = new List<float>();
+    List<float> gravesValoresNorm = new List<float>();
 
     float[,] matriz_agudos;                     // Tiempo y valor en db de los agudos
     float[,] matriz_graves;                     // Tiempo y valor en db de los graves
@@ -37,7 +42,13 @@ public class ReadTxt : MonoBehaviour
         rutaRMSE = path + song + "_rmse.txt";
         rutaSamples = path + song + "_samples.txt";
         rutaSr = path + song + "_sr.txt";
+
+        rutaAgudosTiempo = path + song + "_agudosTiempo.txt";
+        rutaAgudosValoresNorm = path + song + "_agudosValorNorm.txt";
         rutaAgudos = path + song + "_agudos.txt";
+
+        rutaGravesTiempo = path + song + "_gravesTiempo.txt";
+        rutaGravesValoresNorm = path + song + "_gravesValorNorm.txt";
         rutaGraves = path + song + "_graves.txt";
 
         // Leer y almacenar las caracteristicas del audio
@@ -45,9 +56,15 @@ public class ReadTxt : MonoBehaviour
         readFeature(ref scopt, rutaSC);
         readFeature(ref rmse, rutaRMSE);
         readFeature(ref samples, rutaSamples);
+        readFeature(ref agudosTiempo, rutaAgudosTiempo);
+        readFeature(ref agudosValoresNorm, rutaAgudosValoresNorm);
+
+        readFeature(ref gravesTiempo, rutaGravesTiempo);
+        readFeature(ref gravesValoresNorm, rutaGravesValoresNorm);
         readInt(ref sr, rutaSr);
-        readMatriz(ref matriz_agudos, rutaAgudos);
-        readMatriz(ref matriz_graves, rutaGraves);
+
+        //readMatriz(ref matriz_agudos, rutaAgudos);
+        //readMatriz(ref matriz_graves, rutaGraves);
     }
 
     // Lee una caracterísitca de audio que este en un txt, con una valor float por fila
@@ -128,6 +145,22 @@ public class ReadTxt : MonoBehaviour
     public List<float> getSamples()
     {
         return samples;
+    }
+    public List<float> getAgudosTiempo()
+    {
+        return agudosTiempo;
+    }
+    public List<float> getGravesTiempo()
+    {
+        return gravesTiempo;
+    }
+    public List<float> getAgudosValoresNorm()
+    {
+        return agudosValoresNorm;
+    }
+    public List<float> getGravesValoresNorm()
+    {
+        return gravesValoresNorm;
     }
     public int getSr()
     {
