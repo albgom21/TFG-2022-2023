@@ -36,12 +36,12 @@ public class ObstacleGenerator : MonoBehaviour
 
             if (y > 0 && i > 0)
             {
-                float prevX = beats[i-1] * multiplierX;
+                float prevX = beats[i - 1] * multiplierX;
                 float distance = x - prevX;
                 int prevY = (int)(scopt[i - 1] * 10 - 1);
-                //if (y - prevY == 2) distance--;
-                GameObject ground = Instantiate(groundPrefab, new Vector3(prevX + distance/2, y - height, 0), transform.rotation, contenedorGround);
-                ground.transform.localScale = new Vector3(distance - 1, ground.transform.localScale.y, ground.transform.localScale.z);
+                if (y - prevY == 3) Obstacle3(height, y, prevX, prevY, distance);
+                else if(y -prevY ==2) Obstacle2(height, y, prevX, distance);
+                else Obstacle(height, y, prevX, distance);
             }
             else if (i == 0)
             {
@@ -60,6 +60,22 @@ public class ObstacleGenerator : MonoBehaviour
         //{
         //    Instantiate(obstaclePrefab, new Vector3(i, 0, 0), transform.rotation);
         //}
+    }
+
+    private void Obstacle(float height, int y, float prevX, float distance)
+    {
+        float obstacleWidth = obstaclePrefab.transform.localScale.x / 2;
+        GameObject ground = Instantiate(groundPrefab, new Vector3(prevX + distance / 2 + obstacleWidth, y - height, 0), transform.rotation, contenedorGround);
+        ground.transform.localScale = new Vector3(distance, ground.transform.localScale.y, ground.transform.localScale.z);
+    }
+    private void Obstacle2(float height, int y, float prevX, float distance)
+    {
+        GameObject ground = Instantiate(groundPrefab, new Vector3(distance / 2 + prevX + 1, y - height, 0), transform.rotation, contenedorGround);
+        ground.transform.localScale = new Vector3(distance - 1, ground.transform.localScale.y, ground.transform.localScale.z);
+    }
+    private void Obstacle3(float height, int y, float prevX, float prevY, float distance)
+    {
+        Instantiate(obstaclePrefab, new Vector3(distance / 2 + prevX, (y + prevY) / 2, 0), transform.rotation, contenedorObs);
     }
 
     public float getMultiplierX()
