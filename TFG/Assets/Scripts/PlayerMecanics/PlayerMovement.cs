@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Unrotate();
             //Jump
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space))
             {
                 rb.velocity = Vector2.zero;
                 rb.AddForce(Vector2.up * 26.6581f, ForceMode2D.Impulse);

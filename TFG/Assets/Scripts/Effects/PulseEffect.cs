@@ -28,7 +28,7 @@ public class PulseEffect : MonoBehaviour
 
     void TriggerEvent()
     {
-        color.a = 1;
+        color.a = 0.5f;
         efecto.color = color;
         //Debug.Log("Evento activado en " + Time.time + " segundos");
     }
