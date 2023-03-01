@@ -721,8 +721,89 @@ def filtroSeg(matriz_original, seg):
     matriz_nueva = matriz_original[indices_nuevos, :]
     return matriz_nueva
 
+def example(filename):
+    y, sr = librosa.load(filename)
+
+    # Set the hop length; at 22050 Hz, 512 samples ~= 23ms
+    hop_length = 512
+
+    # Separate harmonics and percussives into two waveforms
+    y_harmonic, y_percussive = librosa.effects.hpss(y)
+
+    # Beat track on the percussive signal
+    tempo, beat_frames = librosa.beat.beat_track(y=y_percussive,
+                                                sr=sr)
+
+    # Compute MFCC features from the raw signal
+    mfcc = librosa.feature.mfcc(y=y, sr=sr, hop_length=hop_length, n_mfcc=13)
+
+    # And the first-order differences (delta features)
+    mfcc_delta = librosa.feature.delta(mfcc)
+
+    # Stack and synchronize between beat events
+    # This time, we'll use the mean value (default) instead of median
+    beat_mfcc_delta = librosa.util.sync(np.vstack([mfcc, mfcc_delta]),
+                                        beat_frames)
+
+    # Compute chroma features from the harmonic signal
+    chromagram = librosa.feature.chroma_cqt(y=y_harmonic,
+                                            sr=sr)
+
+    # Aggregate chroma features between beat events
+    # We'll use the median value of each feature between beat frames
+    beat_chroma = librosa.util.sync(chromagram,
+                                    beat_frames,
+                                    aggregate=np.median)
+
+    # Finally, stack all beat-synchronous features together
+    beat_features = np.vstack([beat_chroma, beat_mfcc_delta])
+    plt.plot(chromagram)
+    plt.show()
+    return beat_features
+
+def percussive(filename):
+    y, sr = librosa.load(filename)
+
+    y_harm, y_perc = librosa.effects.hpss(y)
+
+    # plt.subplot(3, 1, 3)
+
+    librosa.display.waveshow(y=y_harm, sr=sr, alpha=0.25)
+    librosa.display.waveshow(y=y_perc, sr=sr, color='r', alpha=0.5)
+    plt.title('Harmonic + Percussive')
+    plt.show()
+
+def beats(filename):
+    y, sr = librosa.load(filename)
+    onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+    pulse = librosa.beat.plp(onset_envelope=onset_env, sr=sr)
+
+    tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env)
+    beats_plp = np.flatnonzero(librosa.util.localmax(pulse))
+    fig, ax = plt.subplots(nrows=2, sharex=True, sharey=True)
+    times = librosa.times_like(onset_env, sr=sr)
+
+    # ax[0].plot(times, librosa.util.normalize(onset_env),
+    #         label='Onset strength')
+    # ax[0].vlines(times[beats], 0, 1, alpha=0.5, color='r',
+    #         linestyle='--', label='Beats')
+    # ax[0].legend()
+    # ax[0].set(title='librosa.beat.beat_track')
+    
+    # times = librosa.times_like(pulse, sr=sr)
+    # ax[1].plot(times, librosa.util.normalize(pulse),
+    #         label='PLP')
+    # ax[1].vlines(times[beats_plp], 0, 1, alpha=0.5, color='r',
+    #         linestyle='--', label='PLP Beats')
+    # ax[1].legend()
+    # ax[1].set(title='librosa.beat.plp')
+    # ax[1].xaxis.set_major_formatter(librosa.display.TimeFormatter())
+    # plt.show()
+    return times[beats_plp]
+
 def main():
-  
+    a = beats("200-BPM.wav")
+    np.savetxt("200-BPM" + '_plpBeats.txt', a, fmt='%.3f')
     # filename = "200-BPM.wav"
     # samples, sr = librosa.load(filename)
     # agudos_ = agudos(samples,sr)
@@ -742,7 +823,7 @@ def main():
     # plt.show()
 
     
-    features_to_txt('200-BPM.wav')
+    # features_to_txt('200-BPM.wav')
     
     # Cargar una señal
     # x.shape # Tamaño
