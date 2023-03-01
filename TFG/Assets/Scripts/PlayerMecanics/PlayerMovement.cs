@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -11,31 +12,35 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform sprite;
     [SerializeField] private GameObject obstacleGenerator;
     private Rigidbody2D rb;
+    private bool jump, onGround;
 
     void Start()
     {
-        int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[0] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY() - 1);
+        int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[0] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY());
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
+        jump = false; onGround = true;
     }
 
     void Update()
     {
         transform.position += Vector3.right * speed * Time.deltaTime;
-
-        if (OnGround())
-        {
-            Unrotate();
-            //Jump
-            if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space))
-            {
-                rb.velocity = Vector2.zero;
-                rb.AddForce(Vector2.up * 26.6581f, ForceMode2D.Impulse);
-            }
-        }
-        else sprite.Rotate(Vector3.back * 2);
+        if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space)) jump = true;
+        else jump = false;
+        onGround = OnGround();
+        if (onGround) Unrotate();
+        else sprite.Rotate(Vector3.back*1.5f);
     }
 
+    private void FixedUpdate()
+    {
+        if (onGround && jump)
+        {
+            //Jump
+            rb.velocity = Vector2.zero;
+            rb.AddForce(Vector2.up * 26.6581f, ForceMode2D.Impulse);
+        }
+    }
 
     bool OnGround()
     {

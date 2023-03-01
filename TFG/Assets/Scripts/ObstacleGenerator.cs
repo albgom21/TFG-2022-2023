@@ -8,6 +8,7 @@ public class ObstacleGenerator : MonoBehaviour
     [SerializeField] private GameObject obstaclePrefab;
     [SerializeField] private GameObject groundPrefab;
     [SerializeField] private GameObject groundStartPrefab;
+    [SerializeField] private GameObject spikePrefab;
     [SerializeField] private GameObject features;
     [SerializeField] private Transform contenedorObs;
     [SerializeField] private Transform contenedorGround;
@@ -32,34 +33,25 @@ public class ObstacleGenerator : MonoBehaviour
         for (int i = 0; i < beats.Count(); i++)
         {
             float x = beats[i] * multiplierX;
-            int y = (int)(scopt[i] * 10 - 1);
+            int y = (int)(scopt[i] * 10);
 
-            if (y > 0 && i > 0)
+            if (i > 0)
             {
                 float prevX = beats[i - 1] * multiplierX;
                 float distance = x - prevX;
-                int prevY = (int)(scopt[i - 1] * 10 - 1);
+                int prevY = (int)(scopt[i - 1] * 10);
                 if (y - prevY == 3) Obstacle3(height, y, prevX, prevY, distance);
-                else if(y -prevY ==2) Obstacle2(height, y, prevX, distance);
+                else if (y - prevY == 2) Obstacle2(height, y, prevX, distance);
                 else Obstacle(height, y, prevX, distance);
             }
             else if (i == 0)
             {
                 for (int j = 0; j < 10; j++)
-                {
-                    //if (j == 0) groundPrefab.GetComponent<SpriteRenderer>().sprite = fin;
-                    //else if (j == 9) groundPrefab.GetComponent<SpriteRenderer>().sprite = ini;
-                    //else groundPrefab.GetComponent<SpriteRenderer>().sprite = mid;
                     Instantiate(groundStartPrefab, new Vector3(x - width * j, y - height, 0), transform.rotation, contenedorGround);
-                }
             }
+
             Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, contenedorObs);
         }
-        //float distance = (60.0f / BPM) * 10.0f; //Distancia entre bloques = 60 / BPM (segundos en 1 minuto) * 10 (el player recorre 10 unidades por segundo)
-        //for (float i = distance; i < finalLevel; i += distance)
-        //{
-        //    Instantiate(obstaclePrefab, new Vector3(i, 0, 0), transform.rotation);
-        //}
     }
 
     private void Obstacle(float height, int y, float prevX, float distance)

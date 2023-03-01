@@ -8,7 +8,7 @@ public class PlayerDeath : MonoBehaviour
     Vector3 originalPosition;
 
     void Start()
-    { 
+    {
         originalPosition = playerTr.position;
     }
 
