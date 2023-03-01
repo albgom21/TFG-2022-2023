@@ -18,7 +18,8 @@ public class PulseEffect : MonoBehaviour
     void Start()
     {
         Color color = efecto.color;
-        beats = input.getBeatsInTime();
+        //beats = input.getBeatsInTime();
+        beats = input.getPlpBeatsInTime();
 
         foreach (float time in beats)
         {

@@ -14,13 +14,14 @@ public class ReadTxt : MonoBehaviour
     public string song = "200-BPM";         // Título del audio analizado
     string path = "Assets/Txt/";            // Ruta dentro del proyecto donde se guardan los txt
     string rutaBeats, rutaSC, rutaRMSE,     // Nombre de cada característica en los txt
-           rutaSamples, rutaSr,
+           rutaSamples, rutaSr, rutaPlpBeats,
            rutaAgudosTiempo, rutaAgudosValoresNorm, rutaAgudos,
            rutaGravesTiempo, rutaGravesValoresNorm, rutaGraves;
 
 
     // ESTRUCTURAS DE DATOS PARA GUARDAS LAS CARACTERÍSTICAS
     List<float> beats = new List<float>();      // Tiempo en seg cuando se producen los beats
+    List<float> plpBeats = new List<float>();      
     List<float> scopt = new List<float>();      // Valor del centroide espectral en los instantes en los que hay beats
     List<float> rmse = new List<float>();       // Valor del RMSE en los instantes en los que hay beats
     List<float> samples = new List<float>();    // Valor de las muestras del audio
@@ -38,6 +39,7 @@ public class ReadTxt : MonoBehaviour
     {
         // Crear las rutas de los txt
         rutaBeats = path + song + "_beats.txt";
+        rutaPlpBeats = path + song + "_plpBeats.txt";
         rutaSC = path + song + "_scopt.txt";
         rutaRMSE = path + song + "_rmse.txt";
         rutaSamples = path + song + "_samples.txt";
@@ -53,6 +55,7 @@ public class ReadTxt : MonoBehaviour
 
         // Leer y almacenar las caracteristicas del audio
         readFeature(ref beats, rutaBeats);
+        readFeature(ref plpBeats, rutaPlpBeats);
         readFeature(ref scopt, rutaSC);
         readFeature(ref rmse, rutaRMSE);
         readFeature(ref samples, rutaSamples);
@@ -133,6 +136,10 @@ public class ReadTxt : MonoBehaviour
     public List<float> getBeatsInTime()
     {
         return beats;
+    }
+    public List<float> getPlpBeatsInTime()
+    {
+        return plpBeats;
     }
     public List<float> getScopt()
     {
