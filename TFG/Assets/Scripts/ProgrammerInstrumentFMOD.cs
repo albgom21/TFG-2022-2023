@@ -35,7 +35,7 @@ class ProgrammerInstrumentFMOD : MonoBehaviour
 #if UNITY_EDITOR
     void Reset()
     {
-        EventName = FMODUnity.EventReference.Find("event:/MUSIC");
+        EventName = FMODUnity.EventReference.Find("event:/Music");
     }
 #endif
 
@@ -129,13 +129,13 @@ class ProgrammerInstrumentFMOD : MonoBehaviour
         }
         return FMOD.RESULT.OK;
     }
-
-//    void Update()
+}
+//void Update()
+//{
+//    if (Input.GetKeyDown(KeyCode.Alpha1))
 //    {
-//        if (Input.GetKeyDown(KeyCode.Alpha1))
-//        {
-//            PlayDialogue("640148main_APU Shutdown");
-//        }
+//        PlayMainMusic(FileName);
+//    }
 //        if (Input.GetKeyDown(KeyCode.Alpha2))
 //        {
 //            PlayDialogue("640165main_Lookin At It");
@@ -145,4 +145,4 @@ class ProgrammerInstrumentFMOD : MonoBehaviour
 //            PlayDialogue("640169main_Press to ATO");
 //        }
 //    }
-}
+//}
