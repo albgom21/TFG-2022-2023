@@ -5992,7 +5992,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1231916428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6401,6 +6401,7 @@ GameObject:
   - component: {fileID: 2107542414}
   - component: {fileID: 2107542413}
   - component: {fileID: 2107542415}
+  - component: {fileID: 2107542416}
   m_Layer: 5
   m_Name: RawImage
   m_TagString: Untagged
@@ -6479,6 +6480,19 @@ MonoBehaviour:
   - {fileID: 8400000, guid: ed94d149e8e300b4bbd5f709b7d80717, type: 2}
   - {fileID: 8400000, guid: fd4eedf89fb72ed438d9cdf2bcec6f20, type: 2}
   - {fileID: 8400000, guid: d64fb4995db5dc94198c6787139045c5, type: 2}
+--- !u!114 &2107542416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107542411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82752068952250244acadc25cd3adb09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skyboxNew: {fileID: 2100000, guid: 7ed994c1997814049b44c36a823bba6c, type: 2}
 --- !u!1 &2124642413
 GameObject:
   m_ObjectHideFlags: 0
