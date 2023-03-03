@@ -75,6 +75,8 @@ class ProgrammerSounds : MonoBehaviour
         dialogueInstance.setCallback(dialogueCallback);
         dialogueInstance.start();
         dialogueInstance.release();
+
+        Debug.Log("Play Dialogue terminado");
     }
 
     [AOT.MonoPInvokeCallback(typeof(FMOD.Studio.EVENT_CALLBACK))]

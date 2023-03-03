@@ -227,7 +227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 403940962}
   - component: {fileID: 403940961}
-  - component: {fileID: 403940960}
+  - component: {fileID: 403940963}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -235,14 +235,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &403940960
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 403940959}
-  m_Enabled: 1
 --- !u!20 &403940961
 Camera:
   m_ObjectHideFlags: 0
@@ -301,6 +293,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &403940963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403940959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attenuationObject: {fileID: 0}
 --- !u!1 &672808411
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +317,7 @@ GameObject:
   - component: {fileID: 672808416}
   - component: {fileID: 672808415}
   - component: {fileID: 672808414}
+  - component: {fileID: 672808418}
   - component: {fileID: 672808417}
   - component: {fileID: 672808412}
   m_Layer: 0
@@ -418,3 +424,23 @@ MonoBehaviour:
       Data3: 1825955221
       Data4: 1005660459
     Path: event:/Music
+--- !u!114 &672808418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672808411}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b3a4c25d83eba448b634d9e24ab056d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EventName:
+    Guid:
+      Data1: 784304206
+      Data2: 1236515896
+      Data3: 1825955221
+      Data4: 1005660459
+    Path: event:/Music
+  FileName: Level6.wav
