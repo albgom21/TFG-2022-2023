@@ -432,6 +432,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82bad54695dc7db4598eb74aebca47e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  badPrefab: {fileID: 8476976511320236115, guid: 6741c5530963fbe4882c4d214b2a6099, type: 3}
+  waterPrefab: {fileID: 8476976511320236115, guid: c6d6e69cf18a7134a90a6d70b52b371d, type: 3}
+  coinPrefab: {fileID: 368775419}
   obstaclePrefab: {fileID: 2973858885463788473, guid: 8ac23f72d5917fc46bd20a5151c9d284, type: 3}
   groundPrefab: {fileID: 2973858885463788473, guid: 39b046f95bfe0cd41ac6c70c86a52018, type: 3}
   groundStartPrefab: {fileID: 2973858885463788473, guid: 1ecb77c0dcf3e4f469dca523a8219198, type: 3}
@@ -458,6 +461,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &368775419 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5367210584118456719, guid: 5eb33e9d648014f40ba90f695dda9a73, type: 3}
+  m_PrefabInstance: {fileID: 5367210582714752727}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &503303438
 GameObject:
   m_ObjectHideFlags: 0
@@ -832,7 +840,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &720389377
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6493,6 +6501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skyboxNew: {fileID: 2100000, guid: 7ed994c1997814049b44c36a823bba6c, type: 2}
+  mainCamera: {fileID: 963194227}
 --- !u!1 &2124642413
 GameObject:
   m_ObjectHideFlags: 0

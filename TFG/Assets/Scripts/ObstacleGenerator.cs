@@ -1,10 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 
 public class ObstacleGenerator : MonoBehaviour
 {
+    // PRUEBAS Graves Y Agudos
+    [SerializeField] private GameObject badPrefab;
+    [SerializeField] private GameObject waterPrefab;
+    [SerializeField] private GameObject coinPrefab;
+
     [SerializeField] private GameObject obstaclePrefab;
     [SerializeField] private GameObject groundPrefab;
     [SerializeField] private GameObject groundStartPrefab;
@@ -27,6 +33,12 @@ public class ObstacleGenerator : MonoBehaviour
         float height = transform.localScale.y;
         List<float> beats = features.GetComponent<ReadTxt>().getBeatsInTime();
         List<float> scopt = features.GetComponent<ReadTxt>().getScopt();
+
+        // PRUEBAS Graves Y Agudos
+        List<float> agudosTiempo = features.GetComponent<ReadTxt>().getAgudosTiempo();
+        List<float> gravesTiempo = features.GetComponent<ReadTxt>().getGravesTiempo();
+        List<float> agudosValoresNorm = features.GetComponent<ReadTxt>().getAgudosValoresNorm();
+        List<float> gravesValoresNorm = features.GetComponent<ReadTxt>().getGravesValoresNorm();
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
 
@@ -52,6 +64,29 @@ public class ObstacleGenerator : MonoBehaviour
 
             Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, contenedorObs);
         }
+
+        // PRUEBAS Graves Y Agudos
+        for (int i = 0; i < gravesTiempo.Count(); i++)
+        {
+            float prevX = 0;
+            float x = gravesTiempo[i] * multiplierX;
+            if(i != 0)
+                prevX = gravesTiempo[i - 1] * multiplierX;
+            float distance = x - prevX;
+            if (gravesValoresNorm[i] >= 0.8f)
+                Instantiate(badPrefab, new Vector3(distance / 2 + prevX,5, 0), transform.rotation, contenedorObs);
+        }
+        for (int i = 0; i < agudosTiempo.Count(); i++)
+        {
+            float prevX = 0;
+            float x = agudosTiempo[i] * multiplierX;
+            if (i != 0)
+                prevX = agudosTiempo[i - 1] * multiplierX;
+            float distance = x - prevX;
+            if (agudosValoresNorm[i] >= 0.8f)
+                Instantiate(waterPrefab, new Vector3(distance / 2 + prevX, 4, 0), transform.rotation, contenedorObs);
+        }
+
     }
 
     private void Obstacle(float height, int y, float prevX, float distance)
