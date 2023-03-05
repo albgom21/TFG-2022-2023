@@ -6,25 +6,9 @@ import sklearn.preprocessing
 import numpy as np
 import matplotlib.pyplot as plt
 
-# filename = '200-BPM.wav'
-# y, sr = librosa.load(filename)
-# print("El sample rate es: ", sr)
-
-# stft = librosa.stft(y)
-# frequencies = librosa.fft_frequencies(sr=sr)
-
-# print("Las frecuencias presentes en el archivo de audio son:", frequencies)
-# bpm = librosa.beat.tempo(y=y, sr=sr)
-# print("El BPM estimado es:", bpm[0], "beats por minuto.")
-
 # tono = librosa.hz_to_midi(librosa.pitch_tuning(y, sr))
 # nota = librosa.midi_to_note(tono)
 # print("El tono principal del archivo de audio es:", nota)
-
-
-# Load a file and resample to 11 KHz ------------------------------DA ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# filename = librosa.ex('200-BPM.wav')
-# y, sr = librosa.load(filename, sr=11025)
 
 '''
 Muestra un tempograma
@@ -85,7 +69,6 @@ bpm : Pulsos Por Minuto (BPM) de una onda
 beat_times: los instantes en segundos donde se producen los beats 
 '''
 
-
 def get_beats_in_timeline(samples, sr):
     # Calcular el tempo (BPM) y los frames de los beats
     bpm, beats = librosa.beat.beat_track(y=samples, sr=sr)
@@ -95,33 +78,26 @@ def get_beats_in_timeline(samples, sr):
 
 
 '''
-Obtener beats a lo largo del tiempo
+Obtener la información del zero crossing
 
 Parametros
 ----------
 samples : muestras del audio
-ini : inicio de la muestra para analizar
-fin : fin de la muestra para analizar
+
 Returns
 ----------
 zero_crossings : array de bool indicando cuándo pasa la onda por 0
 total_crossings : número de veces que la señal cruza el eje horizontal por cero en el rango dado
 '''
 
-
-def zero_crossing(samples, ini=0, fin=0):
-    if (fin == 0):
-        fin = samples.shape(0)
-    zero_crossings = librosa.zero_crossings(samples[ini:fin], pad=False)
+def zero_crossing(samples):
+    zero_crossings = librosa.zero_crossings(samples, pad=False)
     total_crossings = sum(zero_crossings)
     return zero_crossings, total_crossings
 
 
-#------------------------------------LA REVISIÓN DE MÉTODOS VA POR AQUÍ-------------------------------------------
 '''
-Calculo del zero crossing en toda una muestra
-
-El zero crossing rate indica el cuando la señal cruza el eje horizontal por cero en frames
+Calcula la tasa de cruces por cero en una señal de audio en cada frame
 
 Parametros
 ----------
@@ -129,10 +105,9 @@ samples : muestras del audio
 
 Returns
 ----------
-zcrs : array de bool indicando cuándo pasa la onda por 0
+zcrs : the fraction of zero crossings in each frame
 
 '''
-
 
 def zero_crossing_interval(samples):
     zcrs = librosa.feature.zero_crossing_rate(samples)
@@ -149,7 +124,6 @@ Si queremos agregar todos los vectores de características entre
 las señales de una colección, podemos usar una list comprehension de la siguiente manera:
 kick_features = np.array([extract_features(x) for x in kick_signals])
 '''
-
 
 def extract_features(signal):
     return [
@@ -173,7 +147,6 @@ Returns
 training_features : tabla de características normalizada
 '''
 
-
 def feature_scaling(feature_table):
     scaler = sklearn.preprocessing.MinMaxScaler(feature_range=(-1, 1))
     training_features = scaler.fit_transform(feature_table)
@@ -194,7 +167,6 @@ Returns
 energy : array de frames con su energía
 '''
 
-
 def energy(samples):
     hop_length = 256    # tamaño del incremento
     frame_length = 512  # tamaño del segmento
@@ -212,18 +184,26 @@ samples : muestras del audio
 
 Returns
 ----------
-rmse : array de frames con su RMSE
+rmse : array de segundos con su RMSE
 '''
 
+def rmse(samples, frame_length = 512, hop_length=256):
+  
+    rmse = librosa.feature.rms(y=samples)
+    # rmse = librosa.feature.rms(y=samples, frame_length=frame_length, hop_length=hop_length, center=True)
+    # Convertir los valores RMS a dB
+   
+    rmse_db = librosa.amplitude_to_db(rmse, ref=np.max)
+    tiempo_sec = librosa.times_like(rmse_db)
 
-def rmse(samples):
-    hop_length = 256   # tamaño del incremento
-    frame_length = 512  # tamaño del segmento
-    rmse = librosa.feature.rms(
-        y=samples, frame_length=frame_length, hop_length=hop_length, center=True)
-    tiempo_sec = librosa.times_like(rmse)
+    matriz = np.column_stack((tiempo_sec, rmse_db[0]))
+    
+    # plt.plot(matriz[:,0], matriz[:,1], alpha=0.8, label='RMS')
+    # plt.xlabel('Tiempo (s)')
+    # plt.ylabel('Amplitud (dB)')
+    # plt.title('RMSE a lo largo del tiempo')
+    # plt.show()
 
-    matriz = np.column_stack((tiempo_sec, rmse[0]))
     return matriz
 
 
@@ -318,7 +298,6 @@ def mel_Spectogram(samples, sr):
     logS = librosa.amplitude_to_db(S)
     plt.figure(figsize=(15, 5))
     librosa.display.specshow(logS, sr=sr, x_axis='time', y_axis='mel')
-
 
     # OTRA FORMA
     # # Compute the mel-scaled spectrogram
@@ -544,25 +523,13 @@ def pruebaBeats(samples, sr):
     plt.show()
 
 
+
 '''
-Devuelve los valores del centroide espectral que coinciden con el tiempo
+Devuelve los valores de la matriz que coinciden con el tiempo
 en los que se encuentran los beats 
 '''
 
-
-def sc_optimo(sc, beats):
-   mascara_fila = np.isin(sc[:, 0], beats)
-   filtrada = sc[:, 1][mascara_fila]
-   return filtrada
-
-
-'''
-Devuelve los valores del RMSE que coinciden con el tiempo
-en los que se encuentran los beats 
-'''
-
-
-def rmse_optimo(rmse, beats):
+def matriz_coord_beats(rmse, beats):
    mascara_fila = np.isin(rmse[:, 0], beats)
    filtrada = rmse[:, 1][mascara_fila]
    return filtrada
@@ -580,18 +547,17 @@ def features_to_txt(filename):
 
     # Spectral centroid
     sc = spectral_centroid_v1(samples, sr)
-    scopt = sc_optimo(sc, beats)
+    scopt = matriz_coord_beats(sc, beats)
 
     # Rmse
     r = rmse(samples)
-    ropt = rmse_optimo(r, beats)
+    ropt = matriz_coord_beats(r, beats)
 
     # Graves
     g = graves(samples, sr)
     g = filtroSeg(g, 0.5)
     gTiempo = g[:, 0]
     gValorNorm = normalize(g[:, 1])
-
 
     # Agudos 
     a = agudos(samples, sr)
@@ -662,7 +628,6 @@ def graves(y,sr):
 
     return graves_time_value
 
-
 def agudos(y, sr):
 
     # Calcular la transformada de Fourier de corto tiempo
@@ -711,7 +676,7 @@ def filtroSeg(matriz_original, seg):
     # Obtener el vector de tiempo correspondiente a la matriz original
     tiempo_original = matriz_original[:, 0]
 
-    # Crear un nuevo vector de tiempo con los tiempos que quieres muestrear (en este ejemplo, cada 0.5 segundos)
+    # Crear un nuevo vector de tiempo con los tiempos que quieres muestrear
     tiempo_nuevo = np.arange(tiempo_original[0], tiempo_original[-1], seg)
 
     # Buscar los índices correspondientes en la matriz original
@@ -802,8 +767,11 @@ def beats(filename):
     return times[beats_plp]
 
 def main():
-    a = beats("200-BPM.wav")
-    np.savetxt("200-BPM" + '_plpBeats.txt', a, fmt='%.3f')
+    filename = "200-BPM.wav"
+    features_to_txt(filename)
+
+    # a = beats("200-BPM.wav")
+    # np.savetxt("200-BPM" + '_plpBeats.txt', a, fmt='%.3f')
     # filename = "200-BPM.wav"
     # samples, sr = librosa.load(filename)
     # agudos_ = agudos(samples,sr)
