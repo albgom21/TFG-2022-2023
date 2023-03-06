@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
         jump = false; onGround = true;
+        GameManager.instance_.setStartPosition(transform.position);
     }
 
     void Update()
