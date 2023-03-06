@@ -18,11 +18,6 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    private void Start()
-    {
-        startPosition = new Vector3();
-    }
-
     public void setStartPosition(Vector3 pos)
     {
         startPosition = pos;

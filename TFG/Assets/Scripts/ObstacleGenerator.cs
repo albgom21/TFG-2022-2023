@@ -71,7 +71,7 @@ public class ObstacleGenerator : MonoBehaviour
                 prevX = gravesTiempo[i - 1] * multiplierX;
             float distance = x - prevX;
             if (gravesValoresNorm[i] >= 0.8f)
-                Instantiate(badPrefab, new Vector3(distance / 2 + prevX,5, 0), transform.rotation, contenedorObs);
+                Instantiate(badPrefab, new Vector3(distance / 2 + prevX,5, 0), transform.rotation, obstaclePool);
         }
         for (int i = 0; i < agudosTiempo.Count(); i++)
         {
@@ -81,7 +81,7 @@ public class ObstacleGenerator : MonoBehaviour
                 prevX = agudosTiempo[i - 1] * multiplierX;
             float distance = x - prevX;
             if (agudosValoresNorm[i] >= 0.8f)
-                Instantiate(waterPrefab, new Vector3(distance / 2 + prevX, 4, 0), transform.rotation, contenedorObs);
+                Instantiate(waterPrefab, new Vector3(distance / 2 + prevX, 4, 0), transform.rotation, obstaclePool);
         }
 
     }
