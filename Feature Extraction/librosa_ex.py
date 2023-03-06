@@ -357,8 +357,12 @@ def mel_Frequency_Cepstral_Coefficients(samples, sr):
 
 '''
 Normalizar datos para la visualizacion con la onda de audio
-'''
 
+Parametros
+----------
+x : array de 1 dimensión
+axis : dimensión del array a normalizar
+'''
 
 def normalize(x, axis=0):
     return sklearn.preprocessing.minmax_scale(x, axis=axis)
@@ -552,6 +556,8 @@ def features_to_txt(filename):
     # Rmse
     r = rmse(samples)
     ropt = matriz_coord_beats(r, beats)
+    rnorm = normalize(ropt)
+
 
     # Graves
     g = graves(samples, sr)
@@ -569,7 +575,7 @@ def features_to_txt(filename):
     np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
     np.savetxt(name + '_sr.txt', np_sr, fmt='%.0f')
     np.savetxt(name + '_beats.txt', beats, fmt='%.3f')
-    np.savetxt(name + '_rmse.txt', ropt, fmt='%.3f')
+    np.savetxt(name + '_rmse.txt', rnorm, fmt='%.3f')
     np.savetxt(name + '_scopt.txt', scopt, fmt='%.3f')
     np.savetxt(name + '_gravesTiempo.txt', gTiempo, fmt='%.3f')
     np.savetxt(name + '_gravesValorNorm.txt', gValorNorm, fmt='%.3f')

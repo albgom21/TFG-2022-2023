@@ -636,7 +636,7 @@ GameObject:
   - component: {fileID: 592456402}
   - component: {fileID: 592456401}
   m_Layer: 5
-  m_Name: EFECTO
+  m_Name: EFECTO beats
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6181,7 +6181,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332534587}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -6578,7 +6578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skyboxNew: {fileID: 2100000, guid: 7ed994c1997814049b44c36a823bba6c, type: 2}
-  mainCamera: {fileID: 0}
+  mainCamera: {fileID: 963194227}
 --- !u!1 &2124642413
 GameObject:
   m_ObjectHideFlags: 0
