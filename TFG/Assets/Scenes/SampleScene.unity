@@ -428,11 +428,11 @@ MonoBehaviour:
   badPrefab: {fileID: 8476976511320236115, guid: 6741c5530963fbe4882c4d214b2a6099, type: 3}
   waterPrefab: {fileID: 8476976511320236115, guid: c6d6e69cf18a7134a90a6d70b52b371d, type: 3}
   coinPrefab: {fileID: 5367210584118456719, guid: 5eb33e9d648014f40ba90f695dda9a73, type: 3}
-  obstaclePrefab: {fileID: 2973858885463788473, guid: 8ac23f72d5917fc46bd20a5151c9d284, type: 3}
-  groundPrefab: {fileID: 2973858885463788473, guid: 39b046f95bfe0cd41ac6c70c86a52018, type: 3}
-  spikePrefab: {fileID: 8476976511320236115, guid: acda2dbb31aa1a64fbb74f1e2e172c5e, type: 3}
-  groundStartPrefab: {fileID: 2973858885463788473, guid: 1ecb77c0dcf3e4f469dca523a8219198, type: 3}
   features: {fileID: 1277446150}
+  groundPrefab: {fileID: 2973858885463788473, guid: 39b046f95bfe0cd41ac6c70c86a52018, type: 3}
+  groundStartPrefab: {fileID: 2973858885463788473, guid: 1ecb77c0dcf3e4f469dca523a8219198, type: 3}
+  obstaclePrefab: {fileID: 2973858885463788473, guid: 8ac23f72d5917fc46bd20a5151c9d284, type: 3}
+  spikePrefab: {fileID: 8476976511320236115, guid: acda2dbb31aa1a64fbb74f1e2e172c5e, type: 3}
   obstaclePool: {fileID: 1962388977}
   groundPool: {fileID: 1052714808}
   multiplierY: 10
@@ -6181,7 +6181,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332534587}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
