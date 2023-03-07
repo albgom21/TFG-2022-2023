@@ -9,6 +9,7 @@ public class PlayerDeath : MonoBehaviour
         if (collision.gameObject.layer == 7) //Capa de enemigos
         {
             transform.position = GameManager.instance_.getStartPosition();
+            gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             GetComponentInParent<RestartMusic>().restartMusic();
         }
     }
