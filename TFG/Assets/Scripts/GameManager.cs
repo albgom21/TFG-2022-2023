@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance_;
     private Vector3 startPosition;
+    private int coins;
 
     void Awake()     //  Comprobar que solo hay un GameManager.
     {
@@ -17,6 +18,10 @@ public class GameManager : MonoBehaviour
 
         else Destroy(gameObject);
     }
+    private void Start()
+    {
+        coins = 0;
+    }
 
     public void setStartPosition(Vector3 pos)
     {
@@ -27,4 +32,7 @@ public class GameManager : MonoBehaviour
     {
         return startPosition;
     }
+
+    public void addCoin() { coins++; }
+
 }

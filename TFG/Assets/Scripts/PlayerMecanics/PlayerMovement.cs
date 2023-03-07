@@ -6,8 +6,6 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float speed;
-    [SerializeField] private Transform groundCheckTransform;
-    [SerializeField] private float groundCheckRadius;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private Transform sprite;
     [SerializeField] private GameObject obstacleGenerator;
@@ -28,9 +26,8 @@ public class PlayerMovement : MonoBehaviour
         transform.position += Vector3.right * speed * Time.deltaTime;
         if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space)) jump = true;
         else jump = false;
-        onGround = OnGround();
         if (onGround) Unrotate();
-        else sprite.Rotate(Vector3.back*1.5f);
+        else sprite.Rotate(Vector3.back * 1.5f);
     }
 
     private void FixedUpdate()
@@ -43,11 +40,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    bool OnGround()
-    {
-        return Physics2D.OverlapCircle(groundCheckTransform.position, groundCheckRadius, groundMask);
-    }
-
     void Unrotate()
     {
         Vector3 rotation = sprite.rotation.eulerAngles;
@@ -58,5 +50,24 @@ public class PlayerMovement : MonoBehaviour
     public float getPlayerSpeed()
     {
         return speed;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Vector2 normal = collision.GetContact(0).normal;
+        if (normal == Vector2.up) onGround = true;
+        else if (normal == Vector2.down || normal == Vector2.left) playerDeath();
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        onGround = false;
+    }
+
+    public void playerDeath()
+    {
+        transform.position = GameManager.instance_.getStartPosition();
+        gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        GetComponent<RestartMusic>().restartMusic();
     }
 }
