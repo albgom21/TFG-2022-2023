@@ -30,7 +30,8 @@ class ProgrammerInstrumentFMOD : MonoBehaviour
 
     public FMODUnity.EventReference EventName;
 
-    public string FileName;
+    [SerializeField]
+    string FileName;
 
 #if UNITY_EDITOR
     void Reset()

@@ -317,9 +317,8 @@ GameObject:
   - component: {fileID: 672808416}
   - component: {fileID: 672808415}
   - component: {fileID: 672808414}
-  - component: {fileID: 672808418}
-  - component: {fileID: 672808417}
   - component: {fileID: 672808412}
+  - component: {fileID: 672808417}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -414,7 +413,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 672808411}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37a70ac67a15acc46b61e093e7b0cf44, type: 3}
+  m_Script: {fileID: 11500000, guid: eaecba5676d453344a530c6708d7008d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   EventName:
@@ -424,23 +423,3 @@ MonoBehaviour:
       Data3: 1825955221
       Data4: 1005660459
     Path: event:/Music
---- !u!114 &672808418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 672808411}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b3a4c25d83eba448b634d9e24ab056d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EventName:
-    Guid:
-      Data1: 784304206
-      Data2: 1236515896
-      Data3: 1825955221
-      Data4: 1005660459
-    Path: event:/Music
-  FileName: Level6.wav

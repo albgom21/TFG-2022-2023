@@ -1,16 +1,3 @@
-/*
-	Crear en FMOD un evento "programmer" e incluir un instrumento "Programmer instrument" (vacio; se puede poner algo en el placeholder, pero solo funciona en FMOD editando, no en unity).
-
-Cambiar la linea (en este script), para referenciar al "programmer instrument creado"	
-	EventName = FMODUnity.EventReference.Find("event:/programmer");
-	
-En unity cargar este script y modificar los wavs del Update
-
-
-
-
-*/
-
 //--------------------------------------------------------------------
 //
 // This is a Unity behaviour script that demonstrates how to use
@@ -53,7 +40,7 @@ class ProgrammerSounds : MonoBehaviour
 #if UNITY_EDITOR
     void Reset()
     {
-        EventName = FMODUnity.EventReference.Find("event:/Music");
+        //EventName = FMODUnity.EventReference.Find("event:/Music");
     }
 #endif
 
@@ -75,8 +62,6 @@ class ProgrammerSounds : MonoBehaviour
         dialogueInstance.setCallback(dialogueCallback);
         dialogueInstance.start();
         dialogueInstance.release();
-
-        Debug.Log("Play Dialogue terminado");
     }
 
     [AOT.MonoPInvokeCallback(typeof(FMOD.Studio.EVENT_CALLBACK))]
