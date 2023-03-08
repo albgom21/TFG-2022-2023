@@ -35,7 +35,7 @@ public class ObstacleGenerator : MonoBehaviour
 
     //public int BPM;
     //public float finalLevel;
-
+  
     void Start()
     {
         float width = transform.localScale.x;
@@ -48,6 +48,7 @@ public class ObstacleGenerator : MonoBehaviour
         List<float> gravesTiempo = features.GetComponent<ReadTxt>().getGravesTiempo();
         List<float> agudosValoresNorm = features.GetComponent<ReadTxt>().getAgudosValoresNorm();
         List<float> gravesValoresNorm = features.GetComponent<ReadTxt>().getGravesValoresNorm();
+
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
 
@@ -67,29 +68,29 @@ public class ObstacleGenerator : MonoBehaviour
             int nextY = (int)(scopt[i + 1] * multiplierY);
             float distance = x - prevX;
             Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
-            //if (y - prevY == 3) Obstacle3(height, x, y, prevX, prevY, distance);
-            //else if (nextY - y == 2) Obstacle2(height, x, y, prevX, distance);
-            //if (y - prevY == 0 || y - prevY == 1)
-            //{
-            //    Ground0_1(height, y, prevX, distance);
-            //    if (nextY - y == 1) Instantiate(spikePrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
-            //    else Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
-            //}
-            //else if (y - prevY == 2)
-            //{
-            //    Instantiate(obstaclePrefab, new Vector3((x + prevX) / 2, y - 1, 0), transform.rotation, obstaclePool);
-            //    Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
-            //}
-            //else if (y - prevY == -1)
-            //{
-            //    Ground0_1(height, y, prevX, distance);
-            //    Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
-            //}
-            //else
-            //{
-            //    Ground0_1(height, y, prevX, distance);
-            //    Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
-            //}
+            if (y - prevY == 3) Obstacle3(height, x, y, prevX, prevY, distance);
+            else if (nextY - y == 2) Obstacle2(height, x, y, prevX, distance);
+            if (y - prevY == 0 || y - prevY == 1)
+            {
+                Ground0_1(height, y, prevX, distance);
+                if (nextY - y == 1) Instantiate(spikePrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
+                else Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
+            }
+            else if (y - prevY == 2)
+            {
+                Instantiate(obstaclePrefab, new Vector3((x + prevX) / 2, y - 1, 0), transform.rotation, obstaclePool);
+                Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
+            }
+            else if (y - prevY == -1)
+            {
+                Ground0_1(height, y, prevX, distance);
+                Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
+            }
+            else
+            {
+                Ground0_1(height, y, prevX, distance);
+                Instantiate(obstaclePrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
+            }
         }
 
         #region pruebas GyA
@@ -116,7 +117,6 @@ public class ObstacleGenerator : MonoBehaviour
         //}
         #endregion
     }
-
 
     private void Obstacle(float height, float x, int y, float prevX, float distance)
     {
