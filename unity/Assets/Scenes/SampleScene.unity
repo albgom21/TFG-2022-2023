@@ -425,7 +425,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5923cb64ae6a0c4f9cbc3d1152dd1c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skyboxNew: {fileID: 2100000, guid: 7ed994c1997814049b44c36a823bba6c, type: 2}
+  high: {fileID: 2100000, guid: 7ed994c1997814049b44c36a823bba6c, type: 2}
+  low: {fileID: 2100000, guid: baef7505b9e48404cb74585601f49ff9, type: 2}
   features: {fileID: 1277446150}
 --- !u!4 &290854746
 Transform:
@@ -6290,7 +6291,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332534587}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
