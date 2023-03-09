@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1685863512033718591}
   - component: {fileID: -7105674069528179612}
   - component: {fileID: 1526294793053634549}
-  - component: {fileID: 8934811278528706410}
+  - component: {fileID: 6661202368201056002}
   m_Layer: 6
   m_Name: Trampoline
   m_TagString: Untagged
@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m: 1
---- !u!61 &8934811278528706410
-BoxCollider2D:
+--- !u!58 &6661202368201056002
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -113,15 +113,5 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 0.16, y: 0.16}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Radius: 0.5

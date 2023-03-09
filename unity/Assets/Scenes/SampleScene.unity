@@ -436,7 +436,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290854744}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 66.870926, y: 1055.4811, z: -0.64202356}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -478,8 +478,12 @@ MonoBehaviour:
   features: {fileID: 1277446150}
   groundPrefab: {fileID: 2973858885463788473, guid: 39b046f95bfe0cd41ac6c70c86a52018, type: 3}
   groundStartPrefab: {fileID: 2973858885463788473, guid: 1ecb77c0dcf3e4f469dca523a8219198, type: 3}
-  obstaclePrefab: {fileID: 2973858885463788473, guid: 8ac23f72d5917fc46bd20a5151c9d284, type: 3}
-  spikePrefab: {fileID: 8476976511320236115, guid: acda2dbb31aa1a64fbb74f1e2e172c5e, type: 3}
+  obstacles:
+  - {fileID: 2973858885463788473, guid: 8ac23f72d5917fc46bd20a5151c9d284, type: 3}
+  - {fileID: 8476976511320236115, guid: acda2dbb31aa1a64fbb74f1e2e172c5e, type: 3}
+  - {fileID: 4061323180711763171, guid: 68ba5c6e935a5144286f9a1159c11873, type: 3}
+  - {fileID: 4061323180711763171, guid: ff52ad3971e5fdd4cb80006e3c9f6392, type: 3}
+  - {fileID: 6501727687131121628, guid: 87df644389d66714e98cd4f30875990e, type: 3}
   obstaclePool: {fileID: 1962388977}
   groundPool: {fileID: 1052714808}
   multiplierY: 10
@@ -491,7 +495,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 307103656}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3128257, y: -0.097352214, z: -4.75435}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6325,7 +6329,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 10
+  m_GravityScale: 12.41067
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
