@@ -472,10 +472,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82bad54695dc7db4598eb74aebca47e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  badPrefab: {fileID: 8476976511320236115, guid: 6741c5530963fbe4882c4d214b2a6099, type: 3}
-  waterPrefab: {fileID: 8476976511320236115, guid: c6d6e69cf18a7134a90a6d70b52b371d, type: 3}
-  coinPrefab: {fileID: 5367210584118456719, guid: 5eb33e9d648014f40ba90f695dda9a73, type: 3}
+  waterPrefab: {fileID: 8476976511320236115, guid: 93d753d03b222164f908a797fd311150, type: 3}
   features: {fileID: 1277446150}
+  zones: {fileID: 290854745}
   groundPrefab: {fileID: 2973858885463788473, guid: 39b046f95bfe0cd41ac6c70c86a52018, type: 3}
   groundStartPrefab: {fileID: 2973858885463788473, guid: 1ecb77c0dcf3e4f469dca523a8219198, type: 3}
   obstacles:

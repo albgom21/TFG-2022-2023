@@ -10,27 +10,49 @@ public class Zone : MonoBehaviour
 
     private Material originalSkyBox;
 
+
+    private List<int> beatsZones = new List<int>();
+
+    private int beatIniHigh = -1,
+                beatIniLow = -1,
+                beatEndHigh = -1,
+                beatEndLow = -1;
+
+    private float timeCount = 0;
+    private bool[] once = { true, true, true, true };
+
+    private float timeIniZoneHigh = 0;
+    private float timeIniZoneLow = 0;
+    private float timeEndZoneHigh = 0;
+    private float timeEndZoneLow = 0;
+
     void Start()
     {
         originalSkyBox = RenderSettings.skybox;
 
         List<float> beats = features.GetComponent<ReadTxt>().getBeatsInTime();
         List<float> rmse = features.GetComponent<ReadTxt>().getRMSE();
-      
+
         HighZone(beats, rmse);
         LowZone(beats, rmse);
+
+        //Debug.Log("Ini BEAT high: " + beatIniHigh);
+        //Debug.Log("Fin BEAT high: " + beatEndHigh);
+
+        //Debug.Log("Ini BEAT low: " + beatIniLow);
+        //Debug.Log("Fin BEAT low: " + beatEndLow);
+
     }
 
     private void HighZone(List<float> beats, List<float> rmse)
     {
-        float bestIniZone = -1,
-             iniZone = -1,
+        float iniZone = -1,
              contIni = -1,
-             finZone = -1,
              balance = 0;
 
         int bestLength = -1;
         int actualLength = 0;
+        int iniCont = 0;
 
         bool find = true;
         for (int i = 0; i < rmse.Count(); i++)
@@ -40,6 +62,7 @@ public class Zone : MonoBehaviour
             {
                 contIni = i;
                 iniZone = beats[i];
+                iniCont = i;
                 find = false;
                 balance += rmse[i];
             }
@@ -50,17 +73,16 @@ public class Zone : MonoBehaviour
                 if ((balance - ((i - contIni) * 0.85f)) >= 2)
                     balance -= 1.75f;
 
-                balance += rmse[i];
-                finZone = beats[i];
-
                 actualLength++;
                 balance += rmse[i];
 
                 if (actualLength > bestLength)
                 {
                     bestLength = actualLength;
-                    bestIniZone = iniZone;
-                    finZone = beats[i];
+                    timeIniZoneHigh = iniZone;
+                    timeEndZoneHigh = beats[i];
+                    beatEndHigh = i;
+                    beatIniHigh = iniCont;
                 }
             }
             else
@@ -71,11 +93,14 @@ public class Zone : MonoBehaviour
             }
         }
 
-        Debug.Log("Ini zona high: " + bestIniZone);
-        Debug.Log("Fin zona high: " + finZone);
+        beatsZones.Add(beatIniHigh);
+        beatsZones.Add(beatEndHigh);
 
-        Invoke("iniZoneMethod", bestIniZone);
-        Invoke("endZoneMethod", finZone);
+        //Invoke("iniZoneHighMethod", timeIniZoneHigh);
+        //Invoke("endZoneMethod", timeEndZoneHigh);
+        //Debug.Log("Ini zona high: " + timeIniZoneHigh);
+        //Debug.Log("Fin zona high: " + timeEndZoneHigh);
+
     }
 
     private void LowZone(List<float> beats, List<float> rmse)
@@ -88,6 +113,8 @@ public class Zone : MonoBehaviour
 
         int bestLength = -1;
         int actualLength = 0;
+        int iniCont = 0;
+
 
         bool find = true;
         for (int i = 0; i < rmse.Count(); i++)
@@ -98,8 +125,10 @@ public class Zone : MonoBehaviour
                 //Debug.Log("NUEVA BUSQUEDA en: " + i +" de " + rmse.Count());
                 contIni = i;
                 iniZone = beats[i];
+                iniCont = i;
                 find = false;
                 balance += rmse[i];
+
             }
             // Si ya se está en la zona y el balance cumple seguir agrandando la zona
             else if (iniZone >= 0 && balance <= ((i - contIni) * 0.3f) && (((i - contIni) * 0.3f) - balance >= 3) && (rmse[i] <= 0.7f))
@@ -115,31 +144,67 @@ public class Zone : MonoBehaviour
                 if (actualLength > bestLength)
                 {
                     bestLength = actualLength;
-                    bestIniZone = iniZone;
-                    finZone = beats[i];
+                    timeIniZoneLow = iniZone;
+                    timeEndZoneLow = beats[i];
+                    beatEndLow = i;
+                    beatIniLow = iniCont;
                 }
             }
             else
             {
-                //Debug.Log("MAX LENGTH: " + bestLength);
                 actualLength = 0;
-                //Debug.Log("-------FIN------");
                 balance = 0;
                 find = true;
             }
         }
-
-        Invoke("iniZoneMethod2", bestIniZone);
-        Invoke("endZoneMethod", finZone);
-        Debug.Log("Ini zona low: " + bestIniZone);
-        Debug.Log("Fin zona low: " + finZone);
+        beatsZones.Add(beatIniLow);
+        beatsZones.Add(beatEndLow);
+        //Invoke("iniZoneLowMethod", timeIniZoneLow);
+        //Invoke("endZoneMethod", timeEndZoneLow);
+        //Debug.Log("Ini zona low: " + timeIniZoneLow);
+        //Debug.Log("Fin zona low: " + timeEndZoneLow);
     }
 
-    void iniZoneMethod()
+    private void Update()
+    {
+        if (GameManager.instance.getDeath())
+        {
+            RenderSettings.skybox = originalSkyBox;
+            timeCount = 0;
+            for (int i = 0; i < once.Length; i++)
+                once[i] = true;
+        }
+
+        timeCount += Time.deltaTime;
+
+
+        if (timeCount >= timeIniZoneLow && once[0])
+        {
+            iniZoneLowMethod();
+            once[0] = false;
+        }
+        else if (timeCount >= timeEndZoneLow && once[1])
+        {
+            endZoneMethod();
+            once[1] = false;
+        }
+        if (timeCount >= timeIniZoneHigh && once[2])
+        {
+            iniZoneHighMethod();
+            once[2] = false;
+        }
+        else if (timeCount >= timeEndZoneLow && once[3])
+        {
+            endZoneMethod();
+            once[3] = false;
+        }
+    }
+
+    void iniZoneHighMethod()
     {
         RenderSettings.skybox = high;
     }
-    void iniZoneMethod2()
+    void iniZoneLowMethod()
     {
         RenderSettings.skybox = low;
     }
@@ -147,4 +212,11 @@ public class Zone : MonoBehaviour
     {
         RenderSettings.skybox = originalSkyBox;
     }
+
+    // GETTERS
+    public int getBeatIniHigh() { return beatIniHigh; }
+    public int getBeatIniLow() { return beatIniLow; }
+    public int getBeatEndHigh() { return beatEndHigh; }
+    public int getBeatEndLow() { return beatEndLow; }
+    public List<int> getBeatZonesIndexes() { return beatsZones; }
 }

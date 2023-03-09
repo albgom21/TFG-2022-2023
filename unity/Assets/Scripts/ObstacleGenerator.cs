@@ -10,11 +10,12 @@ public class ObstacleGenerator : MonoBehaviour
     }
 
     // PRUEBAS Graves Y Agudos
-    [SerializeField] private GameObject badPrefab;
+    //[SerializeField] private GameObject badPrefab;
     [SerializeField] private GameObject waterPrefab;
-    [SerializeField] private GameObject coinPrefab;
+    //[SerializeField] private GameObject coinPrefab;
 
     [SerializeField] private GameObject features;
+    [SerializeField] private Zone zones;
 
     // Prefabs
     [SerializeField] private GameObject groundPrefab;
@@ -45,10 +46,24 @@ public class ObstacleGenerator : MonoBehaviour
         List<float> scopt = features.GetComponent<ReadTxt>().getScopt();
 
         // PRUEBAS Graves Y Agudos
-        List<float> agudosTiempo = features.GetComponent<ReadTxt>().getAgudosTiempo();
-        List<float> gravesTiempo = features.GetComponent<ReadTxt>().getGravesTiempo();
-        List<float> agudosValoresNorm = features.GetComponent<ReadTxt>().getAgudosValoresNorm();
-        List<float> gravesValoresNorm = features.GetComponent<ReadTxt>().getGravesValoresNorm();
+        //List<float> agudosTiempo = features.GetComponent<ReadTxt>().getAgudosTiempo();
+        //List<float> gravesTiempo = features.GetComponent<ReadTxt>().getGravesTiempo();
+        //List<float> agudosValoresNorm = features.GetComponent<ReadTxt>().getAgudosValoresNorm();
+        //List<float> gravesValoresNorm = features.GetComponent<ReadTxt>().getGravesValoresNorm();
+
+        int iniH = zones.getBeatIniHigh();
+        int iniL = zones.getBeatIniLow();
+        int endH = zones.getBeatEndHigh();
+        int endL = zones.getBeatEndLow();
+
+        List<int> beatsZonesIndex = zones.getBeatZonesIndexes();
+
+
+        //Debug.Log("Ini BEAT high: " + iniH);
+        //Debug.Log("Fin BEAT high: " + endH);
+
+        //Debug.Log("Ini BEAT low: " + iniL);
+        //Debug.Log("Fin BEAT low: " + endL);
 
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
@@ -73,12 +88,37 @@ public class ObstacleGenerator : MonoBehaviour
 
             Ground0_1(prevX, y, distance, width, height);
 
-            if (nextY - y == 0)
-            {
-                InstantiateRandomObstacle(x, y);
-            }
-            else Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(x, y, 0), transform.rotation, obstaclePool);
 
+            // Dejar espacio antes y despues de cada portal (1 beat)
+            bool portal = false;
+            bool espacio = false;
+            foreach(int b in beatsZonesIndex)
+            {
+                if(b == i)
+                {
+                    portal = true;
+                    break;
+                }
+                else if (b == i-1 || b == i + 1)
+                {
+                    espacio = true;
+                    break;
+                }
+            }
+
+            //Portales
+            if (portal)
+            {
+                Instantiate(waterPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
+            }
+            else if (!espacio && !portal) //Obstaculos
+            {
+                if (nextY - y == 0)
+                {
+                    InstantiateRandomObstacle(x, y);
+                }
+                else Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(x, y, 0), transform.rotation, obstaclePool);
+            }
         }
 
         #region pruebas GyA

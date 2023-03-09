@@ -17,7 +17,9 @@ public class Crono : MonoBehaviour
 
     private void Update()
     {
-        t = Time.time - timeActivated;                // Calcular el tiempo que lleva el crono activado         
+        if (GameManager.instance.getDeath())
+            timeActivated = Time.time;
+        t = Time.time - timeActivated;                   // Calcular el tiempo que lleva el crono activado         
         textoCrono.text = t.ToString("F2") + "s";        // Mostrar el tiempo sin decimales   
     }
 }

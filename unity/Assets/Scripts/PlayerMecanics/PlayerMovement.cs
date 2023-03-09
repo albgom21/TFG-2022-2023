@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
         jump = false; onGround = true;
-        GameManager.instance_.setStartPosition(transform.position);
+        GameManager.instance.setStartPosition(transform.position);
     }
 
     void Update()
@@ -66,7 +66,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void playerDeath()
     {
-        transform.position = GameManager.instance_.getStartPosition();
+        GameManager.instance.setDeath();
+        transform.position = GameManager.instance.getStartPosition();
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         GetComponent<RestartMusic>().restartMusic();
     }
