@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private Transform sprite;
     [SerializeField] private GameObject obstacleGenerator;
+    [SerializeField] private GameObject spawnPrefab;
     private Rigidbody2D rb;
     private bool jump, onGround;
 
@@ -19,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
         jump = false; onGround = true;
         GameManager.instance.setStartPosition(transform.position);
+        Instantiate(spawnPrefab, transform.position, transform.rotation);
     }
 
     void Update()
@@ -66,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void playerDeath()
     {
-        GameManager.instance.setDeath();
+        GameManager.instance.setDeath(true);
         transform.position = GameManager.instance.getStartPosition();
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         GetComponent<RestartMusic>().restartMusic();

@@ -6352,6 +6352,7 @@ MonoBehaviour:
     m_Bits: 64
   sprite: {fileID: 1062934579}
   obstacleGenerator: {fileID: 307103656}
+  spawnPrefab: {fileID: 8476976511320236115, guid: 62b17c668c12c9445a522e855565a955, type: 3}
 --- !u!4 &1332534592
 Transform:
   m_ObjectHideFlags: 0

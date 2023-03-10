@@ -36,13 +36,8 @@ public class GameManager : MonoBehaviour
 
     public void addCoin() { coins++; }
     public bool getDeath() { return death; }
-    public void setDeath() { 
-        death = true;
-        Invoke("restart", 0.1f);
+    public void setDeath(bool b) { 
+        death = b;
     }
 
-    public void restart()
-    {
-        death = false;
-    }
 }
