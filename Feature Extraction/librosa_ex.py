@@ -541,7 +541,7 @@ def matriz_coord_beats(rmse, beats):
 
 def features_to_txt(filename):
     # Carga la canción en un array de muestras
-    samples, sr = librosa.load(filename)
+    samples, sr = librosa.load(filename) #mono=True
 
     # Sample rate
     np_sr = np.array([sr])
