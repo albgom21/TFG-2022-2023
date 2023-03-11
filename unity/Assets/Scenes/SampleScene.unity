@@ -483,7 +483,8 @@ MonoBehaviour:
   - {fileID: 4061323180711763171, guid: 68ba5c6e935a5144286f9a1159c11873, type: 3}
   - {fileID: 4061323180711763171, guid: ff52ad3971e5fdd4cb80006e3c9f6392, type: 3}
   - {fileID: 6501727687131121628, guid: 87df644389d66714e98cd4f30875990e, type: 3}
-  trampoline: {fileID: 8476976511320236115, guid: 3753bcdb8d45f7a4a8ae72c230545bb0, type: 3}
+  - {fileID: 8476976511320236115, guid: 3753bcdb8d45f7a4a8ae72c230545bb0, type: 3}
+  - {fileID: 8476976511320236115, guid: 52f3c2c8035466946a2c28d46fa1981f, type: 3}
   obstaclePool: {fileID: 1962388977}
   groundPool: {fileID: 1052714808}
   multiplierY: 10
