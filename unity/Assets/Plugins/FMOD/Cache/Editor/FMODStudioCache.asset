@@ -42,10 +42,10 @@ MonoBehaviour:
   Path: ../FMOD/ProyectoFmod/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638139541384281621
+  lastModified: 638141539721373719
   FileSizes:
   - Name: Desktop
-    Value: 848
+    Value: 1028
   Exists: 1
 --- !u!114 &-7750413543023946753
 MonoBehaviour:
@@ -74,6 +74,54 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 147632
+--- !u!114 &-7072767672238365234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/MUSIC/Quality
+  m_EditorClassIdentifier: 
+  Name: Quality
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 1
+  ID:
+    data1: 2205031200
+    data2: 2420999056
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
+--- !u!114 &-5470130013056783822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/MUSIC/Underwater
+  m_EditorClassIdentifier: 
+  Name: Underwater
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 603318696
+    data2: 3247746894
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,12 +141,13 @@ MonoBehaviour:
   EditorEvents:
   - {fileID: -7750413543023946753}
   - {fileID: -8957803517244097854}
+  - {fileID: 7559952767139251901}
   EditorParameters: []
   MasterBanks:
   - {fileID: 2813485004033085234}
   StringsBanks:
   - {fileID: -8282175085137117510}
-  cacheTime: 638139541384750250
+  cacheTime: 638141539721533292
   cacheVersion: 131593
 --- !u!114 &2813485004033085234
 MonoBehaviour:
@@ -120,6 +169,30 @@ MonoBehaviour:
   - Name: Desktop
     Value: 1036
   Exists: 1
+--- !u!114 &3074553389922377956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/MUSIC/Reverb
+  m_EditorClassIdentifier: 
+  Name: Reverb
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 1101896077
+    data2: 1282880331
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
 --- !u!114 &4236473184428288406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,8 +208,38 @@ MonoBehaviour:
   Path: ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank
   Name: MyBank
   StudioPath: bank:/MyBank
-  lastModified: 638139541384750250
+  lastModified: 638141539721533292
   FileSizes:
   - Name: Desktop
-    Value: 1358080
+    Value: 1361984
   Exists: 1
+--- !u!114 &7559952767139251901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/MUSIC
+  m_EditorClassIdentifier: 
+  Path: event:/MUSIC
+  Guid:
+    Data1: 784304206
+    Data2: 1236515896
+    Data3: 1825955221
+    Data4: 1005660459
+  Banks:
+  - {fileID: 4236473184428288406}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: -7072767672238365234}
+  - {fileID: -5470130013056783822}
+  - {fileID: 3074553389922377956}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 184600

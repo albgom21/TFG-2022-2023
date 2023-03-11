@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class RestartMusic : MonoBehaviour
 {
-    private FMODUnity.StudioEventEmitter audio;
+    private SelectMusic audio;
     private void Start()
     {
-        audio = GetComponent<FMODUnity.StudioEventEmitter>();
+        audio = GetComponent<SelectMusic>();
     }
 
     public void restartMusic()
