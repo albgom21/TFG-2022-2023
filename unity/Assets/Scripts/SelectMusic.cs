@@ -30,17 +30,22 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Linq;
 
+[DefaultExecutionOrder(1)]
 class SelectMusic : MonoBehaviour
 {
     FMOD.Studio.EVENT_CALLBACK callback;
 
     public FMODUnity.EventReference EventName;
 
-    [SerializeField]
-    String fileName;
+    //[SerializeField]
+    private string fileName;
 
     private FMOD.Studio.EventInstance eventInstance;
+   
+    // private string[] songNames;
 
 #if UNITY_EDITOR
     void Reset()
@@ -48,9 +53,24 @@ class SelectMusic : MonoBehaviour
         EventName = FMODUnity.EventReference.Find("event:/Music");
     }
 #endif
+    private void Awake()
+    {
+        fileName = GameManager.instance.getSong() + ".wav";
+    }
 
     void Start()
     {
+        // ------Para cuando se haga un menú de selección de música, con este código se obtienen todas las canciones------
+        // Obtener todos los archivos con la extensión ".mp3" en la carpeta "Songs"
+        //string[] filePaths = Directory.GetFiles(Application.dataPath + "/StreamingAssets", "*.wav");
+        //filePaths = filePaths.Concat(Directory.GetFiles(Application.dataPath + "/StreamingAssets", "*.mp3")).ToArray();
+
+        //// Obtener solo los nombres de archivo sin la ruta y la extensión
+        //songNames = new string[filePaths.Length];
+        //for (int i = 0; i < filePaths.Length; i++)
+        //    songNames[i] = Path.GetFileNameWithoutExtension(filePaths[i]);
+        // --------------------------------------------------------------------------------------------------------------
+
         // Explicitly create the delegate object and assign it to a member so it doesn't get freed
         // by the garbage collected while it's being used
         callback = new FMOD.Studio.EVENT_CALLBACK(EventCallback);

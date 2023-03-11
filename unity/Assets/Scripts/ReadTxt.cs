@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using System;
 
+[DefaultExecutionOrder(0)]
 public class ReadTxt : MonoBehaviour
 {
     /*
@@ -37,6 +38,9 @@ public class ReadTxt : MonoBehaviour
 
     void Awake()
     {
+        GameManager.instance.setSong(song);
+        string extension = Path.GetExtension(song);
+
         // Crear las rutas de los txt
         rutaBeats = path + song + "_beats.txt";
         rutaPlpBeats = path + song + "_plpBeats.txt";
