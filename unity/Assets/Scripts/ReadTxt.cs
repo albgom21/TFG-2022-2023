@@ -39,7 +39,8 @@ public class ReadTxt : MonoBehaviour
     void Awake()
     {
         GameManager.instance.setSong(song);
-        string extension = Path.GetExtension(song);
+        //song = GameManager.instance.getSong();
+        //string extension = Path.GetExtension(song);
 
         // Crear las rutas de los txt
         rutaBeats = path + song + "_beats.txt";

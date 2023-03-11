@@ -22,4 +22,6 @@ public class Crono : MonoBehaviour
         t = Time.time - timeActivated;                   // Calcular el tiempo que lleva el crono activado         
         textoCrono.text = t.ToString("F2") + "s";        // Mostrar el tiempo sin decimales   
     }
+
+    public double getActualTime() { return t; }
 }

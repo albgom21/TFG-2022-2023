@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
         transform.SetPositionAndRotation(new Vector3(transform.position.x, + startingY, transform.position.z), transform.rotation);
         jump = false; onGround = true;
         Instantiate(spawnPrefab, transform.position, transform.rotation);
-        spawnPosition = new Vector3(189, 5, 0);// transform.position;
+        spawnPosition = transform.position;
         raycastDistance = transform.localScale.y / 2.0f + 0.02f;
     }
 
