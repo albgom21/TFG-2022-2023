@@ -7,13 +7,335 @@
 [LOG] OutputWASAPI::init                       : Output buffer size: 4096 samples, latency: 0.00ms, period: 10.00ms, DSP buffer: 1024 * 4
 [LOG] Thread::initThread                       : Init FMOD stream thread. Affinity: 0x4000000000000003, Priority: 0xFFFF7FFB, Stack Size: 98304, Semaphore: No, Sleep Time: 10, Looping: Yes.
 [LOG] Thread::initThread                       : Init FMOD mixer thread. Affinity: 0x4000000000000001, Priority: 0xFFFF7FFA, Stack Size: 81920, Semaphore: No, Sleep Time: 0, Looping: Yes.
-[LOG] AsyncManager::init                       : manager 0000014B10D98238 isAsync 0 updatePeriod 0.02
+[LOG] AsyncManager::init                       : manager 000001CA8A28AD18 isAsync 0 updatePeriod 0.02
 [LOG] AsyncManager::init                       : done
 [LOG] PlaybackSystem::init                     : 
 [LOG] Thread::initThread                       : Init FMOD Studio sample load thread. Affinity: 0x4000000000000003, Priority: 0xFFFF7FFD, Stack Size: 98304, Semaphore: No, Sleep Time: 1, Looping: No.
 [LOG] PlaybackSystem::init                     : done
 [LOG] Thread::initThread                       : Init FMOD Studio bank load thread. Affinity: 0x4000000000000003, Priority: 0xFFFF7FFD, Stack Size: 98304, Semaphore: No, Sleep Time: 1, Looping: No.
 [LOG] Manager::init                            : done.
+[LOG] Manager::readBank                        : fileversion = 142, compatVersion = 140 (oldest = 44, newest = 142)
+[LOG] Manager::readBank                        : fileversion = 142, compatVersion = 140 (oldest = 44, newest = 142)
+[LOG] Manager::readBank                        : fileversion = 142, compatVersion = 140 (oldest = 44, newest = 142)
+[LOG] PlaybackSystem::acquireMasterBus         : Setting master channel group format to 6
+[LOG] Manager::readBank                        : fileversion = 142, compatVersion = 140 (oldest = 44, newest = 142)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C32C98 : node = 000001C9B14FFA70
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C32C98
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C9B14FFB80
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C32C98
+[LOG] SoundI::release                          : 200-BPM (000001CA82C3B8A8)
+[LOG] SoundI::release                          :     200-BPM (000001C7C04D56F8)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C3BDB8)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C3B8A8 : node = 000001C945EF0C20
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C3B8A8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C945EF0D30
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C3B8A8
+[LOG] SoundI::release                          : 200-BPM (000001CA82C32C98)
+[LOG] SoundI::release                          :     200-BPM (000001C9B1264BB8)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C325D8)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C31858 : node = 000001C945EEF5A0
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C31858
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C945EEF6B0
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C31858
+[LOG] SoundI::release                          : 200-BPM (000001CA82C3B8A8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B1266C38)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C3CCE8)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C3CCE8 : node = 000001C945EEF6E0
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C3CCE8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C945EEF7F0
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C3CCE8
+[LOG] SoundI::release                          : 200-BPM (000001CA82C31858)
+[LOG] SoundI::release                          :     200-BPM (000001C9B1266758)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C351B8)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C336B8 : node = 000001CA899C56F0
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C336B8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001CA899C5800
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C336B8
+[LOG] SoundI::release                          : 200-BPM (000001CA82C3CCE8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B12658B8)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C3B8A8)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C3BDB8 : node = 000001C9B179EE20
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C3BDB8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C9B179EF30
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C3BDB8
+[LOG] SoundI::release                          : 200-BPM (000001CA82C336B8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B12631B8)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C32AE8)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C30778 : node = 000001C9DF9B0360
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C30778
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C9DF9B0470
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C30778
+[LOG] SoundI::release                          : 200-BPM (000001CA82C3BDB8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B1265F38)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C3B8A8)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C3B8A8 : node = 000001C9B14FF6B0
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C3B8A8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C9B14FF7C0
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C3B8A8
+[LOG] SoundI::release                          : 200-BPM (000001CA82C30778)
+[LOG] SoundI::release                          :     200-BPM (000001C9B1264398)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C305C8)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C336B8 : node = 000001C945EEF5A0
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C336B8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C945EEF6B0
+[LOG] SystemI::createSound                     :     filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSound                     :     FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSound                     :     setdata soundi = 000001CA82C367A8 : node = 000001C945EF0360
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSound                     :     add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C336B8
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C367A8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C945EF0470
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C367A8
+[LOG] SoundI::release                          : 200-BPM (000001CA82C336B8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B1265BF8)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C31BB8)
+[LOG] SoundI::release                          : 200-BPM (000001CA82C3B8A8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B1264538)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C39BF8)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C3B8A8 : node = 000001C9DF9B0AE0
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C3B8A8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C9DF9B0BF0
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C3B8A8
+[LOG] SoundI::release                          : 200-BPM (000001CA82C367A8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B12639D8)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C32278)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C34CA8 : node = 000001C9DF9B0EA0
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C34CA8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C9DF9B0FB0
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C34CA8
+[LOG] SoundI::release                          : 200-BPM (000001CA82C3B8A8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B12634F8)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C3BDB8)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C39BF8 : node = 000001C945EF0C20
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C39BF8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C945EF0D30
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C39BF8
+[LOG] SoundI::release                          : 200-BPM (000001CA82C34CA8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B1264058)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C35368)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C33F28 : node = 000001C945EF0D60
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C33F28
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C945EF0E70
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C33F28
+[LOG] SoundI::release                          : 200-BPM (000001CA82C39BF8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B1263358)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C3B8A8)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C39BF8 : node = 000001C945EF0360
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C39BF8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C945EF0470
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C39BF8
+[LOG] SoundI::release                          : 200-BPM (000001CA82C33F28)
+[LOG] SoundI::release                          :     200-BPM (000001C9B1264538)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C35D88)
+[LOG] SystemI::createSound                     : filename = ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank : mode 02010082
+[LOG] SystemI::createSound                     : FMOD_NONBLOCKING specified.  Putting into queue to be opened asynchronously!
+[LOG] SystemI::createSound                     : setdata soundi = 000001CA82C34CA8 : node = 000001C945EF0D60
+[LOG] SystemI::createSound                     : add node to async list : head = 000001CAAF4F86E8.  list count = 0
+[LOG] AsyncThread::threadFunc                  : Starting Asynchronous operation on sound 000001CA82C34CA8
+[LOG] SystemI::createSoundInternal             :     Create name='../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank', mode=0x02010082
+[LOG] SystemI::createSoundInternal             :     exinfo->cbsize             = 224
+[LOG] SystemI::createSoundInternal             :     exinfo->length             = 1355616
+[LOG] SystemI::createSoundInternal             :     exinfo->fileoffset         = 2464
+[LOG] SystemI::createSoundInternal             :     exinfo->numsubsounds       = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlist      = 000001C945EF0E70
+[LOG] SystemI::createSoundInternal             :     exinfo->inclusionlistnum   = 1
+[LOG] SystemI::createSoundInternal             :     exinfo->suggestedsoundtype = 5
+[LOG] SystemI::createSoundInternal             :     exinfo->initialseekpostype = 1
+[LOG] SystemI::createSoundInternal             :     Stream 0/1: name='200-BPM', format=5, channels=1, frequency=48000, lengthbytes=1252864, lengthpcm=7086358, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.999969.
+[LOG] AsyncThread::threadFunc                  : Finished Asynchronous operation on sound 000001CA82C34CA8
+[LOG] SoundI::release                          : 200-BPM (000001CA82C39BF8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B12646D8)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C3B8A8)
+[LOG] SoundI::release                          : 200-BPM (000001CA82C34CA8)
+[LOG] SoundI::release                          :     200-BPM (000001C9B1262E78)
+[LOG] SoundI::release                          :     200-BPM (000001CA82C34948)
+[LOG] Thread::callback                         : FMOD Studio update thread finished.
+[LOG] Thread::callback                         : FMOD Studio bank load thread finished.
+[LOG] Profile::disconnectAll                   : Profiler disconnecting all clients
+[LOG] Thread::callback                         : FMOD Studio sample load thread finished.
+[LOG] LiveUpdate::release                      : 
+[LOG] LiveUpdate::reset                        : Reset connection (reason Disconnected)
+[LOG] Thread::callback                         : FMOD stream thread finished.
+[LOG] Thread::callback                         : FMOD mixer thread finished.
+[LOG] Profile::disconnectAll                   : Profiler disconnecting all clients
+[LOG] SystemI::close                           : Closed.
 [LOG] Manager::readBank                        : fileversion = 142, compatVersion = 140 (oldest = 44, newest = 142)
 [LOG] Manager::readBank                        : fileversion = 142, compatVersion = 140 (oldest = 44, newest = 142)
 [LOG] Manager::readBank                        : fileversion = 142, compatVersion = 140 (oldest = 44, newest = 142)
@@ -26,3 +348,5 @@
 [LOG] Thread::callback                         : FMOD stream thread finished.
 [LOG] Thread::callback                         : FMOD mixer thread finished.
 [LOG] SystemI::close                           : Closed.
+[LOG] Thread::callback                         : FMOD nonblocking thread (0) finished.
+[LOG] Thread::callback                         : FMOD file thread finished.
