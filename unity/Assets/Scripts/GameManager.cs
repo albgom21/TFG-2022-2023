@@ -24,16 +24,6 @@ public class GameManager : MonoBehaviour
         coins = 0;
     }
 
-    public void setStartPosition(Vector3 pos)
-    {
-        startPosition = pos;
-    }
-
-    public Vector3 getStartPosition()
-    {
-        return startPosition;
-    }
-
     public void addCoin() { coins++; }
     public bool getDeath() { return death; }
     public void setDeath(bool b) { 

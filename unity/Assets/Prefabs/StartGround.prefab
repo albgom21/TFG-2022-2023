@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2973858885463788420}
   - component: {fileID: 2973858885463788475}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: StartGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8800423578068902745}
   - component: {fileID: 8933113082091678422}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: HitboxObstacle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,7 +155,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8746614410538314021}
   - component: {fileID: 7028920700081639905}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: HitboxGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,7 +213,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5450340871221499920}
   - component: {fileID: 4680476897535357790}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: HitboxObstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

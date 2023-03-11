@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
+using UnityEditor.Timeline;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -12,15 +13,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject spawnPrefab;
     private Rigidbody2D rb;
     private bool jump, onGround;
+    private Vector3 spawnPosition;
+    private RaycastHit2D raycast;
+    private float raycastDistance;
 
     void Start()
     {
         int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[0] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY());
         rb = GetComponent<Rigidbody2D>();
-        transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
+        transform.SetPositionAndRotation(new Vector3(transform.position.x, + startingY, transform.position.z), transform.rotation);
         jump = false; onGround = true;
-        GameManager.instance.setStartPosition(transform.position);
         Instantiate(spawnPrefab, transform.position, transform.rotation);
+        spawnPosition = transform.position;
+        raycastDistance = transform.localScale.y / 2.0f + 0.02f;
     }
 
     void Update()
@@ -40,6 +45,10 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = Vector2.zero;
             rb.AddForce(Vector2.up * 26.6581f, ForceMode2D.Impulse);
         }
+
+        raycast = Physics2D.Raycast(transform.position, Vector2.down, raycastDistance);
+        if (raycast.collider != null) onGround = true;
+        else onGround = false;
     }
 
     void Unrotate()
@@ -57,20 +66,14 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.up) onGround = true;
-        else if (normal == Vector2.down || normal == Vector2.left) playerDeath();
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        onGround = false;
+        if (normal == Vector2.down || normal == Vector2.left) playerDeath();
     }
 
     public void playerDeath()
     {
         GameManager.instance.setDeath(true);
-        transform.position = GameManager.instance.getStartPosition();
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        transform.position = spawnPosition;
         GetComponent<RestartMusic>().restartMusic();
     }
 }

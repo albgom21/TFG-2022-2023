@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class ObstacleGenerator : MonoBehaviour
 {
@@ -21,6 +23,7 @@ public class ObstacleGenerator : MonoBehaviour
     [SerializeField] private GameObject groundPrefab;
     [SerializeField] private GameObject groundStartPrefab;
     [SerializeField] private GameObject[] obstacles;
+    [SerializeField] private GameObject trampoline;
 
     // Obstacle Array
     private readonly ObstacleType[] allObstacles = {ObstacleType.obstacle, ObstacleType.spike,
@@ -65,61 +68,8 @@ public class ObstacleGenerator : MonoBehaviour
         //Debug.Log("Ini BEAT low: " + iniL);
         //Debug.Log("Fin BEAT low: " + endL);
 
-
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
-
-        for (int i = 0; i < beats.Count() - 1; i++)
-        {
-            float x = beats[i] * multiplierX;
-            int y = (int)(scopt[i] * multiplierY);
-            if (i == 0)
-            {
-                for (int j = 0; j < 10; j++)
-                    Instantiate(groundStartPrefab, new Vector3(x - width * j, y - height, 0), transform.rotation, groundPool);
-                Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(x, y, 0), transform.rotation, obstaclePool);
-                continue;
-            }
-            float prevX = beats[i - 1] * multiplierX;
-            float nextX = beats[i + 1] * multiplierX;
-            int prevY = (int)(scopt[i - 1] * multiplierY);
-            int nextY = (int)(scopt[i + 1] * multiplierY);
-            float distance = x - prevX;
-
-
-            Ground0_1(prevX, y, distance, width, height);
-
-
-            // Dejar espacio antes y despues de cada portal (1 beat)
-            bool portal = false;
-            bool espacio = false;
-            foreach(int b in beatsZonesIndex)
-            {
-                if(b == i)
-                {
-                    portal = true;
-                    break;
-                }
-                else if (b == i-1 || b == i + 1)
-                {
-                    espacio = true;
-                    break;
-                }
-            }
-
-            //Portales
-            if (portal)
-            {
-                Instantiate(waterPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
-            }
-            else if (!espacio && !portal) //Obstaculos
-            {
-                if (nextY - y == 0)
-                {
-                    InstantiateRandomObstacle(x, y);
-                }
-                else Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(x, y, 0), transform.rotation, obstaclePool);
-            }
-        }
+        GenerateLevel(width, height, beats, scopt, beatsZonesIndex);
 
         #region pruebas GyA
         // PRUEBAS Graves Y Agudos
@@ -144,6 +94,49 @@ public class ObstacleGenerator : MonoBehaviour
         //        Instantiate(waterPrefab, new Vector3(distance / 2 + prevX, 4, 0), transform.rotation, obstaclePool);
         //}
         #endregion
+    }
+
+    private void GenerateLevel(float width, float height, List<float> beats, List<float> scopt, List<int> beatsZonesIndex)
+    {
+        bool portal = false;
+        for (int i = 2; i < beats.Count() - 1; i++)
+        {
+            float x = beats[i] * multiplierX;
+            int y = (int)(scopt[i] * multiplierY);
+            if (i == 2)
+            {
+                Ground0_1(-1, y, x + 1, width, height);
+                continue;
+            }
+
+            foreach (int b in beatsZonesIndex)
+            {
+                if (b == i)
+                {
+                    portal = true;
+                    break;
+                }
+            }
+
+            float prevX = beats[i - 1] * multiplierX;
+            float nextX = beats[i + 1] * multiplierX;
+            int prevY = (int)(scopt[i - 1] * multiplierY);
+            int nextY = (int)(scopt[i + 1] * multiplierY);
+            float distance = x - prevX;
+
+            if (portal)
+            {
+                Instantiate(waterPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
+                Ground0_1(prevX, y, distance, width, height);
+                portal = false;
+                continue;
+            }
+
+            Ground0_1(prevX, y, distance, width, height);
+            if (nextY - y == 0) InstantiateRandomObstacle(x, y);
+            else Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(x, y, 0), transform.rotation, obstaclePool);
+        }
+
     }
 
     private void Obstacle(float height, float x, int y, float prevX, float distance)
