@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class Zone : MonoBehaviour
 {
-    [SerializeField] private Material high;
-    [SerializeField] private Material low;
+    [SerializeField] private Material highSky;
+    [SerializeField] private Material lowSky;
     [SerializeField] private GameObject features;
+    [SerializeField] private SpriteRenderer playerSprite;
+    [SerializeField] private Color highColor;
+    [SerializeField] private Color lowColor;
+
+    private Color originalColor;
 
     private Material originalSkyBox;
-
 
     private List<int> beatsZones = new List<int>();
 
@@ -35,6 +39,8 @@ public class Zone : MonoBehaviour
 
         HighZone(beats, rmse);
         LowZone(beats, rmse);
+
+        originalColor = playerSprite.color;
 
         //Debug.Log("Ini BEAT high: " + beatIniHigh);
         //Debug.Log("Fin BEAT high: " + beatEndHigh);
@@ -169,7 +175,7 @@ public class Zone : MonoBehaviour
     {
         if (GameManager.instance.getDeath())
         {
-            RenderSettings.skybox = originalSkyBox;
+            endZoneMethod();
             timeCount = 0;
             for (int i = 0; i < once.Length; i++)
                 once[i] = true;
@@ -202,15 +208,19 @@ public class Zone : MonoBehaviour
 
     void iniZoneHighMethod()
     {
-        RenderSettings.skybox = high;
+        RenderSettings.skybox = highSky;
+        playerSprite.color = highColor;
     }
+
     void iniZoneLowMethod()
     {
-        RenderSettings.skybox = low;
+        RenderSettings.skybox = lowSky;
+        playerSprite.color = lowColor;
     }
     void endZoneMethod()
     {
         RenderSettings.skybox = originalSkyBox;
+        playerSprite.color = originalColor;
     }
 
     // GETTERS

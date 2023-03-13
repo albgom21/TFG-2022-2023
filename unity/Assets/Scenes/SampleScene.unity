@@ -462,9 +462,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5923cb64ae6a0c4f9cbc3d1152dd1c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  high: {fileID: 2100000, guid: 7ed994c1997814049b44c36a823bba6c, type: 2}
-  low: {fileID: 2100000, guid: baef7505b9e48404cb74585601f49ff9, type: 2}
+  highSky: {fileID: 2100000, guid: 7ed994c1997814049b44c36a823bba6c, type: 2}
+  lowSky: {fileID: 2100000, guid: baef7505b9e48404cb74585601f49ff9, type: 2}
   features: {fileID: 1277446150}
+  playerSprite: {fileID: 1062934580}
+  highColor: {r: 1, g: 0.3764706, b: 0.3372549, a: 1}
+  lowColor: {r: 0.93333334, g: 0.7137255, b: 1, a: 1}
 --- !u!4 &290854746
 Transform:
   m_ObjectHideFlags: 0
@@ -1315,8 +1318,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2e8c2f9f903858c4697b2f526d4918a7, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: cb7cec92898790844a887b794597a78a, type: 3}
+  m_Color: {r: 0.7122642, g: 0.85618883, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
