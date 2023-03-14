@@ -44,6 +44,10 @@ class SelectMusic : MonoBehaviour
     private string fileName;
 
     private FMOD.Studio.EventInstance eventInstance;
+
+
+    //Parametros
+    UnderWaterEffect underWaterEffect;
    
 #if UNITY_EDITOR
     void Reset()
@@ -54,6 +58,7 @@ class SelectMusic : MonoBehaviour
     private void Awake()
     {
         fileName = GameManager.instance.getSong() + ".wav";
+        underWaterEffect = GetComponent<UnderWaterEffect>();
     }
 
     void Start()
@@ -149,9 +154,15 @@ class SelectMusic : MonoBehaviour
     public void Play()
     {
         PlayMusic(fileName);
+        if (underWaterEffect) underWaterEffect.setEventInstance(eventInstance);
     }
     public void Stop()
     {
         eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+    }
+
+    public FMOD.Studio.EventInstance getEventInstance()
+    {
+        return eventInstance;
     }
 }
