@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform sprite;
     [SerializeField] private GameObject obstacleGenerator;
     [SerializeField] private GameObject spawnPrefab;
+    [SerializeField] private GameObject particles;
     private Rigidbody2D rb;
     private bool jump, onGround;
     private Vector3 spawnPosition;
@@ -33,8 +34,14 @@ public class PlayerMovement : MonoBehaviour
         transform.position += Vector3.right * speed * Time.deltaTime;
         if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space)) jump = true;
         else jump = false;
-        if (onGround) Unrotate();
-        else sprite.Rotate(Vector3.back * 1.5f);
+        if (onGround) {
+            Unrotate();
+            //particles.SetActive(true);
+        }
+        else {
+            sprite.Rotate(Vector3.back);
+            //particles.SetActive(false);
+        }
     }
 
     private void FixedUpdate()
