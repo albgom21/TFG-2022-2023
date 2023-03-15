@@ -460,9 +460,10 @@ sr : frecuencia del audio (Sample Rate)
 '''
 def onset_detection(samples, sr):
     # Cargar la canción
-    y_harm, y_perc = librosa.effects.hpss(samples)
+    y_harm, y_perc = librosa.effects.hpss(samples, margin=2)
     onset_frames = librosa.onset.onset_detect(y=y_perc, sr=sr)
     onset_times = librosa.frames_to_time(onset_frames, sr=sr)
+    
     return onset_times
 
 #--------------------OTRAS FUNCIONES-------------------------------
