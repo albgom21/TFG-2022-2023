@@ -691,7 +691,7 @@ def features_to_txt(filename):
     ruta_origen = './'
 
     # Ruta de la carpeta de destino
-    ruta_destino = '../TFG/Assets/Txt/'
+    ruta_destino = '../unity/Assets/Txt/'
 
     # Recorre los archivos de la carpeta de origen
     # for archivo in os.listdir(ruta_origen):
