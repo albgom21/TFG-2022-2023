@@ -1,42 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PulseEffect : MonoBehaviour
 {
-    public Image efecto;
+    //public Image efecto;
+    public SpriteRenderer sprite;
     public ReadTxt input;
 
+    private float timeCount = 0;
     private Color color;
-    private float a;
     List<float> beats;
     int cont = 0;
 
-    public float[] eventTimes;
-
     void Start()
     {
-        Color color = efecto.color;
-        //beats = input.getBeatsInTime();
-        beats = input.getPlpBeatsInTime();
+        color = sprite.color;
+        beats = input.getBeatsInTime();
+        //beats = input.getPlpBeatsInTime();
 
-        foreach (float time in beats)
-        {
-            Invoke("TriggerEvent", time);
-        }
+        //foreach (float time in beats)
+        //{
+        //    Invoke("TriggerEvent", time);
+        //}
     }
 
-    void TriggerEvent()
-    {
-        color.a = 0.5f;
-        efecto.color = color;
-        //Debug.Log("Evento activado en " + Time.time + " segundos");
-    }
+    //void TriggerEvent()
+    //{
+    //    color.a = 0.5f;
+    //    efecto.color = color;
+    //    //Debug.Log("Evento activado en " + Time.time + " segundos");
+    //}
 
     private void Update()
     {
-        color.a -= 0.025f;
-        efecto.color = color;
+        if (GameManager.instance.getDeath())
+        {
+            timeCount = 0;
+            cont = 0;
+        }
+
+        timeCount += Time.deltaTime;
+
+        if (cont < beats.Count() && timeCount >= beats[cont])
+        {
+            color.a = 1f;
+            sprite.color = color;
+            cont++;
+        }
+
+        color.a -= 1f * Time.deltaTime;
+        sprite.color = color;
     }
 }
