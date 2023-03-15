@@ -17,7 +17,8 @@ public class ReadTxt : MonoBehaviour
     string rutaBeats, rutaSC, rutaRMSE,     // Nombre de cada característica en los txt
            rutaSamples, rutaSr, rutaPlpBeats,
            rutaAgudosTiempo, rutaAgudosValoresNorm, rutaAgudos,
-           rutaGravesTiempo, rutaGravesValoresNorm, rutaGraves;
+           rutaGravesTiempo, rutaGravesValoresNorm, rutaGraves,
+           rutaOnset;
 
 
     // ESTRUCTURAS DE DATOS PARA GUARDAS LAS CARACTERÍSTICAS
@@ -30,6 +31,7 @@ public class ReadTxt : MonoBehaviour
     List<float> gravesTiempo = new List<float>();   
     List<float> agudosValoresNorm = new List<float>();
     List<float> gravesValoresNorm = new List<float>();
+    List<float> onset = new List<float>();
 
     float[,] matriz_agudos;                     // Tiempo y valor en db de los agudos
     float[,] matriz_graves;                     // Tiempo y valor en db de los graves
@@ -58,6 +60,8 @@ public class ReadTxt : MonoBehaviour
         rutaGravesValoresNorm = path + song + "_gravesValorNorm.txt";
         rutaGraves = path + song + "_graves.txt";
 
+        rutaOnset = path + song + "_onsetDetection.txt";
+
         // Leer y almacenar las caracteristicas del audio
         readFeature(ref beats, rutaBeats);
         readFeature(ref plpBeats, rutaPlpBeats);
@@ -69,6 +73,7 @@ public class ReadTxt : MonoBehaviour
 
         readFeature(ref gravesTiempo, rutaGravesTiempo);
         readFeature(ref gravesValoresNorm, rutaGravesValoresNorm);
+        readFeature(ref onset, rutaOnset);
         readInt(ref sr, rutaSr);
 
         //readMatriz(ref matriz_agudos, rutaAgudos);
@@ -82,13 +87,10 @@ public class ReadTxt : MonoBehaviour
         if (File.Exists(ruta))
         {
             string[] lines = File.ReadAllLines(ruta);
-
             foreach (string line in lines)
                 lista.Add(float.Parse(line) / 1000.0f);
-
         }
-        else
-            Debug.LogError("El archivo de texto para leer una FEATURE no existe en la ruta especificada: " + ruta);
+        else Debug.LogError("El archivo de texto para leer una FEATURE no existe en la ruta especificada: " + ruta);
     }
 
     // Lee una caracterísitca de audio que este en un txt, siendo esta un único int
@@ -100,8 +102,7 @@ public class ReadTxt : MonoBehaviour
             string[] lines = File.ReadAllLines(ruta);
             n = int.Parse(lines[0]);
         }
-        else
-            Debug.LogError("El archivo de texto para leer un INT no existe en la ruta especificada: " + ruta);
+        else Debug.LogError("El archivo de texto para leer un INT no existe en la ruta especificada: " + ruta);
     }
 
     // Lee una caracterísitca de audio que este en un txt, con la forma de una matriz bidimensional,
@@ -173,6 +174,10 @@ public class ReadTxt : MonoBehaviour
     public List<float> getGravesValoresNorm()
     {
         return gravesValoresNorm;
+    }
+    public List<float> getOnset()
+    {
+        return onset;
     }
     public int getSr()
     {
