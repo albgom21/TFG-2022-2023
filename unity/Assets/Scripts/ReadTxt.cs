@@ -65,7 +65,7 @@ public class ReadTxt : MonoBehaviour
 
         // Leer y almacenar las caracteristicas del audio
         readFeature(ref beats, rutaBeats);
-        readFeature(ref plpBeats, rutaPlpBeats);
+        //readFeature(ref plpBeats, rutaPlpBeats);
         readFeature(ref scopt, rutaSC);
         readFeature(ref rmse, rutaRMSE);
         readFeature(ref samples, rutaSamples);
