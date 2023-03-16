@@ -128,10 +128,7 @@
 	<object class="MixerBusPanner" id="{5e6b82f7-cc1f-4043-9841-a48aea9af28a}" />
 	<object class="ProgrammerSound" id="{86770739-78b1-40c2-a0d6-e874822801f0}">
 		<property name="length">
-			<value>184.60000000000002</value>
-		</property>
-		<property name="looping">
-			<value>true</value>
+			<value>300</value>
 		</property>
 		<relationship name="placeholder">
 			<destination>{7fd247d8-c300-4fd8-9dac-8a923b873d3c}</destination>
