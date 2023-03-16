@@ -460,11 +460,14 @@ sr : frecuencia del audio (Sample Rate)
 '''
 def onset_detection(samples, sr):
     # Cargar la canción
-    y_harm, y_perc = librosa.effects.hpss(samples, margin=2)
+    print(samples.size)
+    y_perc = librosa.effects.percussive(samples, margin = 3.0)
     onset_frames = librosa.onset.onset_detect(y=y_perc, sr=sr)
-    onset_times = librosa.frames_to_time(onset_frames, sr=sr)
+    y_perc = librosa.frames_to_time(onset_frames, sr=sr)
+    print(y_perc.size)
+    sc = spectral_centroid_v1(y_perc, sr)
     
-    return onset_times
+    return y_perc
 
 #--------------------OTRAS FUNCIONES-------------------------------
 def graves(y,sr):
@@ -727,8 +730,9 @@ def extract_features(signal):
 
 
 def main():
-    filename = '200-BPM.wav'
-    features_to_txt(filename)
-
+    filename = 'bzrp.wav'
+    #features_to_txt(filename)
+    sample, sr = load_Wave(filename)
+    onset_detection(sample, sr)
 
 main()

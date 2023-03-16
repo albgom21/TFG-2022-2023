@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 public class DrumsEffect : MonoBehaviour
@@ -11,6 +14,8 @@ public class DrumsEffect : MonoBehaviour
     List<float> onset;
     private int i;
     private float offset;
+    private float time;
+    private int onsetCount;
 
     void Start()
     {
@@ -18,29 +23,26 @@ public class DrumsEffect : MonoBehaviour
         color = image.color;
         onset = input.getOnset();
         i = 0;
-        foreach (float time in onset)
-        {
-            Invoke("DrumsEvent", time);
-        }
-
-    }
-
-    void DrumsEvent()
-    {
-        color.a = 1f;
-        if (i < onset.Count - 1)
-        {
-            if (onset[i + 1] - onset[i] > 1f) offset = 1f;
-            else offset = onset[i + 1] - onset[i];
-            Debug.Log(offset);
-        }
-        else offset = 1;
-        i++;
+        onsetCount = onset.Count;
     }
 
     private void Update()
     {
-        color.a -= 1f * (Time.deltaTime/offset);
+        if (GameManager.instance.getDeath()) time = i = 0;
+        time += Time.deltaTime;
+
+        if (i < onsetCount && time >= onset[i])
+        {
+            color.a = 1f;
+            if (i < onset.Count - 1)
+            {
+                if (onset[i + 1] - onset[i] > 1f) offset = 1f;
+                else offset = onset[i + 1] - onset[i];
+            }
+            else offset = 1;
+            i++;
+        }
         image.color = color;
+        color.a -= 1f * (Time.deltaTime / offset);
     }
 }
