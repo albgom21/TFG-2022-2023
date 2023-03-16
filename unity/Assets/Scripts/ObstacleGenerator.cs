@@ -135,14 +135,18 @@ public class ObstacleGenerator : MonoBehaviour
                 continue;
             }
 
-
-            if (y - prevY == 3)
+            if (y-prevY >= 4)
             {
-                InstantiateObstacle3Up(x, y, prevX, prevY);
+                InstantiateObstacle3Up(x, y, prevX, prevY, y-prevY);
+                continue;
+            }
+            else if (y - prevY == 3)
+            {
+                InstantiateObstacle3Up(x, y, prevX, prevY, y-prevY);
                 continue;
             }
             Ground0_1(prevX, y, distance, width, height);
-            if (nextY - y == 0) InstantiateRandomObstacle(x, y);
+            if (y - prevY == 0 && nextY - y == 0) InstantiateRandomObstacle(x, y);
             else if (nextY - y == 2) InstantiateObstacle2Up(x, y);
             else Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(x, y, 0), transform.rotation, obstaclePool);
         }
@@ -171,11 +175,12 @@ public class ObstacleGenerator : MonoBehaviour
         Instantiate(obstacles[(int)ObstacleType.spike], new Vector2(x, y), transform.rotation, obstaclePool);
     }
 
-    private void InstantiateObstacle3Up(float x, int y, float prevX, int prevY)
+    private void InstantiateObstacle3Up(float x, int y, float prevX, int prevY, int highDiference)
     {
         int rnd = Random.Range(0, centerObstacles.Length);
         Destroy(obstaclePool.GetChild(obstaclePool.childCount - 1).gameObject);
-        Instantiate(obstacles[(int)ObstacleType.interactiveTrampoline], new Vector2((x + prevX) / 2f, (y + prevY) / 2f), transform.rotation, obstaclePool);
+        GameObject intTramp =  Instantiate(obstacles[(int)ObstacleType.interactiveTrampoline], new Vector2((x + prevX) / 2f, (y + prevY) / 2f), transform.rotation, obstaclePool);
+        //intTramp.GetComponent<Trampoline>().setJumpForce(highDiference - 3);
         Instantiate(obstacles[(int)centerObstacles[rnd]], new Vector2(x, y), transform.rotation, obstaclePool);
     }
 

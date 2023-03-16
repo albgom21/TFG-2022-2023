@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[0] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY());
+        int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[2] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY());
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, + startingY, transform.position.z), transform.rotation);
         jump = false; onGround = true;

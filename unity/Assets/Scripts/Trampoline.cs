@@ -17,4 +17,6 @@ public class Trampoline : MonoBehaviour
             rb.AddForce(Vector2.up * 26.6581f * jumpForce, ForceMode2D.Impulse);
         }
     }
+
+    public void setJumpForce(int newJF) { jumpForce = newJF; }
 }

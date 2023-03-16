@@ -730,9 +730,7 @@ def extract_features(signal):
 
 
 def main():
-    filename = 'bzrp.wav'
-    #features_to_txt(filename)
-    sample, sr = load_Wave(filename)
-    onset_detection(sample, sr)
+    filename = 'Purpurina.wav'
+    features_to_txt(filename)
 
 main()
