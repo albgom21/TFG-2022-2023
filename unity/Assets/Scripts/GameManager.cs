@@ -9,9 +9,9 @@ public class GameManager : MonoBehaviour
     private Vector3 startPosition;
     private int coins;
     private bool death = false;
-    private string song;
+    private string song, extension;
 
-    void Awake()     //  Comprobar que solo hay un GameManager.
+    void Awake()     // Comprobar que solo hay un GameManager.
     {
         if (instance == null)
         {
@@ -31,5 +31,7 @@ public class GameManager : MonoBehaviour
     public void setDeath(bool b) { death = b;}
     public void setSong(string s) { song = s; }
     public string getSong() { return song; }
+    public void setExtension(string s) { extension = s; }
+    public string getExtension() { return extension; }
 
 }
