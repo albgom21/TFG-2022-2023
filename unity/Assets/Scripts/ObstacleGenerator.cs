@@ -39,6 +39,7 @@ public class ObstacleGenerator : MonoBehaviour
     // Multipliers
     [SerializeField] private int multiplierY;
     private float multiplierX;
+    private float minDistanceBetweenObstacles;
 
     //public int BPM;
     //public float finalLevel;
@@ -71,6 +72,8 @@ public class ObstacleGenerator : MonoBehaviour
         //Debug.Log("Fin BEAT low: " + endL);
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
+        minDistanceBetweenObstacles = multiplierX / 2f;
+        Debug.Log(minDistanceBetweenObstacles);
         GenerateLevel(width, height, beats, scopt, beatsZonesIndex);
 
         #region pruebas GyA
@@ -102,6 +105,7 @@ public class ObstacleGenerator : MonoBehaviour
     {
         bool portal = false;
         int offsetI = 2;
+        bool jumpObstacle = false;
         for (int i = offsetI; i < beats.Count() - 1; i++)
         {
             float x = beats[i] * multiplierX;
@@ -135,17 +139,24 @@ public class ObstacleGenerator : MonoBehaviour
                 continue;
             }
 
-            if (y-prevY >= 4)
+            if (y - prevY >= 4)
             {
-                InstantiateObstacle3Up(x, y, prevX, prevY, y-prevY);
+                InstantiateObstacle3Up(x, y, prevX, prevY, y - prevY);
                 continue;
             }
             else if (y - prevY == 3)
             {
-                InstantiateObstacle3Up(x, y, prevX, prevY, y-prevY);
+                InstantiateObstacle3Up(x, y, prevX, prevY, y - prevY);
                 continue;
             }
+            //if(x-prevX < minDistanceBetweenObstacles) Ground0_1(prevX, nextY, distance, width, height);
             Ground0_1(prevX, y, distance, width, height);
+            if (x - prevX < minDistanceBetweenObstacles && !jumpObstacle)
+            {
+                jumpObstacle = true;
+                continue;
+            }
+            jumpObstacle = false;
             if (y - prevY == 0 && nextY - y == 0) InstantiateRandomObstacle(x, y);
             else if (nextY - y == 2) InstantiateObstacle2Up(x, y);
             else Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(x, y, 0), transform.rotation, obstaclePool);
@@ -179,7 +190,7 @@ public class ObstacleGenerator : MonoBehaviour
     {
         int rnd = Random.Range(0, centerObstacles.Length);
         Destroy(obstaclePool.GetChild(obstaclePool.childCount - 1).gameObject);
-        GameObject intTramp =  Instantiate(obstacles[(int)ObstacleType.interactiveTrampoline], new Vector2((x + prevX) / 2f, (y + prevY) / 2f), transform.rotation, obstaclePool);
+        GameObject intTramp = Instantiate(obstacles[(int)ObstacleType.interactiveTrampoline], new Vector2((x + prevX) / 2f, (y + prevY) / 2f), transform.rotation, obstaclePool);
         //intTramp.GetComponent<Trampoline>().setJumpForce(highDiference - 3);
         Instantiate(obstacles[(int)centerObstacles[rnd]], new Vector2(x, y), transform.rotation, obstaclePool);
     }

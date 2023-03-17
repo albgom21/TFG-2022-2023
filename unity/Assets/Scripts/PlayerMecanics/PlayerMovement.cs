@@ -74,7 +74,10 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.down || normal == Vector2.left) playerDeath();
+        if (normal == Vector2.down || normal == Vector2.left)
+        {
+            playerDeath();
+        }
     }
 
     public void playerDeath()
