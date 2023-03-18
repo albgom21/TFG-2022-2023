@@ -22,10 +22,10 @@ public class Resolution : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-            i++;
-            cam.targetTexture = renderTexts[i % 3];
-        }
+        //if (Input.GetMouseButtonDown(1))
+        //{
+        //    i++;
+        //    cam.targetTexture = renderTexts[i % 3];
+        //}
     }
 }

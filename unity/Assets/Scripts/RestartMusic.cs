@@ -10,9 +10,10 @@ public class RestartMusic : MonoBehaviour
         audio = GetComponent<SelectMusic>();
     }
 
-    public void restartMusic()
+    public void restartMusic(int t)
     {
         audio.Stop();
-        audio.Play();
+        audio.playTime(t);
+        //audio.Play();
     }
 }

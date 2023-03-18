@@ -6,7 +6,6 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    private Vector3 startPosition;
     private int coins;
     private bool death = false;
     private string song, extension;
@@ -33,5 +32,4 @@ public class GameManager : MonoBehaviour
     public string getSong() { return song; }
     public void setExtension(string s) { extension = s; }
     public string getExtension() { return extension; }
-
 }

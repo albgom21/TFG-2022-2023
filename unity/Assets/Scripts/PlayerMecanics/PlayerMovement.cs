@@ -11,10 +11,27 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform sprite;
     [SerializeField] private GameObject obstacleGenerator;
     [SerializeField] private GameObject spawnPrefab;
+    [SerializeField] private GameObject spawnPool;
     [SerializeField] private ParticleSystem particles;
+    [SerializeField] private Crono crono;
     private Rigidbody2D rb;
     private bool jump, onGround;
-    private Vector3 spawnPosition;
+
+    private struct spawnData
+    {
+        public Vector3 pos;
+        public GameObject obj;
+        public double time;
+        
+        public spawnData(Vector3 position, GameObject o, double t)
+        {
+            pos = position;
+            obj = o;
+            time = t;
+        }
+    }
+    List<spawnData> spawns = new List<spawnData>();
+
     private RaycastHit2D raycast;
     private float raycastDistance;
 
@@ -24,8 +41,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, + startingY, transform.position.z), transform.rotation);
         jump = false; onGround = true;
-        Instantiate(spawnPrefab, transform.position, transform.rotation);
-        spawnPosition = transform.position;
+        spawns.Add(new spawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform),0));
         raycastDistance = transform.localScale.y / 2.0f + 0.02f;
     }
 
@@ -34,6 +50,31 @@ public class PlayerMovement : MonoBehaviour
         transform.position += Vector3.right * speed * Time.deltaTime;
         if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space)) jump = true;
         else jump = false;
+
+        if (Input.GetMouseButtonDown(1))           
+            spawns.Add(new spawnData(transform.position, 
+                                    Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform),
+                                    crono.getActualTime()));
+        
+        if (Input.GetKeyDown(KeyCode.Z)) {
+            if (spawns.Count > 1)
+            {
+                var obj =  spawns[spawns.Count - 1].obj;
+                Destroy(obj);
+                spawns.RemoveAt(spawns.Count - 1);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            for(int i = spawns.Count - 1; i > 0; i--)
+            {
+                var obj = spawns[i].obj;
+                Destroy(obj);
+                spawns.RemoveAt(i);
+            }
+        }
+
         if (onGround) {
             Unrotate();
             particles.enableEmission = true;
@@ -83,8 +124,12 @@ public class PlayerMovement : MonoBehaviour
     public void playerDeath()
     {
         GameManager.instance.setDeath(true);
+        
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        transform.position = spawnPosition;
-        GetComponent<RestartMusic>().restartMusic();
+
+        transform.position = spawns[spawns.Count-1].pos;
+        crono.setActualTime(spawns[spawns.Count - 1].time);
+        
+        GetComponent<RestartMusic>().restartMusic((int)(spawns[spawns.Count - 1].time * 1000));
     }
 }

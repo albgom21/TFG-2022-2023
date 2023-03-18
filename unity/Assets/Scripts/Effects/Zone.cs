@@ -50,6 +50,41 @@ public class Zone : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        if (GameManager.instance.getDeath())
+        {
+            endZoneMethod();
+            timeCount = 0;
+            for (int i = 0; i < once.Length; i++)
+                once[i] = true;
+        }
+
+        timeCount += Time.deltaTime;
+
+
+        if (timeCount >= timeIniZoneLow && once[0])
+        {
+            iniZoneLowMethod();
+            once[0] = false;
+        }
+        else if (timeCount >= timeEndZoneLow && once[1])
+        {
+            endZoneMethod();
+            once[1] = false;
+        }
+        if (timeCount >= timeIniZoneHigh && once[2])
+        {
+            iniZoneHighMethod();
+            once[2] = false;
+        }
+        else if (timeCount >= timeEndZoneLow && once[3])
+        {
+            endZoneMethod();
+            once[3] = false;
+        }
+    }
+
     private void HighZone(List<float> beats, List<float> rmse)
     {
         float iniZone = -1,
@@ -169,41 +204,6 @@ public class Zone : MonoBehaviour
         //Invoke("endZoneMethod", timeEndZoneLow);
         //Debug.Log("Ini zona low: " + timeIniZoneLow);
         //Debug.Log("Fin zona low: " + timeEndZoneLow);
-    }
-
-    private void Update()
-    {
-        if (GameManager.instance.getDeath())
-        {
-            endZoneMethod();
-            timeCount = 0;
-            for (int i = 0; i < once.Length; i++)
-                once[i] = true;
-        }
-
-        timeCount += Time.deltaTime;
-
-
-        if (timeCount >= timeIniZoneLow && once[0])
-        {
-            iniZoneLowMethod();
-            once[0] = false;
-        }
-        else if (timeCount >= timeEndZoneLow && once[1])
-        {
-            endZoneMethod();
-            once[1] = false;
-        }
-        if (timeCount >= timeIniZoneHigh && once[2])
-        {
-            iniZoneHighMethod();
-            once[2] = false;
-        }
-        else if (timeCount >= timeEndZoneLow && once[3])
-        {
-            endZoneMethod();
-            once[3] = false;
-        }
     }
 
     void iniZoneHighMethod()

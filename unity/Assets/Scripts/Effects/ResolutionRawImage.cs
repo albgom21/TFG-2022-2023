@@ -21,10 +21,10 @@ public class ResolutionRawImage : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-            i++;
-            raw.texture = renderTexts[i%3];
-        }
+        //if (Input.GetMouseButtonDown(1))
+        //{
+        //    i++;
+        //    raw.texture = renderTexts[i%3];
+        //}
     }
 }

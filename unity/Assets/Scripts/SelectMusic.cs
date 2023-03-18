@@ -156,6 +156,20 @@ class SelectMusic : MonoBehaviour
         PlayMusic(fileName);
         if (underWaterEffect) underWaterEffect.setEventInstance(eventInstance);
     }
+    public void playTime(int t)
+    {
+        eventInstance = FMODUnity.RuntimeManager.CreateInstance(EventName);
+
+        // Pin the key string in memory and pass a pointer through the user data
+        GCHandle stringHandle = GCHandle.Alloc(fileName);
+        eventInstance.setUserData(GCHandle.ToIntPtr(stringHandle));
+
+        eventInstance.setCallback(callback);
+        eventInstance.setTimelinePosition(t);
+        eventInstance.start();
+        eventInstance.release();
+
+    }
     public void Stop()
     {
         eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
