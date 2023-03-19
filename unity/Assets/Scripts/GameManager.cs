@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     private int coins;
+    private double deathTime;
     private bool death = false;
     private bool powerUpQuality = false;
     private bool powerUpGravity = false;
@@ -25,11 +26,15 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         coins = 0;
+        deathTime = 0;
     }
 
     public void addCoin() { coins++; }
     public bool getDeath() { return death; }
     public void setDeath(bool b) { death = b;}
+
+    public double getDeathTime() { return deathTime; }
+    public void setDeathTime(double t) { deathTime = t; }
 
     public bool getPowerUpGravity() { return powerUpGravity; }
     public void setPowerUpGravity(bool b) { powerUpGravity = b; }

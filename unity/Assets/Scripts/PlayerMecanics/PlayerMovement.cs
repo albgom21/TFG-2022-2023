@@ -128,6 +128,7 @@ public class PlayerMovement : MonoBehaviour
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
         transform.position = spawns[spawns.Count-1].pos;
+        GameManager.instance.setDeathTime(spawns[spawns.Count - 1].time);
         crono.setActualTime(spawns[spawns.Count - 1].time);
         
         GetComponent<RestartMusic>().restartMusic((int)(spawns[spawns.Count - 1].time * 1000));

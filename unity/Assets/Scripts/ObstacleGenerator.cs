@@ -5,6 +5,8 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Analytics;
 
+using dataStructs;
+
 public class ObstacleGenerator : MonoBehaviour
 {
     enum ObstacleType
@@ -57,14 +59,8 @@ public class ObstacleGenerator : MonoBehaviour
         //List<float> agudosValoresNorm = features.GetComponent<ReadTxt>().getAgudosValoresNorm();
         //List<float> gravesValoresNorm = features.GetComponent<ReadTxt>().getGravesValoresNorm();
 
-        int iniH = zones.getBeatIniHigh();
-        int iniL = zones.getBeatIniLow();
-        int endH = zones.getBeatEndHigh();
-        int endL = zones.getBeatEndLow();
-
-        List<int> beatsZonesIndex = zones.getBeatZonesIndexes();
-
-
+        List<int>beatsZonesIndex = zones.getBeatsZonesIndex();
+        
         //Debug.Log("Ini BEAT high: " + iniH);
         //Debug.Log("Fin BEAT high: " + endH);
 
@@ -73,7 +69,7 @@ public class ObstacleGenerator : MonoBehaviour
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
         minDistanceBetweenObstacles = multiplierX / 2f;
-        Debug.Log(minDistanceBetweenObstacles);
+        //Debug.Log(minDistanceBetweenObstacles);
         GenerateLevel(width, height, beats, scopt, beatsZonesIndex);
 
         #region pruebas GyA
