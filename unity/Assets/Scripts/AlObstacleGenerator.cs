@@ -19,7 +19,7 @@ public class AlObstacleGenerator : MonoBehaviour
     // Prefabs
     [SerializeField] private GameObject groundPrefab;
     [SerializeField] private GameObject groundStartPrefab;
-    [SerializeField] private GameObject[] obstaclesStructures;
+    private GameObject[] obstaclesStructures;
 
     // Pools
     [SerializeField] private Transform obstaclePool;
@@ -35,7 +35,7 @@ public class AlObstacleGenerator : MonoBehaviour
 
     void Start()
     {
-        //obstaclesStructures = Resources.LoadAll<GameObject>("../Prefabs/Alvaro/Estructuras");
+        obstaclesStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/Estructuras");
         lastObstacle = null;
         //float width = transform.localScale.x;
         //float height = transform.localScale.y;
