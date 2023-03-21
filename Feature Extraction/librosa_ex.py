@@ -5,6 +5,7 @@ import sklearn
 import sklearn.preprocessing
 import numpy as np
 import matplotlib.pyplot as plt
+import spleeter as sp
 
 '''
 Carga un archivo de audio para obtener los samples y su frecuencia de muestreo
@@ -22,9 +23,6 @@ sr : frecuencia del audio (Sample Rate)
 def load_Wave(filename):
     samples, sr = librosa.load(filename)
     return samples, sr
-
-
-
 
 #--------------------EXTRACCIÓN DE CARACTERÍSTICAS-------------------------------
 '''
@@ -458,16 +456,15 @@ Parámetros
 samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
-def onset_detection(samples, sr):
-    # Cargar la canción
-    print(samples.size)
-    y_perc = librosa.effects.percussive(samples, margin = 3.0)
-    onset_frames = librosa.onset.onset_detect(y=y_perc, sr=sr)
-    y_perc = librosa.frames_to_time(onset_frames, sr=sr)
-    print(y_perc.size)
-    sc = spectral_centroid_v1(y_perc, sr)
-    
-    return y_perc
+def onset_detection(filename):
+    y,sr = load_Wave("drums_" + filename)
+    o_env = o_env = librosa.onset.onset_strength(y=y, sr=sr, aggregate=np.median)
+    o_env = normalize(o_env)    
+    onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
+    print ("Total frames: ", y.size)
+    print("OnsetFrames size: ", onset_frames.size)
+    onset_time = librosa.frames_to_time(onset_frames)    
+    return onset_time
 
 #--------------------OTRAS FUNCIONES-------------------------------
 def graves(y,sr):
@@ -677,7 +674,7 @@ def features_to_txt(filename):
     aValorNorm = normalize(a[:, 1])
 
     # Golpes de batería (onset)
-    onset = onset_detection(samples, sr)
+    onset = onset_detection(filename)
 
     name = os.path.splitext(filename)[0]
     np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
@@ -727,10 +724,51 @@ def extract_features(signal):
             signal)[0, 0],  # Centroide del espectro
     ]
 
+'''
+Método para depurar y sacar gráficas de los golpes de batería
+'''
+def depuracion_onset(filename, v1):
+    filename = 'drums_'+filename
+    y,sr = load_Wave(filename)
+    if v1:  o_env = librosa.onset.onset_strength(y=y, sr=sr)
+    else:  o_env = librosa.onset.onset_strength(y=y, sr=sr, aggregate=np.median)
+    o_env = normalize(o_env)
+    onset_frames = librosa.onset.onset_detect(onset_envelope = o_env, sr=sr)
+    new_o_env = o_env[onset_frames]
+    times = librosa.times_like(o_env, sr=sr)    
+
+
+    #sin mean
+    onset_frames_aux  = onset_frames
+    fig, aux = plt.subplots(nrows=2, sharex=True)
+    aux[0].plot(times, o_env, label='Onset strength')
+    aux[0].vlines(times[onset_frames_aux], 0, o_env.max(), color='r', alpha=0.9,
+             linestyle='--', label='Onsets')
+    aux[0].legend()
+ 
+
+    #mean = 0.1
+    if onset_frames.size/y.size >0.0001: color = 'g'
+    else: color = 'y'
+    mean = np.mean(new_o_env)
+    mask = new_o_env > mean
+    onset_frames_aux2 = onset_frames_aux[mask]
+    aux[1].plot(times, o_env, label='Onset strength')
+    aux[1].vlines(times[onset_frames_aux2], 0, o_env.max(), color='r', alpha=0.9,
+             linestyle='--', label='Onsets')
+    aux[1].legend()
+    aux[1].axhline(y = mean, color = color)
+ 
+    print("OnsetFrames 1 size: ",onset_frames_aux.size)
+    print("OnsetFrames 2 size: ", onset_frames_aux2.size)
+    plt.show()
+
 
 
 def main():
-    filename = 'Purpurina.wav'
+    filename = 'besos.wav'
     features_to_txt(filename)
+
+
 
 main()
