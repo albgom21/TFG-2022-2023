@@ -6,6 +6,7 @@ import sklearn.preprocessing
 import numpy as np
 import matplotlib.pyplot as plt
 import spleeter as sp
+import sys
 
 '''
 Carga un archivo de audio para obtener los samples y su frecuencia de muestreo
@@ -765,10 +766,8 @@ def depuracion_onset(filename, v1):
 
 
 
-def main():
-    filename = 'besos.wav'
+def main(filename):
     features_to_txt(filename)
 
-
-
-main()
+main(sys.argv[1]) #Si se llama desde Unity o desde consola
+# main("200-BPM.wav") #Si se llama ejecutando con F5
