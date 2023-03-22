@@ -16,4 +16,8 @@ public class RestartMusic : MonoBehaviour
         audio.playTime(t);
         //audio.Play();
     }
+    public void stopMusic()
+    {
+        audio.Stop();
+    }
 }

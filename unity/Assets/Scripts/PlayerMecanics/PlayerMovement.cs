@@ -134,4 +134,9 @@ public class PlayerMovement : MonoBehaviour
         
         GetComponent<RestartMusic>().restartMusic((int)(spawns[spawns.Count - 1].time * 1000));
     }
+
+    public void stopPlayer()
+    {
+        speed = 0;
+    }
 }

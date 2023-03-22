@@ -25,6 +25,7 @@ public class ObstacleGenerator : MonoBehaviour
     // Prefabs
     [SerializeField] private GameObject groundPrefab;
     [SerializeField] private GameObject groundStartPrefab;
+    [SerializeField] private GameObject endPrefab;
     [SerializeField] private GameObject[] obstacles;
 
     // Obstacle Array
@@ -60,13 +61,7 @@ public class ObstacleGenerator : MonoBehaviour
         //List<float> gravesValoresNorm = features.GetComponent<ReadTxt>().getGravesValoresNorm();
 
         List<int>beatsZonesIndex = zones.getBeatsZonesIndex();
-        
-        //Debug.Log("Ini BEAT high: " + iniH);
-        //Debug.Log("Fin BEAT high: " + endH);
-
-        //Debug.Log("Ini BEAT low: " + iniL);
-        //Debug.Log("Fin BEAT low: " + endL);
-
+            
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
         minDistanceBetweenObstacles = multiplierX / 2f;
         //Debug.Log(minDistanceBetweenObstacles);
@@ -102,10 +97,12 @@ public class ObstacleGenerator : MonoBehaviour
         bool portal = false;
         int offsetI = 2;
         bool jumpObstacle = false;
+        float x = 0;
+        int y = 0;
         for (int i = offsetI; i < beats.Count() - 1; i++)
         {
-            float x = beats[i] * multiplierX;
-            int y = (int)(scopt[i] * multiplierY);
+            x = beats[i] * multiplierX;
+            y = (int)(scopt[i] * multiplierY);
             if (i == offsetI)
             {
                 Ground0_1(-1, y, x + 1, width, height);
@@ -157,7 +154,7 @@ public class ObstacleGenerator : MonoBehaviour
             else if (nextY - y == 2) InstantiateObstacle2Up(x, y);
             else Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(x, y, 0), transform.rotation, obstaclePool);
         }
-
+        Instantiate(endPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
     }
 
     private void Obstacle(float x, int y, float prevX, int prevY)
