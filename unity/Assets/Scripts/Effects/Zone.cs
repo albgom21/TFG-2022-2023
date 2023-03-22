@@ -4,7 +4,6 @@ using UnityEngine;
 
 // TO DO
 // CAMBIAR STRUCTS A UN SCRIPT UNICO DE STRUCTS
-// CAMBIAR BUCLES PARA PODER CAMBIAR VARIBLES DE STRUCTS
 
 namespace dataStructs
 {
@@ -135,9 +134,8 @@ namespace dataStructs
 
         private void HighZone(List<float> beats, List<float> rmse)
         {
-            zData.Add(new ZoneData(ZoneType.HIGH, -1, -1, -1, -1, -1, false, false));
-            ZoneData a = zData[zData.Count - 1];
-            
+            ZoneData aux = new ZoneData();
+
             float iniZone = -1,
                   balance = 0;
 
@@ -169,25 +167,41 @@ namespace dataStructs
                     if (actualLength > bestLength)
                     {
                         bestLength = actualLength;
-
-                        a.setType(ZoneType.HIGH);
-                        a.setTimeIniZone(iniZone);
-                        a.setTimeEndZone(beats[i]);
-                        a.setBeatIni(iniBeat);
-                        a.setBeatEnd(i);
+                        aux.setType(ZoneType.HIGH);
+                        aux.setTimeIniZone(iniZone);
+                        aux.setTimeEndZone(beats[i]);
+                        aux.setBeatIni(iniBeat);
+                        aux.setBeatEnd(i);                     
                     }
                 }
                 else
                 {
+                    //if (actualLength != 0)
+                    //    Debug.Log("Al h: " + actualLength);
                     actualLength = 0;
                     balance = 0;
                     find = true;
                 }
             }
-            zData[zData.Count-1] = a; 
+
+            aux.setBeatLength(actualLength);
+            aux.setActivatedIni(false);
+            aux.setActivatedEnd(false);
+            zData.Add(aux);
 
             beatsZones.Add(zData[zData.Count - 1].getBeatIni());
             beatsZones.Add(zData[zData.Count - 1].getBeatEnd());
+
+            //int cont = 0;
+            //foreach (ZoneData z in zData)
+            //{
+            //    if (z.getType() == ZoneType.HIGH)
+            //    {
+            //        cont++;
+            //        Debug.Log("Z high:" + cont + " ini: " + z.getTimeIniZone() + " end: " + z.getTimeEndZone());
+            //    }
+            //}
+            //Debug.Log("BEST High: " + bestLength);
 
             //Debug.Log("Ini zona high: " + zData[zData.Count - 1].getTimeIniZone());
             //Debug.Log("Fin zona high: " + zData[zData.Count - 1].getTimeEndZone());
@@ -195,8 +209,7 @@ namespace dataStructs
 
         private void LowZone(List<float> beats, List<float> rmse)
         {
-            zData.Add(new ZoneData(ZoneType.LOW, -1, -1, -1, -1, -1, false, false));
-            ZoneData a = zData[zData.Count - 1];
+            ZoneData aux = new ZoneData();
 
             float iniZone = -1,
                   balance = 0;
@@ -212,19 +225,19 @@ namespace dataStructs
                 // Si está dentro del umbral y la zona no se ha iniciado guardar comienzo
                 if (find && (rmse[i] >= 0.4f && rmse[i] < 0.5f))
                 {
-                    //Debug.Log("NUEVA BUSQUEDA en: " + i +" de " + rmse.Count());
                     iniBeat = i;
                     iniZone = beats[i];
                     find = false;
                     balance += rmse[i];
-
+                    //Debug.Log("iniZone: " + iniZone + " i: "+ i);
                 }
                 // Si ya se está en la zona y el balance cumple seguir agrandando la zona
                 else if (iniZone >= 0 && balance <= ((i - iniBeat) * 0.3f) && (((i - iniBeat) * 0.3f) - balance >= 3) && (rmse[i] <= 0.7f))
                 {
+                    //Debug.Log("ampliando zona: " + iniZone + " i: " + i);
                     actualLength++;
                     balance += rmse[i];
-                    //Debug.Log(" B: " + balance + " BU: " + ((i - contIni) * 0.3f));
+                    //Debug.Log(" B: " + balance + " BU: " + ((i - iniBeat) * 0.3f)+" i: "+ i +" iniB: "+iniBeat);
 
                     //if (((i - contIni) * 0.3f) - balance >= 3)
                     //    balance += 2.5f;
@@ -233,28 +246,41 @@ namespace dataStructs
                     if (actualLength > bestLength)
                     {
                         bestLength = actualLength;
-                        a.setType(ZoneType.LOW);
-                        a.setTimeIniZone(iniZone);
-                        a.setTimeEndZone(beats[i]);
-                        a.setBeatIni(iniBeat);
-                        a.setBeatEnd(i);
+                        aux.setTimeIniZone(iniZone);
+                        aux.setTimeEndZone(beats[i]);
+                        aux.setBeatIni(iniBeat);
+                        aux.setBeatEnd(i);
                     }
                 }
                 else
                 {
+                    //Debug.Log("Nada i: " + i);
                     actualLength = 0;
                     balance = 0;
                     find = true;
                 }
             }
-            zData[zData.Count - 1] = a;
+            aux.setType(ZoneType.LOW);
+            aux.setBeatLength(actualLength);
+            aux.setActivatedIni(false);
+            aux.setActivatedEnd(false);
+            zData.Add(aux);
 
             beatsZones.Add(zData[zData.Count - 1].getBeatIni());
             beatsZones.Add(zData[zData.Count - 1].getBeatEnd());
-            //Invoke("iniZoneLowMethod", timeIniZoneLow);
-            //Invoke("endZoneMethod", timeEndZoneLow);
-            //Debug.Log("Ini zona low: " + timeIniZoneLow);
-            //Debug.Log("Fin zona low: " + timeEndZoneLow);
+
+            //int cont = 0;
+            //foreach(ZoneData z in zData)
+            //{
+            //    if(z.getType() == ZoneType.LOW)
+            //    {
+            //        cont++;
+            //        Debug.Log("Z low:" +cont+" ini: "+z.getTimeIniZone()+ " end: " +z.getTimeEndZone());
+            //    }
+            //}
+            //Debug.Log("BEST low: " + bestLength);
+            //Debug.Log("Ini zona low: " + zData[zData.Count - 1].getTimeIniZone());
+            //Debug.Log("Fin zona low: " + zData[zData.Count - 1].getTimeEndZone());
         }
 
         void iniZone(ZoneType type)

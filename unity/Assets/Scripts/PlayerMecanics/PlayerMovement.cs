@@ -78,7 +78,6 @@ public class PlayerMovement : MonoBehaviour
         if (onGround) {
             Unrotate();
             particles.enableEmission = true;
-
         }
         else {
             sprite.Rotate(Vector3.back);
@@ -124,7 +123,8 @@ public class PlayerMovement : MonoBehaviour
     public void playerDeath()
     {
         GameManager.instance.setDeath(true);
-        
+
+        onGround = false;
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
         transform.position = spawns[spawns.Count-1].pos;
