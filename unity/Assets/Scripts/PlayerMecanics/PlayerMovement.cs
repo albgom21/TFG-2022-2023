@@ -72,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
                 var obj = spawns[i].obj;
                 Destroy(obj);
                 spawns.RemoveAt(i);
+                playerDeath();
             }
         }
 
