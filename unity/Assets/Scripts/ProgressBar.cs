@@ -9,11 +9,13 @@ public class ProgressBar : MonoBehaviour
 
     [SerializeField]
     private Crono crono;
+    [SerializeField]
+    private ReadTxt features;
 
     void Start()
     {
         slider = GetComponent<Slider>();
-        changeSongDuration(147); //Poner la duración verdadera de la canción.
+        changeSongDuration(features.getDuration());
     }
 
     public void changeSongDuration(float duration)

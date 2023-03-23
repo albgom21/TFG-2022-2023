@@ -5,7 +5,7 @@ import sklearn
 import sklearn.preprocessing
 import numpy as np
 import matplotlib.pyplot as plt
-import spleeter as sp
+# import spleeter as sp
 import sys
 
 '''
@@ -650,6 +650,9 @@ def features_to_txt(filename):
     # Sample rate
     np_sr = np.array([sr])
 
+    # Duration
+    dur = np.array([librosa.get_duration(y=samples, sr=sr)]) 
+
     # Beats
     bpm, beats = get_beats_in_timeline(samples, sr)
 
@@ -679,6 +682,7 @@ def features_to_txt(filename):
 
     name = os.path.splitext(filename)[0]
     np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
+    np.savetxt(name + '_duration.txt', dur,fmt='%.0f')
     np.savetxt(name + '_sr.txt', np_sr, fmt='%.0f')
     np.savetxt(name + '_beats.txt', beats, fmt='%.3f')
     np.savetxt(name + '_rmse.txt', rnorm, fmt='%.3f')
@@ -696,15 +700,15 @@ def features_to_txt(filename):
     ruta_destino = '../unity/Assets/Txt/'
 
     # Recorre los archivos de la carpeta de origen
-    # for archivo in os.listdir(ruta_origen):
-    #     # Verifica que el archivo sea un archivo de texto
-    #     if archivo.endswith('.txt'):
-    #         # Obtiene la ruta completa del archivo de origen
-    #         ruta_archivo_origen = os.path.join(ruta_origen, archivo)
-    #         # Obtiene la ruta completa del archivo de destino
-    #         ruta_archivo_destino = os.path.join(ruta_destino, archivo)
-    #         # Mueve el archivo de origen al archivo de destino
-    #         os.replace(ruta_archivo_origen, ruta_archivo_destino)
+    for archivo in os.listdir(ruta_origen):
+        # Verifica que el archivo sea un archivo de texto
+        if archivo.endswith('.txt'):
+            # Obtiene la ruta completa del archivo de origen
+            ruta_archivo_origen = os.path.join(ruta_origen, archivo)
+            # Obtiene la ruta completa del archivo de destino
+            ruta_archivo_destino = os.path.join(ruta_destino, archivo)
+            # Mueve el archivo de origen al archivo de destino
+            os.replace(ruta_archivo_origen, ruta_archivo_destino)
 
 #--------------------FUNCIONES QUE PUEDEN SER BORRADAS-------------------------------
 '''
@@ -769,5 +773,5 @@ def depuracion_onset(filename, v1):
 def main(filename):
     features_to_txt(filename)
 
-main(sys.argv[1]) #Si se llama desde Unity o desde consola
-# main("200-BPM.wav") #Si se llama ejecutando con F5
+# main(sys.argv[1]) #Si se llama desde Unity o desde consola
+main("200-BPM.wav") #Si se llama ejecutando con F5

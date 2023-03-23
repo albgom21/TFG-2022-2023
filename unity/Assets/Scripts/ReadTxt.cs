@@ -15,7 +15,7 @@ public class ReadTxt : MonoBehaviour
     public string song = "200-BPM";         // Título del audio analizado
     string path = "Assets/Txt/";            // Ruta dentro del proyecto donde se guardan los txt
     string rutaBeats, rutaSC, rutaRMSE,     // Nombre de cada característica en los txt
-           rutaSamples, rutaSr, rutaPlpBeats,
+           rutaSamples, rutaSr, rutaDuration, rutaPlpBeats,
            rutaAgudosTiempo, rutaAgudosValoresNorm, rutaAgudos,
            rutaGravesTiempo, rutaGravesValoresNorm, rutaGraves,
            rutaOnset;
@@ -37,6 +37,7 @@ public class ReadTxt : MonoBehaviour
     float[,] matriz_graves;                     // Tiempo y valor en db de los graves
 
     int sr;                                     // Sample rate (Frecuencia de muestreo)    
+    float duration;                             // Duración en segundos del audio
 
     void Awake()
     {
@@ -52,6 +53,7 @@ public class ReadTxt : MonoBehaviour
         rutaRMSE = path + song + "_rmse.txt";
         rutaSamples = path + song + "_samples.txt";
         rutaSr = path + song + "_sr.txt";
+        rutaDuration = path + song + "_duration.txt";
 
         rutaAgudosTiempo = path + song + "_agudosTiempo.txt";
         rutaAgudosValoresNorm = path + song + "_agudosValorNorm.txt";
@@ -76,6 +78,7 @@ public class ReadTxt : MonoBehaviour
         readFeature(ref gravesValoresNorm, rutaGravesValoresNorm);
         readFeature(ref onset, rutaOnset);
         readInt(ref sr, rutaSr);
+        readFloat(ref duration, rutaDuration);
 
         //readMatriz(ref matriz_agudos, rutaAgudos);
         //readMatriz(ref matriz_graves, rutaGraves);
@@ -104,6 +107,18 @@ public class ReadTxt : MonoBehaviour
             n = int.Parse(lines[0]);
         }
         else Debug.LogError("El archivo de texto para leer un INT no existe en la ruta especificada: " + ruta);
+    }
+
+    // Lee una caracterísitca de audio que este en un txt, siendo esta un único float
+    private void readFloat(ref float n, string ruta)
+    {
+        // Lectura por líneas y luego palabras
+        if (File.Exists(ruta))
+        {
+            string[] lines = File.ReadAllLines(ruta);
+            n = float.Parse(lines[0]);
+        }
+        else Debug.LogError("El archivo de texto para leer un FLOAT no existe en la ruta especificada: " + ruta);
     }
 
     // Lee una caracterísitca de audio que este en un txt, con la forma de una matriz bidimensional,
@@ -183,6 +198,10 @@ public class ReadTxt : MonoBehaviour
     public int getSr()
     {
         return sr;
+    }
+    public float getDuration()
+    {
+        return duration;
     }
     public float[,] getAgudos()
     {
