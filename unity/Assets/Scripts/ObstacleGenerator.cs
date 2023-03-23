@@ -154,7 +154,7 @@ public class ObstacleGenerator : MonoBehaviour
             else if (nextY - y == 2) InstantiateObstacle2Up(x, y);
             else Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(x, y, 0), transform.rotation, obstaclePool);
         }
-        Instantiate(endPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
+        Instantiate(endPrefab, new Vector3(75, y, 0), transform.rotation, obstaclePool);
     }
 
     private void Obstacle(float x, int y, float prevX, int prevY)

@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     private int coins;
     private double deathTime;
     private bool death = false;
+    private bool end = false;
     private bool powerUpQuality = false;
     private bool powerUpGravity = false;
     private string song, extension;
@@ -32,6 +33,8 @@ public class GameManager : MonoBehaviour
     public void addCoin() { coins++; }
     public bool getDeath() { return death; }
     public void setDeath(bool b) { death = b;}
+    public bool getEnd() { return end; }
+    public void setEnd(bool b) { end = b; }
 
     public double getDeathTime() { return deathTime; }
     public void setDeathTime(double t) { deathTime = t; }

@@ -87,47 +87,50 @@ namespace dataStructs
 
         private void Update()
         {
-            if (GameManager.instance.getDeath())
+            if (!GameManager.instance.getEnd())
             {
-                endZone();
-                timeCount = GameManager.instance.getDeathTime();
-                for(int i = 0; i < zData.Count; i++)
+                if (GameManager.instance.getDeath())
                 {
-                    ZoneData aux = zData[i];
-                    if(timeCount < zData[i].getTimeIniZone() || (timeCount > zData[i].getTimeIniZone() && timeCount < zData[i].getTimeEndZone()))
-                        aux.setActivatedIni(false);
-                    if(timeCount < zData[i].getTimeEndZone() || (timeCount > zData[i].getTimeIniZone() && timeCount < zData[i].getTimeEndZone()))
-                        aux.setActivatedEnd(false);
-                    zData[i] = aux;
-                }
-            }
-
-            timeCount += Time.deltaTime;
-            for (int i = 0; i < zData.Count; i++)
-            {
-                // Si no se ha pasado el portal de inicio y ha pasado el tiempo de activación
-                if (!zData[i].getActivatedIni() && timeCount >= zData[i].getTimeIniZone())
-                {
-                    // Poner la zona según su tipo                                    
-                    iniZone(zData[i].getType());
-                    
-                    ZoneData aux = zData[i];
-                    aux.setActivatedIni(true);
-                    zData[i] = aux;
-
-                    break;
-                } 
-                // Si no se había salido de la zona y ha pasado el tiempo de la zona
-                else if (!zData[i].getActivatedEnd() && timeCount >= zData[i].getTimeEndZone())
-                {
-                    // Finalizar la zona
                     endZone();
+                    timeCount = GameManager.instance.getDeathTime();
+                    for (int i = 0; i < zData.Count; i++)
+                    {
+                        ZoneData aux = zData[i];
+                        if (timeCount < zData[i].getTimeIniZone() || (timeCount > zData[i].getTimeIniZone() && timeCount < zData[i].getTimeEndZone()))
+                            aux.setActivatedIni(false);
+                        if (timeCount < zData[i].getTimeEndZone() || (timeCount > zData[i].getTimeIniZone() && timeCount < zData[i].getTimeEndZone()))
+                            aux.setActivatedEnd(false);
+                        zData[i] = aux;
+                    }
+                }
 
-                    ZoneData aux = zData[i];
-                    aux.setActivatedEnd(true);
-                    zData[i] = aux;
+                timeCount += Time.deltaTime;
+                for (int i = 0; i < zData.Count; i++)
+                {
+                    // Si no se ha pasado el portal de inicio y ha pasado el tiempo de activación
+                    if (!zData[i].getActivatedIni() && timeCount >= zData[i].getTimeIniZone())
+                    {
+                        // Poner la zona según su tipo                                    
+                        iniZone(zData[i].getType());
 
-                    break;
+                        ZoneData aux = zData[i];
+                        aux.setActivatedIni(true);
+                        zData[i] = aux;
+
+                        break;
+                    }
+                    // Si no se había salido de la zona y ha pasado el tiempo de la zona
+                    else if (!zData[i].getActivatedEnd() && timeCount >= zData[i].getTimeEndZone())
+                    {
+                        // Finalizar la zona
+                        endZone();
+
+                        ZoneData aux = zData[i];
+                        aux.setActivatedEnd(true);
+                        zData[i] = aux;
+
+                        break;
+                    }
                 }
             }
         }

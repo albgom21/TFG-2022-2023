@@ -28,7 +28,8 @@ public class EndBehaviour : MonoBehaviour
             foreach (RectTransform b in botones)
                 b.gameObject.SetActive(true);
             music.stopMusic();
-            pm.stopPlayer();
-        }
+            pm.gameObject.SetActive(false);
+            GameManager.instance.setEnd(true);
+        }           
     }
 }

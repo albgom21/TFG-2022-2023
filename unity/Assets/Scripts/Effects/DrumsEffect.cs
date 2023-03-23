@@ -28,21 +28,24 @@ public class DrumsEffect : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.getDeath()) time = i = 0;
-        time += Time.deltaTime;
-
-        if (i < onsetCount && time >= onset[i])
+        if (!GameManager.instance.getEnd())
         {
-            color.a = 1f;
-            if (i < onset.Count - 1)
+            if (GameManager.instance.getDeath()) time = i = 0;
+            time += Time.deltaTime;
+
+            if (i < onsetCount && time >= onset[i])
             {
-                if (onset[i + 1] - onset[i] > 1f) offset = 1f;
-                else offset = onset[i + 1] - onset[i];
+                color.a = 1f;
+                if (i < onset.Count - 1)
+                {
+                    if (onset[i + 1] - onset[i] > 1f) offset = 1f;
+                    else offset = onset[i + 1] - onset[i];
+                }
+                else offset = 1;
+                i++;
             }
-            else offset = 1;
-            i++;
+            image.color = color;
+            color.a -= 1f * (Time.deltaTime / offset);
         }
-        image.color = color;
-        color.a -= 1f * (Time.deltaTime / offset);
     }
 }

@@ -35,6 +35,12 @@ public class PlayerMovement : MonoBehaviour
     private RaycastHit2D raycast;
     private float raycastDistance;
 
+    private void Awake()
+    {
+        GameManager.instance.setDeath(false);
+        GameManager.instance.setEnd(false);
+    }
+
     void Start()
     {
         int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[2] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY());
@@ -133,10 +139,5 @@ public class PlayerMovement : MonoBehaviour
         crono.setActualTime(spawns[spawns.Count - 1].time);
         
         GetComponent<RestartMusic>().restartMusic((int)(spawns[spawns.Count - 1].time * 1000));
-    }
-
-    public void stopPlayer()
-    {
-        speed = 0;
     }
 }

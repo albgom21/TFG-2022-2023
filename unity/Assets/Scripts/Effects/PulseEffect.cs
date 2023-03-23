@@ -36,22 +36,26 @@ public class PulseEffect : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.getDeath())
+        if (!GameManager.instance.getEnd())
         {
-            timeCount = 0;
-            cont = 0;
-        }
 
-        timeCount += Time.deltaTime;
+            if (GameManager.instance.getDeath())
+            {
+                timeCount = 0;
+                cont = 0;
+            }
 
-        if (cont < beats.Count() && timeCount >= beats[cont])
-        {
-            color.a = 1f;
+            timeCount += Time.deltaTime;
+
+            if (cont < beats.Count() && timeCount >= beats[cont])
+            {
+                color.a = 1f;
+                sprite.color = color;
+                cont++;
+            }
+
+            color.a -= 1f * Time.deltaTime;
             sprite.color = color;
-            cont++;
         }
-
-        color.a -= 1f * Time.deltaTime;
-        sprite.color = color;
     }
 }

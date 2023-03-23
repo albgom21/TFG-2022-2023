@@ -18,10 +18,13 @@ public class Crono : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.getDeath())
-            timeActivated = Time.time;
-        t = Time.time - timeActivated + spawnTime;                   // Calcular el tiempo que lleva el crono activado         
-        textoCrono.text = t.ToString("F2") + "s";        // Mostrar el tiempo sin decimales   
+        if (!GameManager.instance.getEnd())
+        {
+            if (GameManager.instance.getDeath())
+                timeActivated = Time.time;
+            t = Time.time - timeActivated + spawnTime;                   // Calcular el tiempo que lleva el crono activado         
+            textoCrono.text = t.ToString("F2") + "s";        // Mostrar el tiempo sin decimales   
+        }
     }
 
     public double getActualTime() { return t; }
