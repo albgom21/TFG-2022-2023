@@ -31,7 +31,7 @@ public class AlObstacleGenerator : MonoBehaviour
 
     //public int BPM;
     //public float finalLevel;
-    private ObstacleStructure lastObstacle;
+    private ObstacleStructureData lastObstacle;
 
     void Start()
     {
@@ -71,25 +71,33 @@ public class AlObstacleGenerator : MonoBehaviour
         float coordX;
         float coordY = transform.localScale.y;
         float prevX = 0.0f;
-  
+        ObstacleStructureData thisObstacle = null;
+
+
         for (int i = offsetI; i < beats.Count() - 1; i++)
         {
             coordX = beats[i] * multiplierX; //coordenada X del obstáculo.
-
             
+            
+
             //Espacio entre el CENTRO del anterior obstáculo y este
             float spaceBetweenBeats = coordX - prevX; 
-            ObstacleStructure thisObstacle = InstantiateRandomObstacle(coordX, coordY, spaceBetweenBeats);
 
-            float floorStart, floorEnd;
+            if (lastObstacle == null || spaceBetweenBeats > lastObstacle.getPostX())
+            {
+                thisObstacle = InstantiateRandomObstacle(coordX, coordY, spaceBetweenBeats);
 
-            if (lastObstacle == null) floorStart = 0.0f;
-            else floorStart = prevX + lastObstacle.getPostX();
+                //El suelo tendrá que ir desde el FINAL (no el centro) del anterior obstáculo hasta el PRINCIPIO de este
+                float floorStart, floorEnd;
 
-            floorEnd = coordX - thisObstacle.getPrevX();
+                if (lastObstacle == null) floorStart = 0.0f; //Solo ocurre con el primer obstáculo, el cual no tiene anterior
+                else floorStart = prevX + lastObstacle.getPostX();
 
-            GenerateFloorBetweenObstacles(floorStart, floorEnd, coordY);
+                floorEnd = coordX - thisObstacle.getPrevX();
 
+                GenerateFloorBetweenObstacles(floorStart, floorEnd, coordY);
+            }
+            
             //if (portal)
             //{
             //    Instantiate(waterPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
@@ -100,17 +108,22 @@ public class AlObstacleGenerator : MonoBehaviour
 
 
             //Preparando la siguiente iteración
-            prevX = coordX;
-            if (thisObstacle != null) coordY += thisObstacle.getUnlevel();
-            lastObstacle = thisObstacle;
+            if (thisObstacle != null)
+            {
+                prevX = coordX;
+                coordY += thisObstacle.getUnlevel();
+                lastObstacle = thisObstacle;
+                thisObstacle = null;
+            }
+            
         }
     }
 
-    private ObstacleStructure InstantiateRandomObstacle(float x, float y, float spaceBetweenBeats)
+    private ObstacleStructureData InstantiateRandomObstacle(float x, float y, float spaceBetweenBeats)
     {
         bool correctObstacle = false;
         GameObject obstacle;
-        ObstacleStructure obstacleStructure = null;
+        ObstacleStructureData obstacleStructure = null;
 
         int intentos = 0;
         while (!correctObstacle && intentos < 20)
@@ -118,10 +131,10 @@ public class AlObstacleGenerator : MonoBehaviour
             int rnd = Random.Range(0, obstaclesStructures.Length);
             obstacle = Instantiate(obstaclesStructures[rnd], new Vector3(x, y, 0), transform.rotation, obstaclePool);
 
-            obstacleStructure = obstacle.GetComponent<ObstacleStructure>();
+            obstacleStructure = obstacle.GetComponent<ObstacleStructureData>();
 
             if (lastObstacle == null) correctObstacle = true; //Esto solo se da en el primer obstáculo, aún no hay anterior
-            else correctObstacle = (lastObstacle.getPostX() + obstacleStructure.getPrevX() < spaceBetweenBeats); //Comprueba si es correcto
+            else correctObstacle = (obstacleStructure.getObstacleEnabled()) && (lastObstacle.getPostX() + obstacleStructure.getPrevX() < spaceBetweenBeats); //Comprueba si es correcto
 
 
             if (!correctObstacle) Destroy(obstacle); //Si no lo es, lo destruye, volverá al while y creará otro.
@@ -130,9 +143,9 @@ public class AlObstacleGenerator : MonoBehaviour
 
         if (obstacleStructure == null) //Si no se ha encontrado en todos los intentos ninguno
         {
-            //Pongo A MANO el número 9 porque es el más "fino", cabe seguro
+            //Pongo A MANO el número 9 (Struct9) porque es el más "fino", cabe seguro
             obstacle = Instantiate(obstaclesStructures[9], new Vector3(x, y, 0), transform.rotation, obstaclePool);
-            obstacleStructure = obstacle.GetComponent<ObstacleStructure>();
+            obstacleStructure = obstacle.GetComponent<ObstacleStructureData>();
         }
 
         return obstacleStructure;
