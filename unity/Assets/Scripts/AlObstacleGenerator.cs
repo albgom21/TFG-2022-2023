@@ -20,6 +20,8 @@ public class AlObstacleGenerator : MonoBehaviour
     [SerializeField] private GameObject groundPrefab;
     [SerializeField] private GameObject groundStartPrefab;
     private GameObject[] obstaclesStructures;
+    [SerializeField] private GameObject endPrefab;
+    [SerializeField] private GameObject groundToDestroy;
 
     // Pools
     [SerializeField] private Transform obstaclePool;
@@ -60,6 +62,10 @@ public class AlObstacleGenerator : MonoBehaviour
         Debug.Log(minDistanceBetweenObstacles);
 
         GenerateObstacles(beats/*, beatsZonesIndex*/);
+
+        Instantiate(endPrefab, new Vector3(50000, 0, 0), transform.rotation, obstaclePool);
+
+        Destroy(groundToDestroy);
     }
 
     private void GenerateObstacles(List<float> beats/*, List<int> beatsZonesIndex*/)
@@ -78,8 +84,6 @@ public class AlObstacleGenerator : MonoBehaviour
         {
             coordX = beats[i] * multiplierX; //coordenada X del obstáculo.
             
-            
-
             //Espacio entre el CENTRO del anterior obstáculo y este
             float spaceBetweenBeats = coordX - prevX; 
 
@@ -95,9 +99,8 @@ public class AlObstacleGenerator : MonoBehaviour
 
                 floorEnd = coordX - thisObstacle.getPrevX();
 
-                GenerateFloorBetweenObstacles(floorStart, floorEnd, coordY);
+                GenerateFloor(floorStart, floorEnd, coordY);
             }
-            
             //if (portal)
             //{
             //    Instantiate(waterPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
@@ -126,7 +129,7 @@ public class AlObstacleGenerator : MonoBehaviour
         ObstacleStructureData obstacleStructure = null;
 
         int intentos = 0;
-        while (!correctObstacle && intentos < 20)
+        while (!correctObstacle && intentos < 25)
         {
             int rnd = Random.Range(0, obstaclesStructures.Length);
             obstacle = Instantiate(obstaclesStructures[rnd], new Vector3(x, y, 0), transform.rotation, obstaclePool);
@@ -137,7 +140,12 @@ public class AlObstacleGenerator : MonoBehaviour
             else correctObstacle = (obstacleStructure.getObstacleEnabled()) && (lastObstacle.getPostX() + obstacleStructure.getPrevX() < spaceBetweenBeats); //Comprueba si es correcto
 
 
-            if (!correctObstacle) Destroy(obstacle); //Si no lo es, lo destruye, volverá al while y creará otro.
+            if (!correctObstacle)
+            {
+                Destroy(obstacle); //Si no lo es, lo destruye, volverá al while y creará otro.
+                obstacleStructure = null;
+            }
+
             intentos++;
         }
 
@@ -151,11 +159,11 @@ public class AlObstacleGenerator : MonoBehaviour
         return obstacleStructure;
     }
 
-    private void GenerateFloorBetweenObstacles(float prevObstX, float obstX, float y)
+    private void GenerateFloor(float floorStart, float floorEnd, float y)
     {
-        float distanceX = obstX - prevObstX;
-        GameObject ground = Instantiate(groundPrefab, new Vector3(prevObstX + (distanceX / 2.0f), y, 0), transform.rotation, groundPool);
-        ground.transform.localScale = new Vector3(distanceX, ground.transform.localScale.y, ground.transform.localScale.z);
+        float width = floorEnd - floorStart;
+        GameObject ground = Instantiate(groundPrefab, new Vector3(floorStart + (width / 2.0f), y, 0), transform.rotation, groundPool);
+        ground.transform.localScale = new Vector3(width, ground.transform.localScale.y, ground.transform.localScale.z);
     }
 
     public float getMultiplierX()

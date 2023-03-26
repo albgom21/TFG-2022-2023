@@ -18,9 +18,9 @@ public class ButtonFunc : MonoBehaviour
         GameManager.instance.setExtension(extension);
 
         //if (aun no han sido creados los txts)
-            //pythonCall();
+        pythonCall();
 
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("PruebasAlvaro");
     }
     public void setExtension(string s)
     {
@@ -29,9 +29,11 @@ public class ButtonFunc : MonoBehaviour
 
     private void pythonCall()
     {
+        //string arguments = "Assets/FeaturesExtraction/librosa_ex.py ../StreamingAssets/" + songName + extension;
+        string arguments = "Assets/FeaturesExtraction/librosa_ex.py";
         ProcessStartInfo startInfo = new ProcessStartInfo();
         startInfo.FileName = "python";
-        startInfo.Arguments = "../Feature Extraction/librosa_ex.py " + songName + extension;
+        startInfo.Arguments = arguments;
         startInfo.UseShellExecute = false;
         startInfo.RedirectStandardOutput = true;
 
@@ -42,6 +44,6 @@ public class ButtonFunc : MonoBehaviour
         string output = process.StandardOutput.ReadToEnd();
         process.WaitForExit();
 
-        UnityEngine.Debug.Log(output);
+        UnityEngine.Debug.Log("Resultado: " + output);
     }
 }

@@ -13,7 +13,7 @@ public class ReadTxt : MonoBehaviour
 
     // RUTAS
     public string song = "200-BPM";         // Título del audio analizado
-    string path = "Assets/Txt/";            // Ruta dentro del proyecto donde se guardan los txt
+    string path = "Assets/FeaturesExtraction/Txt/";            // Ruta dentro del proyecto donde se guardan los txt
     string rutaBeats, rutaSC, rutaRMSE,     // Nombre de cada característica en los txt
            rutaSamples, rutaSr, rutaDuration, rutaPlpBeats,
            rutaAgudosTiempo, rutaAgudosValoresNorm, rutaAgudos,
@@ -41,9 +41,11 @@ public class ReadTxt : MonoBehaviour
 
     void Awake()
     {
+        //Desde la escena del propio nivel
         GameManager.instance.setSong(song);
         GameManager.instance.setExtension(".wav");
 
+        //Desde el menú
         //song = GameManager.instance.getSong();
 
         // Crear las rutas de los txt

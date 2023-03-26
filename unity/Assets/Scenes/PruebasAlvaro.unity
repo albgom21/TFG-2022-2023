@@ -518,6 +518,7 @@ MonoBehaviour:
   zones: {fileID: 290854745}
   groundPrefab: {fileID: 2973858885463788473, guid: 39b046f95bfe0cd41ac6c70c86a52018, type: 3}
   groundStartPrefab: {fileID: 2973858885463788473, guid: 1ecb77c0dcf3e4f469dca523a8219198, type: 3}
+  endPrefab: {fileID: 0}
   obstacles:
   - {fileID: 2973858885463788473, guid: 8ac23f72d5917fc46bd20a5151c9d284, type: 3}
   - {fileID: 8476976511320236115, guid: acda2dbb31aa1a64fbb74f1e2e172c5e, type: 3}
@@ -12004,6 +12005,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   crono: {fileID: 1179285987}
+  features: {fileID: 0}
 --- !u!114 &1961801119
 MonoBehaviour:
   m_ObjectHideFlags: 0

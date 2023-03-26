@@ -773,5 +773,5 @@ def depuracion_onset(filename, v1):
 def main(filename):
     features_to_txt(filename)
 
-# main(sys.argv[1]) #Si se llama desde Unity o desde consola
-main("200-BPM.wav") #Si se llama ejecutando con F5
+main(sys.argv[1]) #Si se llama desde Unity o desde consola
+#main("200-BPM.wav") #Si se llama ejecutando con F5

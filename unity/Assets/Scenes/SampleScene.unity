@@ -764,6 +764,7 @@ GameObject:
   m_Component:
   - component: {fileID: 307103658}
   - component: {fileID: 307103657}
+  - component: {fileID: 307103659}
   m_Layer: 0
   m_Name: ObstacleGenerator
   m_TagString: Untagged
@@ -778,7 +779,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 307103656}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82bad54695dc7db4598eb74aebca47e4, type: 3}
   m_Name: 
@@ -815,6 +816,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &307103659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 307103656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82c5cc377067e1440a63599aa50bba11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterPrefab: {fileID: 8476976511320236115, guid: 93d753d03b222164f908a797fd311150, type: 3}
+  features: {fileID: 1277446150}
+  groundPrefab: {fileID: 2973858885463788473, guid: 39b046f95bfe0cd41ac6c70c86a52018, type: 3}
+  groundStartPrefab: {fileID: 2973858885463788473, guid: 1ecb77c0dcf3e4f469dca523a8219198, type: 3}
+  endPrefab: {fileID: 3341490454293171990, guid: a98f6690fef6b9b42a038382ecab267e, type: 3}
+  groundToDestroy: {fileID: 2124642413}
+  obstaclePool: {fileID: 1962388977}
+  groundPool: {fileID: 1052714808}
 --- !u!1 &308216788
 GameObject:
   m_ObjectHideFlags: 0
