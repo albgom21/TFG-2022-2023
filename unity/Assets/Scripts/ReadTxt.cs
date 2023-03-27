@@ -11,6 +11,9 @@ public class ReadTxt : MonoBehaviour
      Clase para leer las características del audio extraidas por el programa de Python
     */
 
+    // DEBUG
+    public bool pruebasDesdeMenu = false;
+
     // RUTAS
     public string song = "200-BPM";         // Título del audio analizado
     string path = "Assets/FeaturesExtraction/Txt/";            // Ruta dentro del proyecto donde se guardan los txt
@@ -23,12 +26,12 @@ public class ReadTxt : MonoBehaviour
 
     // ESTRUCTURAS DE DATOS PARA GUARDAS LAS CARACTERÍSTICAS
     List<float> beats = new List<float>();      // Tiempo en seg cuando se producen los beats
-    List<float> plpBeats = new List<float>();      
+    List<float> plpBeats = new List<float>();
     List<float> scopt = new List<float>();      // Valor del centroide espectral en los instantes en los que hay beats
     List<float> rmse = new List<float>();       // Valor del RMSE en los instantes en los que hay beats
     List<float> samples = new List<float>();    // Valor de las muestras del audio
-    List<float> agudosTiempo = new List<float>();   
-    List<float> gravesTiempo = new List<float>();   
+    List<float> agudosTiempo = new List<float>();
+    List<float> gravesTiempo = new List<float>();
     List<float> agudosValoresNorm = new List<float>();
     List<float> gravesValoresNorm = new List<float>();
     List<float> onset = new List<float>();
@@ -42,11 +45,13 @@ public class ReadTxt : MonoBehaviour
     void Awake()
     {
         //Desde la escena del propio nivel
-        GameManager.instance.setSong(song);
-        GameManager.instance.setExtension(".wav");
-
-        //Desde el menú
-        //song = GameManager.instance.getSong();
+        if (!pruebasDesdeMenu)
+        {
+            GameManager.instance.setSong(song);
+            GameManager.instance.setExtension(".wav");
+        }
+        else   //Desde el menú
+            song = GameManager.instance.getSong();
 
         // Crear las rutas de los txt
         rutaBeats = path + song + "_beats.txt";
@@ -72,13 +77,13 @@ public class ReadTxt : MonoBehaviour
         //readFeature(ref plpBeats, rutaPlpBeats);
         readFeature(ref scopt, rutaSC);
         readFeature(ref rmse, rutaRMSE);
-        readFeature(ref samples, rutaSamples);
+        //readFeature(ref samples, rutaSamples);
         readFeature(ref agudosTiempo, rutaAgudosTiempo);
         readFeature(ref agudosValoresNorm, rutaAgudosValoresNorm);
 
         readFeature(ref gravesTiempo, rutaGravesTiempo);
         readFeature(ref gravesValoresNorm, rutaGravesValoresNorm);
-        readFeature(ref onset, rutaOnset);
+        //readFeature(ref onset, rutaOnset);
         readInt(ref sr, rutaSr);
         readFloat(ref duration, rutaDuration);
 

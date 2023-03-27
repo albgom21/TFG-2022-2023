@@ -681,7 +681,7 @@ def features_to_txt(filename):
     # onset = onset_detection(filename)
 
     name = os.path.splitext(filename)[0]
-    np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
+    # np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
     np.savetxt(name + '_duration.txt', dur,fmt='%.0f')
     np.savetxt(name + '_sr.txt', np_sr, fmt='%.0f')
     np.savetxt(name + '_beats.txt', beats, fmt='%.3f')
@@ -694,10 +694,10 @@ def features_to_txt(filename):
     # np.savetxt(name + '_onsetDetection.txt', onset, fmt='%.3f')
 
     # Ruta de la carpeta de origen
-    ruta_origen = '../StreamingAssets/'
+    ruta_origen = 'Assets/StreamingAssets'
 
     # Ruta de la carpeta de destino
-    ruta_destino = './Txt/'
+    ruta_destino = 'Assets/FeaturesExtraction/Txt/'
 
     # Recorre los archivos de la carpeta de origen
     for archivo in os.listdir(ruta_origen):
@@ -772,6 +772,7 @@ def depuracion_onset(filename, v1):
 
 def main(filename):
     features_to_txt(filename)
+    print("Fin del main de Python")
 
-main("../StreamingAssets/CantLetGo.wav") #Si se llama desde Unity o desde consola
-#main("Level6.wav") #Si se llama ejecutando con F5
+main(sys.argv[1]) #Llamada desde Unity con la canción como 1er argumento
+# main("Assets/StreamingAssets/CantLetGo.wav") # Ruta que se usa en Unity

@@ -20,7 +20,7 @@ public class ButtonFunc : MonoBehaviour
         //if (aun no han sido creados los txts)
         pythonCall();
 
-        SceneManager.LoadScene("PruebasAlvaro");
+        SceneManager.LoadScene("SampleScene");
     }
     public void setExtension(string s)
     {
@@ -29,8 +29,7 @@ public class ButtonFunc : MonoBehaviour
 
     private void pythonCall()
     {
-        //string arguments = "Assets/FeaturesExtraction/librosa_ex.py ../StreamingAssets/" + songName + extension;
-        string arguments = "Assets/FeaturesExtraction/librosa_ex.py";
+        string arguments = "Assets/FeaturesExtraction/librosa_ex.py Assets/StreamingAssets/" + songName + extension;
         ProcessStartInfo startInfo = new ProcessStartInfo();
         startInfo.FileName = "python";
         startInfo.Arguments = arguments;
