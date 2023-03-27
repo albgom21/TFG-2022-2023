@@ -35,6 +35,9 @@ public class AlObstacleGenerator : MonoBehaviour
     //public float finalLevel;
     private ObstacleStructureData lastObstacle;
 
+    //Dificultad
+    [SerializeField] private int difficulty;
+
     void Start()
     {
         obstaclesStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/Estructuras");
@@ -174,5 +177,13 @@ public class AlObstacleGenerator : MonoBehaviour
     public GameObject getFeatures()
     {
         return features;
+    }
+
+    bool obstacleEnabled(ObstacleStructureData obstacleStructure)
+    {
+        int obstacleDif = obstacleStructure.getDifficulty();
+        //Se elegirán obstáculos cuya dificultad sea igual o con 1 de diferencia respecto a la dificultad del script
+        //Ejemplo: si la dificultad marcada en script es 3, se elegirá, obstáculos de dificultad 2, 3 y 4
+        return obstacleStructure.getObstacleEnabled() && difficulty >= obstacleDif - 1 && difficulty <= obstacleDif + 1; 
     }
 }
