@@ -45,6 +45,8 @@ class SelectMusic : MonoBehaviour
 
     private FMOD.Studio.EventInstance eventInstance;
 
+    [SerializeField]
+    dataStructs.Zone zones;
 
     //Parametros
     UnderWaterEffect underWaterEffect;
@@ -155,6 +157,7 @@ class SelectMusic : MonoBehaviour
     {
         PlayMusic(fileName);
         if (underWaterEffect) underWaterEffect.setEventInstance(eventInstance);
+        if (zones) zones.setEventInstance(eventInstance);
     }
     public void playTime(int t)
     {
@@ -169,7 +172,10 @@ class SelectMusic : MonoBehaviour
         eventInstance.start();
         eventInstance.release();
 
+        if (underWaterEffect) underWaterEffect.setEventInstance(eventInstance);
+        if (zones) zones.setEventInstance(eventInstance);
     }
+
     public void Stop()
     {
         eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);

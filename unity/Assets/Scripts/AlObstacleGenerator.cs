@@ -47,22 +47,11 @@ public class AlObstacleGenerator : MonoBehaviour
         List<float> beats = features.GetComponent<ReadTxt>().getBeatsInTime();
         //List<float> scopt = features.GetComponent<ReadTxt>().getScopt();
 
-        //int iniH = zones.getBeatIniHigh();
-        //int iniL = zones.getBeatIniLow();
-        //int endH = zones.getBeatEndHigh();
-        //int endL = zones.getBeatEndLow();
-
-        //Debug.Log("Ini BEAT high: " + iniH);
-        //Debug.Log("Fin BEAT high: " + endH);
-
-        //Debug.Log("Ini BEAT low: " + iniL);
-        //Debug.Log("Fin BEAT low: " + endL);
-
         //List<int> beatsZonesIndex = zones.getBeatZonesIndexes();
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
         minDistanceBetweenObstacles = multiplierX / 2.0f;
-        Debug.Log(minDistanceBetweenObstacles);
+        //Debug.Log(minDistanceBetweenObstacles);
 
         GenerateObstacles(beats/*, beatsZonesIndex*/);
 

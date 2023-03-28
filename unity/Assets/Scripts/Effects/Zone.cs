@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 // TO DO
 // CAMBIAR STRUCTS A UN SCRIPT UNICO DE STRUCTS
@@ -16,6 +17,8 @@ namespace dataStructs
         [SerializeField] private Color highColor;
         [SerializeField] private Color lowColor;
 
+        FMOD.Studio.EventInstance eventInstance;
+
         private Color originalColor;
 
         private Material originalSkyBox;
@@ -23,6 +26,10 @@ namespace dataStructs
         private List<int> beatsZones = new List<int>();
 
         private double timeCount = 0;
+
+        [SerializeField] Image water;
+        public bool waterEnabled = false;
+
 
         public enum ZoneType { HIGH, LOW };
         public struct ZoneData
@@ -71,7 +78,7 @@ namespace dataStructs
 
         }
         private List<ZoneData> zData = new List<ZoneData>();
-        
+
         void Start()
         {
             originalSkyBox = RenderSettings.skybox;
@@ -91,7 +98,7 @@ namespace dataStructs
             {
                 if (GameManager.instance.getDeath())
                 {
-                    endZone();
+                    endZone(true);
                     timeCount = GameManager.instance.getDeathTime();
                     for (int i = 0; i < zData.Count; i++)
                     {
@@ -132,7 +139,37 @@ namespace dataStructs
                         break;
                     }
                 }
+                // Efecto agua en zona LOW
+                if (waterEnabled && water.fillAmount < 1)
+                    water.fillAmount += Time.deltaTime * 2;
+                else if (!waterEnabled && water.fillAmount > 0)
+                    water.fillAmount -= Time.deltaTime * 2;
             }
+        }
+        void iniZone(ZoneType type)
+        {
+            if (type == ZoneType.HIGH)
+            {
+                RenderSettings.skybox = highSky;
+                playerSprite.color = highColor;
+            }
+            else if (type == ZoneType.LOW)
+            {
+                waterEnabled = true;
+                eventInstance.setParameterByName("Underwater", 1);
+                RenderSettings.skybox = lowSky;
+                playerSprite.color = lowColor;
+            }
+        }
+
+        void endZone(bool death = false)
+        {
+            waterEnabled = false;
+            eventInstance.setParameterByName("Underwater", 0);
+            RenderSettings.skybox = originalSkyBox;
+            playerSprite.color = originalColor;
+            if (death)
+                water.fillAmount = 0;
         }
 
         private void HighZone(List<float> beats, List<float> rmse)
@@ -174,7 +211,7 @@ namespace dataStructs
                         aux.setTimeIniZone(iniZone);
                         aux.setTimeEndZone(beats[i]);
                         aux.setBeatIni(iniBeat);
-                        aux.setBeatEnd(i);                     
+                        aux.setBeatEnd(i);
                     }
                 }
                 else
@@ -286,24 +323,9 @@ namespace dataStructs
             //Debug.Log("Fin zona low: " + zData[zData.Count - 1].getTimeEndZone());
         }
 
-        void iniZone(ZoneType type)
+        public void setEventInstance(FMOD.Studio.EventInstance eI)
         {
-            if(type == ZoneType.HIGH)
-            {
-                RenderSettings.skybox = highSky;
-                playerSprite.color = highColor;
-            }
-            else if(type == ZoneType.LOW)
-            {
-                RenderSettings.skybox = lowSky;
-                playerSprite.color = lowColor;
-            }
-        }
-
-        void endZone()
-        {
-            RenderSettings.skybox = originalSkyBox;
-            playerSprite.color = originalColor;
+            eventInstance = eI;
         }
 
         // GETTERS

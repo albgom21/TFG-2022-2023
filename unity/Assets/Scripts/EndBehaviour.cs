@@ -17,7 +17,6 @@ public class EndBehaviour : MonoBehaviour
 
         foreach (RectTransform b in botones)
             b.gameObject.SetActive(false);
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
