@@ -46,7 +46,7 @@ class SelectMusic : MonoBehaviour
     private FMOD.Studio.EventInstance eventInstance;
 
     [SerializeField]
-    dataStructs.Zone zones;
+    Zone zones;
 
     //Parametros
     UnderWaterEffect underWaterEffect;

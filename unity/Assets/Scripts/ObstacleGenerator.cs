@@ -4,8 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Analytics;
-
-using dataStructs;
+using ZoneCode;
 
 public class ObstacleGenerator : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class ObstacleGenerator : MonoBehaviour
 
     // PRUEBAS Graves Y Agudos
     //[SerializeField] private GameObject badPrefab;
-    [SerializeField] private GameObject waterPrefab;
+    [SerializeField] private GameObject portalPrefab;
     //[SerializeField] private GameObject coinPrefab;
 
     [SerializeField] private GameObject features;
@@ -44,27 +43,32 @@ public class ObstacleGenerator : MonoBehaviour
     private float multiplierX;
     private float minDistanceBetweenObstacles;
 
-    //public int BPM;
-    //public float finalLevel;
 
+    List<ZoneData> zonesData;
+    Color lowColor, highColor;
     void Start()
     {
+        lowColor = new Color(0.2f, 0.4f, 0.6f, 1.0f);  // DARK BLUE
+        highColor = new Color(1.0f, 1.0f, 0.0f, 1.0f); // YELLOW
+
+
         float width = transform.localScale.x;
         float height = transform.localScale.y;
         List<float> beats = features.GetComponent<ReadTxt>().getBeatsInTime();
         List<float> scopt = features.GetComponent<ReadTxt>().getScopt();
-
+        zonesData = zones.getZonesData();
         // PRUEBAS Graves Y Agudos
         //List<float> agudosTiempo = features.GetComponent<ReadTxt>().getAgudosTiempo();
         //List<float> gravesTiempo = features.GetComponent<ReadTxt>().getGravesTiempo();
         //List<float> agudosValoresNorm = features.GetComponent<ReadTxt>().getAgudosValoresNorm();
         //List<float> gravesValoresNorm = features.GetComponent<ReadTxt>().getGravesValoresNorm();
 
-        List<int>beatsZonesIndex = zones.getBeatsZonesIndex();
-            
+        List<int> beatsZonesIndex = zones.getBeatsZonesIndex();
+
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
         minDistanceBetweenObstacles = multiplierX / 2f;
         //Debug.Log(minDistanceBetweenObstacles);
+
         GenerateLevel(width, height, beats, scopt, beatsZonesIndex);
 
         #region pruebas GyA
@@ -109,6 +113,7 @@ public class ObstacleGenerator : MonoBehaviour
                 continue;
             }
 
+            // PORTALES
             foreach (int b in beatsZonesIndex)
             {
                 if (b == i)
@@ -118,6 +123,31 @@ public class ObstacleGenerator : MonoBehaviour
                 }
             }
 
+            // CAMBIO DE COLOR OBSTACULOS POR ZONAS
+            groundPrefab.GetComponent<SpriteRenderer>().color = Color.white;
+            foreach (ZoneData z in zonesData)
+            {
+                //Debug.Log("N: " + cont);
+                //Debug.Log("TYPE: " + z.getType());
+
+                //Debug.Log("B INI: " + z.getBeatIni());
+                //Debug.Log("B END: " + z.getBeatEnd());
+
+                //Debug.Log("T INI: " + z.getTimeIniZone());
+                //Debug.Log("T END: " + z.getTimeEndZone());
+
+                if (i >= z.getBeatIni() && i <= z.getBeatEnd())
+                {
+                    if (z.getType() == ZoneType.LOW)
+                        groundPrefab.GetComponent<SpriteRenderer>().color = lowColor;
+                    else if (z.getType() == ZoneType.HIGH)
+                        groundPrefab.GetComponent<SpriteRenderer>().color = highColor;
+
+                    break;
+                }
+            }
+
+
             float prevX = beats[i - 1] * multiplierX;
             float nextX = beats[i + 1] * multiplierX;
             int prevY = (int)(scopt[i - 1] * multiplierY);
@@ -126,7 +156,7 @@ public class ObstacleGenerator : MonoBehaviour
 
             if (portal)
             {
-                Instantiate(waterPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
+                Instantiate(portalPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
                 Ground0_1(prevX, y, distance, width, height);
                 portal = false;
                 continue;
@@ -154,6 +184,7 @@ public class ObstacleGenerator : MonoBehaviour
             else if (nextY - y == 2) InstantiateObstacle2Up(x, y);
             else Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(x, y, 0), transform.rotation, obstaclePool);
         }
+        groundPrefab.GetComponent<SpriteRenderer>().color = Color.white;
         Instantiate(endPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
     }
 
