@@ -170,6 +170,9 @@ public class AlObstacleGenerator : MonoBehaviour
 
     bool obstacleEnabled(ObstacleStructureData obstacleStructure)
     {
+        if (difficulty == -1) return obstacleStructure.getObstacleEnabled();
+
+        //else
         int obstacleDif = obstacleStructure.getDifficulty();
         //Se elegirán obstáculos cuya dificultad sea igual o con 1 de diferencia respecto a la dificultad del script
         //Ejemplo: si la dificultad marcada en script es 3, se elegirá, obstáculos de dificultad 2, 3 y 4
