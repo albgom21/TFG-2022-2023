@@ -8,6 +8,7 @@ TagManager:
   - coin
   - RawImage
   - EndMenu
+  - Ground
   layers:
   - Default
   - TransparentFX

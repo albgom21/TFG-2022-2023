@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Analytics;
+using ZoneCode;
 
 public class AlObstacleGenerator : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class AlObstacleGenerator : MonoBehaviour
     //[SerializeField] private GameObject coinPrefab;
 
     [SerializeField] private GameObject features;
-    //[SerializeField] private Zone zones;
+    [SerializeField] private Zone zones;
 
     // Prefabs
     [SerializeField] private GameObject groundPrefab;
@@ -31,20 +32,30 @@ public class AlObstacleGenerator : MonoBehaviour
     private float multiplierX;
     private float minDistanceBetweenObstacles;
 
-    //public int BPM;
-    //public float finalLevel;
     private ObstacleStructureData lastObstacle;
 
-    //Dificultad
+    // Dificultad
     [SerializeField] private int difficulty;
+
+    // Zones
+    List<ZoneData> zonesData;
+    Color lowColor, highColor;
+    bool lowColorChange = false;
+    bool highColorChange = false;
+    
 
     void Start()
     {
+        lowColor = new Color(0.2f, 0.4f, 0.6f, 1.0f);  // DARK BLUE
+        highColor = new Color(1.0f, 1.0f, 0.0f, 1.0f); // YELLOW
+
         obstaclesStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/Estructuras");
         lastObstacle = null;
         //float width = transform.localScale.x;
         //float height = transform.localScale.y;
         List<float> beats = features.GetComponent<ReadTxt>().getBeatsInTime();
+        zonesData = zones.getZonesData();
+
         //List<float> scopt = features.GetComponent<ReadTxt>().getScopt();
 
         //List<int> beatsZonesIndex = zones.getBeatZonesIndexes();
@@ -74,6 +85,36 @@ public class AlObstacleGenerator : MonoBehaviour
 
         for (int i = offsetI; i < beats.Count() - 1; i++)
         {
+            groundPrefab.GetComponent<SpriteRenderer>().color = Color.white;
+            foreach (ZoneData z in zonesData)
+            {
+                /*Debug.Log("N: " + cont);
+                Debug.Log("TYPE: " + z.getType());
+                Debug.Log("B INI: " + z.getBeatIni());
+                Debug.Log("B END: " + z.getBeatEnd());
+                Debug.Log("T INI: " + z.getTimeIniZone());
+                Debug.Log("T END: " + z.getTimeEndZone());*/
+
+                if (i >= z.getBeatIni() && i <= z.getBeatEnd())
+                {
+                    if (z.getType() == ZoneType.LOW)
+                    {
+                        groundPrefab.GetComponent<SpriteRenderer>().color = lowColor;
+                        lowColorChange = true;
+                    }
+                    else if (z.getType() == ZoneType.HIGH)
+                    {
+                        groundPrefab.GetComponent<SpriteRenderer>().color = highColor;
+                        highColorChange = true;
+                    }
+
+                    break;
+                }
+                lowColorChange = false;
+                highColorChange = false;
+
+            }
+
             coordX = beats[i] * multiplierX; //coordenada X del obstáculo.
             
             //Espacio entre el CENTRO del anterior obstáculo y este
@@ -110,7 +151,6 @@ public class AlObstacleGenerator : MonoBehaviour
                 lastObstacle = thisObstacle;
                 thisObstacle = null;
             }
-            
         }
     }
 
@@ -124,13 +164,15 @@ public class AlObstacleGenerator : MonoBehaviour
         while (!correctObstacle && intentos < 25)
         {
             int rnd = Random.Range(0, obstaclesStructures.Length);
+
+                    ChangeGroundColor(rnd, lowColorChange, highColorChange);
+            
             obstacle = Instantiate(obstaclesStructures[rnd], new Vector3(x, y, 0), transform.rotation, obstaclePool);
 
             obstacleStructure = obstacle.GetComponent<ObstacleStructureData>();
 
             if (lastObstacle == null) correctObstacle = true; //Esto solo se da en el primer obstáculo, aún no hay anterior
             else correctObstacle = (obstacleStructure.getObstacleEnabled()) && (lastObstacle.getPostX() + obstacleStructure.getPrevX() < spaceBetweenBeats); //Comprueba si es correcto
-
 
             if (!correctObstacle)
             {
@@ -141,14 +183,36 @@ public class AlObstacleGenerator : MonoBehaviour
             intentos++;
         }
 
-        if (obstacleStructure == null) //Si no se ha encontrado en todos los intentos ninguno
-        {
+        if (obstacleStructure == null){ //Si no se ha encontrado en todos los intentos ninguno
+            ChangeGroundColor(9,lowColorChange, highColorChange);
             //Pongo A MANO el número 9 (Struct9) porque es el más "fino", cabe seguro
             obstacle = Instantiate(obstaclesStructures[9], new Vector3(x, y, 0), transform.rotation, obstaclePool);
             obstacleStructure = obstacle.GetComponent<ObstacleStructureData>();
         }
 
         return obstacleStructure;
+    }
+
+    // Cambia el color del suelo a todos los "Ground" de un obstaculo struct según la zona
+    private void ChangeGroundColor(int index, bool lowColorChange, bool highColorChange)
+    {
+        // Recorrer todos los hijos del GameObject padre
+        for (int i = 0; i < obstaclesStructures[index].transform.childCount; i++)
+        {
+            // Obtener el GameObject hijo actual
+            GameObject hijo = obstaclesStructures[index].transform.GetChild(i).gameObject;
+
+            // Comprobar si el GameObject hijo tiene el tag "Ground"
+            if (hijo.CompareTag("Ground"))
+            {
+                if (lowColorChange)
+                    hijo.GetComponent<SpriteRenderer>().color = lowColor;
+                else if(highColorChange)
+                    hijo.GetComponent<SpriteRenderer>().color = highColor;
+                else
+                    hijo.GetComponent<SpriteRenderer>().color = Color.white;
+            }
+        }
     }
 
     private void GenerateFloor(float floorStart, float floorEnd, float y)
