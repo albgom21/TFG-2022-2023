@@ -5,14 +5,29 @@ using UnityEngine;
 public class AutoJump : MonoBehaviour
 {
     private bool jump;
-    private PlayerMovement playerMov;
     private Rigidbody2D rb;
     private int ticks; //JAJA XD LOL LOL LOL LOL LOL LOL LOL MIRA ESTO LOL
+    private AutoJumpManager autoJumpManager;
+    private DebugManager debugManager;
+
     private void Start()
     {
         jump = false;
         rb = null;
         ticks = 0;
+
+        //DebugMode
+        debugManager = GameManager.instance.getDebugManager();
+        debugManager.addAutoJumpInstance(this.gameObject);
+        this.GetComponent<SpriteRenderer>().enabled = debugManager.getDebugMode();
+
+        //AutoJumpMode
+        autoJumpManager = GameManager.instance.getAutoJumpManager();
+        autoJumpManager.addInstance(this.gameObject);
+        bool startEnabled = autoJumpManager.getAutoJumpEnabled();
+        if (startEnabled) GetComponent<SpriteRenderer>().color = Color.green;
+        else            GetComponent<SpriteRenderer>().color = Color.red;
+        this.enabled = startEnabled;
     }
     private void FixedUpdate()
     {

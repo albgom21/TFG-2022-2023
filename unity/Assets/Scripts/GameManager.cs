@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviour
     private bool powerUpGravity = false;
     private string song, extension;
 
+    [SerializeField] private AutoJumpManager autoJumpManager;
+    [SerializeField] private DebugManager debugManager;
+
     void Awake()     // Comprobar que solo hay un GameManager.
     {
         if (instance == null)
@@ -49,4 +52,22 @@ public class GameManager : MonoBehaviour
     public string getSong() { return song; }
     public void setExtension(string s) { extension = s; }
     public string getExtension() { return extension; }
+
+
+    //Debug mode
+    public DebugManager getDebugManager() { return debugManager; }
+
+    public void changeDebugMode()
+    {
+        debugManager.changeDebugMode();
+    }
+
+    //AutoJump
+    public AutoJumpManager getAutoJumpManager() { return autoJumpManager; }
+
+
+    public void changeAutoJumpMode()
+    {
+        autoJumpManager.changeAutoJumpMode();
+    }
 }

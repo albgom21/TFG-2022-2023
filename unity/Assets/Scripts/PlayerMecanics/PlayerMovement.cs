@@ -82,6 +82,16 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            GameManager.instance.changeAutoJumpMode();
+        }
+
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            GameManager.instance.changeDebugMode();
+        }
+
         if (onGround) {
             Unrotate();
             particles.enableEmission = true;
@@ -121,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.down || normal == Vector2.left)
+        if (normal == Vector2.down /* || normal == Vector2.left*/)
         {
             playerDeath();
         }
