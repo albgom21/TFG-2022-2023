@@ -781,7 +781,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 307103656}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82bad54695dc7db4598eb74aebca47e4, type: 3}
   m_Name: 
@@ -825,7 +825,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 307103656}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82c5cc377067e1440a63599aa50bba11, type: 3}
   m_Name: 
@@ -5794,7 +5794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b17c76fb0831bd4b8a8e1b0e9def0af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoJumpEnabled: 0
+  autoJumpEnabled: 1
 --- !u!4 &424069684
 Transform:
   m_ObjectHideFlags: 0
@@ -6683,7 +6683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98b69bcd3c68954b9105788efef37ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugMode: 0
+  debugMode: 1
 --- !u!4 &931255590
 Transform:
   m_ObjectHideFlags: 0
@@ -11940,7 +11940,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b11ec5b9f9e77645a065dcef7e7afb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textoCrono: {fileID: 1179285988}
 --- !u!114 &1179285988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12370,8 +12369,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7edbab51395bd1439b4ed8d1b935099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoJumpManager: {fileID: 424069683}
-  debugManager: {fileID: 931255589}
 --- !u!4 &1376168086
 Transform:
   m_ObjectHideFlags: 0

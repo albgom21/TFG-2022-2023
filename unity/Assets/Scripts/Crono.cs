@@ -5,7 +5,8 @@ using UnityEngine.UI;
 // Clase para mostrar el tiempo actual de la canción
 public class Crono : MonoBehaviour
 {
-    public Text textoCrono;
+    private Text textoCrono;
+    private DebugManager debugManager;
 
     private double timeActivated = 0;
     private double t = 0;
@@ -13,7 +14,12 @@ public class Crono : MonoBehaviour
 
     private void Start()
     {
+        textoCrono = GetComponent<Text>();
         timeActivated = Time.time;
+
+        debugManager = GameManager.instance.getDebugManager();
+        debugManager.setCronoInstance(textoCrono);
+        textoCrono.enabled = debugManager.getDebugMode();
     }
 
     private void Update()
