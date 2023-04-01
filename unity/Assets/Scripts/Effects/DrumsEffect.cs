@@ -1,16 +1,12 @@
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
-using UnityEngine.Timeline;
-using UnityEngine.UI;
+using UnityEngine.Rendering.Universal;
 
 public class DrumsEffect : MonoBehaviour
 {
     public ReadTxt input;
-    private Light light;
-    private float intensity;
+    private Light2D light_;
+    [SerializeField] private float intensity;
     List<float> onset;
     private int i, maxIntensity,onsetCount;
     private float offset, time;
@@ -18,16 +14,16 @@ public class DrumsEffect : MonoBehaviour
 
     void Start()
     {
-        light = gameObject.GetComponent<Light>();
+        light_ = gameObject.GetComponent<Light2D>();
         onset = input.getOnset();
         intensity = i = 9;
-        maxIntensity = 10;
+        maxIntensity = 1;
         onsetCount = onset.Count;
     }
 
     private void Update()
     {
-        light.intensity = intensity;
+        light_.intensity = intensity;
         if (GameManager.instance.getEnd()) return;
 
         if (GameManager.instance.getDeath()) time = i = 0;
@@ -45,7 +41,7 @@ public class DrumsEffect : MonoBehaviour
             else offset = 1;
             i++;
         }
-        light.intensity = intensity;
+        light_.intensity = intensity;
         intensity -= maxIntensity * (Time.deltaTime / offset);
     }
 }
