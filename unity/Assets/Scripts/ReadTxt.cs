@@ -83,7 +83,7 @@ public class ReadTxt : MonoBehaviour
 
         readFeature(ref gravesTiempo, rutaGravesTiempo);
         readFeature(ref gravesValoresNorm, rutaGravesValoresNorm);
-        //readFeature(ref onset, rutaOnset);
+        readFeature(ref onset, rutaOnset);
         readInt(ref sr, rutaSr);
         readFloat(ref duration, rutaDuration);
 
