@@ -15,14 +15,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private ParticleSystem particles;
     [SerializeField] private Crono crono;
     private Rigidbody2D rb;
-    private bool jump, onGround;
+    private bool jump, onGround, dieByLeftCollision;
 
     private struct spawnData
     {
         public Vector3 pos;
         public GameObject obj;
         public double time;
-        
+
         public spawnData(Vector3 position, GameObject o, double t)
         {
             pos = position;
@@ -47,8 +47,9 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
         jump = false; onGround = true;
-        spawns.Add(new spawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform),0));
+        spawns.Add(new spawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform), 0));
         raycastDistance = transform.localScale.y / 2.0f + 0.02f;
+        dieByLeftCollision = false;
     }
 
     void Update()
@@ -57,15 +58,16 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space)) jump = true;
         else jump = false;
 
-        if (Input.GetMouseButtonDown(1))           
-            spawns.Add(new spawnData(transform.position, 
+        if (Input.GetMouseButtonDown(1))
+            spawns.Add(new spawnData(transform.position,
                                     Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform),
                                     crono.getActualTime()));
-        
-        if (Input.GetKeyDown(KeyCode.Z)) {
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
             if (spawns.Count > 1)
             {
-                var obj =  spawns[spawns.Count - 1].obj;
+                var obj = spawns[spawns.Count - 1].obj;
                 Destroy(obj);
                 spawns.RemoveAt(spawns.Count - 1);
             }
@@ -73,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            for(int i = spawns.Count - 1; i > 0; i--)
+            for (int i = spawns.Count - 1; i > 0; i--)
             {
                 var obj = spawns[i].obj;
                 Destroy(obj);
@@ -92,11 +94,13 @@ public class PlayerMovement : MonoBehaviour
             GameManager.instance.changeDebugMode();
         }
 
-        if (onGround) {
+        if (onGround)
+        {
             Unrotate();
             particles.enableEmission = true;
         }
-        else {
+        else
+        {
             sprite.Rotate(Vector3.back);
             particles.enableEmission = false;
         }
@@ -131,8 +135,23 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.down /*|| normal == Vector2.left*/)
+        if (normal == Vector2.left)
         {
+            Debug.Log("depurasionasao");
+        }
+        if (normal == Vector2.down)
+        {
+            playerDeath();
+        }
+        
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        Vector2 normal = collision.GetContact(0).normal;
+        if (normal == Vector2.left)
+        {
+            Debug.Log("depurasionasao STAY");
             playerDeath();
         }
     }
@@ -144,10 +163,10 @@ public class PlayerMovement : MonoBehaviour
         onGround = false;
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
-        transform.position = spawns[spawns.Count-1].pos;
+        transform.position = spawns[spawns.Count - 1].pos;
         GameManager.instance.setDeathTime(spawns[spawns.Count - 1].time);
         crono.setActualTime(spawns[spawns.Count - 1].time);
-        
+
         GetComponent<RestartMusic>().restartMusic((int)(spawns[spawns.Count - 1].time * 1000));
     }
 }

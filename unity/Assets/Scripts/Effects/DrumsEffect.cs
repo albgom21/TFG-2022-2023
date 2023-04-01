@@ -6,9 +6,9 @@ public class DrumsEffect : MonoBehaviour
 {
     public ReadTxt input;
     private Light2D light_;
-    [SerializeField] private float intensity;
+    private float intensity, maxIntensity;
     List<float> onset;
-    private int i, maxIntensity,onsetCount;
+    private int i,onsetCount;
     private float offset, time;
 
 
@@ -17,7 +17,7 @@ public class DrumsEffect : MonoBehaviour
         light_ = gameObject.GetComponent<Light2D>();
         onset = input.getOnset();
         intensity = i = 9;
-        maxIntensity = 1;
+        maxIntensity = light_.intensity;
         onsetCount = onset.Count;
     }
 
