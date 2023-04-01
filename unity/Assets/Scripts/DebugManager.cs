@@ -8,11 +8,13 @@ public class DebugManager : MonoBehaviour
 
     private List<GameObject> syncInstances;
     private List<GameObject> autoJumpInstances;
+    private List<GameObject> obstacleIndexTextInstances;
     // Start is called before the first frame update
     void Start()
     {
         syncInstances = new List<GameObject>();
         autoJumpInstances = new List<GameObject>();
+        obstacleIndexTextInstances = new List<GameObject>();
     }
 
     public bool getDebugMode() { return debugMode; }
@@ -34,15 +36,17 @@ public class DebugManager : MonoBehaviour
         {
             syncInstances[j].GetComponent<MeshRenderer>().enabled = debugMode;
         }
+
+        for (int k = 0; k < syncInstances.Count; ++k)
+        {
+            obstacleIndexTextInstances[k].GetComponent<MeshRenderer>().enabled = debugMode;
+        }
     }
 
-    public void addSyncInstance(GameObject newSyncInstance)
-    {
-        syncInstances.Add(newSyncInstance);
-    }
+    public void addSyncInstance(GameObject newSyncInstance) { syncInstances.Add(newSyncInstance); }
 
-    public void addAutoJumpInstance(GameObject newAutoJump)
-    {
-        autoJumpInstances.Add(newAutoJump);
-    }
+    public void addAutoJumpInstance(GameObject newAutoJump) { autoJumpInstances.Add(newAutoJump); }
+
+    public void addObstacleIndexTextInstance(GameObject newAutoJump) { obstacleIndexTextInstances.Add(newAutoJump); }
+
 }
