@@ -9,6 +9,7 @@ TagManager:
   - RawImage
   - EndMenu
   - Ground
+  - LoadingImage
   layers:
   - Default
   - TransparentFX

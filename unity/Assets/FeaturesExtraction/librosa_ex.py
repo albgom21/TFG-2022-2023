@@ -774,5 +774,7 @@ def main(filename):
     features_to_txt(filename)
     print("Fin del main de Python")
 
-main(sys.argv[1]) #Llamada desde Unity con la canción como 1er argumento
-# main("Assets/StreamingAssets/CantLetGo.wav") # Ruta que se usa en Unity
+# Main para usarlo desde Unity con la canción como 1er argumento (equivale a :"Assets/StreamingAssets/200-BPM.wav")
+main(sys.argv[1])
+# Main para usarlo desde VScode
+# main("../StreamingAssets/200-BPM.wav") 
