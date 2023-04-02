@@ -14,18 +14,12 @@ public class Zone : MonoBehaviour
     [SerializeField] private Color lowColor;
 
     FMOD.Studio.EventInstance eventInstance;
-
     private Color originalColor;
-
     private Material originalSkyBox;
-
     private List<int> beatsZones = new List<int>();
-
     private double timeCount = 0;
-
     [SerializeField] Image water;
     public bool waterEnabled = false;
-
     private List<ZoneData> zData = new List<ZoneData>();
 
     void Start()
@@ -43,59 +37,58 @@ public class Zone : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.instance.getEnd())
-        {
-            if (GameManager.instance.getDeath())
-            {
-                endZone(true);
-                timeCount = GameManager.instance.getDeathTime();
-                for (int i = 0; i < zData.Count; i++)
-                {
-                    ZoneData aux = zData[i];
-                    if (timeCount < zData[i].getTimeIniZone() || (timeCount > zData[i].getTimeIniZone() && timeCount < zData[i].getTimeEndZone()))
-                        aux.setActivatedIni(false);
-                    if (timeCount < zData[i].getTimeEndZone() || (timeCount > zData[i].getTimeIniZone() && timeCount < zData[i].getTimeEndZone()))
-                        aux.setActivatedEnd(false);
-                    zData[i] = aux;
-                }
-            }
+        if (GameManager.instance.getEnd()) return;
 
-            timeCount += Time.deltaTime;
+        if (GameManager.instance.getDeath())
+        {
+            EndZone(true);
+            timeCount = GameManager.instance.getDeathTime();
             for (int i = 0; i < zData.Count; i++)
             {
-                // Si no se ha pasado el portal de inicio y ha pasado el tiempo de activación
-                if (!zData[i].getActivatedIni() && timeCount >= zData[i].getTimeIniZone())
-                {
-                    // Poner la zona según su tipo                                    
-                    iniZone(zData[i].getType());
-
-                    ZoneData aux = zData[i];
-                    aux.setActivatedIni(true);
-                    zData[i] = aux;
-
-                    break;
-                }
-                // Si no se había salido de la zona y ha pasado el tiempo de la zona
-                else if (!zData[i].getActivatedEnd() && timeCount >= zData[i].getTimeEndZone())
-                {
-                    // Finalizar la zona
-                    endZone();
-
-                    ZoneData aux = zData[i];
-                    aux.setActivatedEnd(true);
-                    zData[i] = aux;
-
-                    break;
-                }
+                ZoneData aux = zData[i];
+                if (timeCount < zData[i].getTimeIniZone() || (timeCount > zData[i].getTimeIniZone() && timeCount < zData[i].getTimeEndZone()))
+                    aux.setActivatedIni(false);
+                if (timeCount < zData[i].getTimeEndZone() || (timeCount > zData[i].getTimeIniZone() && timeCount < zData[i].getTimeEndZone()))
+                    aux.setActivatedEnd(false);
+                zData[i] = aux;
             }
-            // Efecto agua en zona LOW
-            if (waterEnabled && water.fillAmount < 1)
-                water.fillAmount += Time.deltaTime;
-            else if (!waterEnabled && water.fillAmount > 0)
-                water.fillAmount -= Time.deltaTime;
         }
+
+        timeCount += Time.deltaTime;
+        for (int i = 0; i < zData.Count; i++)
+        {
+            // Si no se ha pasado el portal de inicio y ha pasado el tiempo de activación
+            if (!zData[i].getActivatedIni() && timeCount >= zData[i].getTimeIniZone())
+            {
+                // Poner la zona según su tipo                                    
+                IniZone(zData[i].getType());
+
+                ZoneData aux = zData[i];
+                aux.setActivatedIni(true);
+                zData[i] = aux;
+
+                break;
+            }
+            // Si no se había salido de la zona y ha pasado el tiempo de la zona
+            else if (!zData[i].getActivatedEnd() && timeCount >= zData[i].getTimeEndZone())
+            {
+                // Finalizar la zona
+                EndZone();
+
+                ZoneData aux = zData[i];
+                aux.setActivatedEnd(true);
+                zData[i] = aux;
+
+                break;
+            }
+        }
+        // Efecto agua en zona LOW
+        if (waterEnabled && water.fillAmount < 1) water.fillAmount += Time.deltaTime;
+        else if (!waterEnabled && water.fillAmount > 0) water.fillAmount -= Time.deltaTime;
+
     }
-    void iniZone(ZoneType type)
+
+    void IniZone(ZoneType type)
     {
         if (type == ZoneType.HIGH)
         {
@@ -109,16 +102,17 @@ public class Zone : MonoBehaviour
             RenderSettings.skybox = lowSky;
             playerSprite.color = lowColor;
         }
+        GameManager.instance.changeZone(type);
     }
 
-    void endZone(bool death = false)
+    void EndZone(bool death = false)
     {
         waterEnabled = false;
         eventInstance.setParameterByName("Underwater", 0);
         RenderSettings.skybox = originalSkyBox;
         playerSprite.color = originalColor;
-        if (death)
-            water.fillAmount = 0;
+        if (death) water.fillAmount = 0;
+        GameManager.instance.changeZone(ZoneType.STANDARD);
     }
 
     private void HighZone(List<float> beats, List<float> rmse)

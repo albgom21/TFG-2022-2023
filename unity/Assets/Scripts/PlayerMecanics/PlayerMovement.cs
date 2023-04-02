@@ -144,25 +144,13 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.left)
-        {
-            Debug.Log("depurasionasao");
-        }
-        if (normal == Vector2.down)
-        {
-            playerDeath();
-        }
-        
+        if (normal == Vector2.down) playerDeath();
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.left)
-        {
-            Debug.Log("depurasionasao STAY");
-            playerDeath();
-        }
+        if (normal == Vector2.left) playerDeath();
     }
 
     public void playerDeath()

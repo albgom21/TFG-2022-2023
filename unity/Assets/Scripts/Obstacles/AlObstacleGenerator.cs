@@ -42,7 +42,7 @@ public class AlObstacleGenerator : MonoBehaviour
     Color lowColor, highColor;
     bool lowColorChange = false;
     bool highColorChange = false;
-    
+
 
     void Start()
     {
@@ -116,9 +116,9 @@ public class AlObstacleGenerator : MonoBehaviour
             }
 
             coordX = beats[i] * multiplierX; //coordenada X del obstáculo.
-            
+
             //Espacio entre el CENTRO del anterior obstáculo y este
-            float spaceBetweenBeats = coordX - prevX; 
+            float spaceBetweenBeats = coordX - prevX;
 
             if (lastObstacle == null || spaceBetweenBeats > lastObstacle.getPostX())
             {
@@ -165,8 +165,8 @@ public class AlObstacleGenerator : MonoBehaviour
         {
             int rnd = Random.Range(0, obstaclesStructures.Length);
 
-                    ChangeGroundColor(rnd, lowColorChange, highColorChange);
-            
+            ChangeGroundColor(rnd, lowColorChange, highColorChange);
+
             obstacle = Instantiate(obstaclesStructures[rnd], new Vector3(x, y, 0), transform.rotation, obstaclePool);
 
             obstacleStructure = obstacle.GetComponent<ObstacleStructureData>();
@@ -183,8 +183,9 @@ public class AlObstacleGenerator : MonoBehaviour
             intentos++;
         }
 
-        if (obstacleStructure == null){ //Si no se ha encontrado en todos los intentos ninguno
-            ChangeGroundColor(9,lowColorChange, highColorChange);
+        if (obstacleStructure == null)
+        { //Si no se ha encontrado en todos los intentos ninguno
+            ChangeGroundColor(9, lowColorChange, highColorChange);
             //Pongo A MANO el número 9 (Struct9) porque es el más "fino", cabe seguro (es un obstáculo vacío)
             obstacle = Instantiate(obstaclesStructures[9], new Vector3(x, y, 0), transform.rotation, obstaclePool);
             obstacleStructure = obstacle.GetComponent<ObstacleStructureData>();
@@ -207,7 +208,7 @@ public class AlObstacleGenerator : MonoBehaviour
             {
                 if (lowColorChange)
                     hijo.GetComponent<SpriteRenderer>().color = lowColor;
-                else if(highColorChange)
+                else if (highColorChange)
                     hijo.GetComponent<SpriteRenderer>().color = highColor;
                 else
                     hijo.GetComponent<SpriteRenderer>().color = Color.white;
@@ -240,6 +241,6 @@ public class AlObstacleGenerator : MonoBehaviour
         int obstacleDif = obstacleStructure.getDifficulty();
         //Se elegirán obstáculos cuya dificultad sea igual o con 1 de diferencia respecto a la dificultad del script
         //Ejemplo: si la dificultad marcada en script es 3, se elegirá, obstáculos de dificultad 2, 3 y 4
-        return obstacleStructure.getObstacleEnabled() && difficulty >= obstacleDif - 1 && difficulty <= obstacleDif + 1; 
+        return obstacleStructure.getObstacleEnabled() && difficulty >= obstacleDif - 1 && difficulty <= obstacleDif + 1;
     }
 }

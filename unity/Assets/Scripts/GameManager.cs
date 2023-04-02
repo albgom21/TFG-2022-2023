@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ZoneCode;
 
 [DefaultExecutionOrder(-1)]
 public class GameManager : MonoBehaviour
@@ -15,6 +16,8 @@ public class GameManager : MonoBehaviour
     private AutoJumpManager autoJumpManager;
     private DebugManager debugManager;
     private PowerUpsManager powerUpsManager;
+    private DrumsEffect drumsEffect;
+    private ZoneType zoneType;
 
     void Awake()     // Comprobar que solo hay un GameManager.
     {
@@ -48,8 +51,9 @@ public class GameManager : MonoBehaviour
 
     public void setAutoJumpManager(AutoJumpManager a) { autoJumpManager = a; }
     public void setDebugManager(DebugManager d) { debugManager = d; }
-
     public void setPowerUpsManager(PowerUpsManager p) { powerUpsManager = p; }
+
+    public void setDrumsEffect(DrumsEffect d) { drumsEffect = d; }
 
     public PowerUpsManager getPowerUpsManager() { return powerUpsManager; }
 
@@ -72,5 +76,20 @@ public class GameManager : MonoBehaviour
         if (!music) Debug.Log("Se está intentando llamar a la canción cuando no hay ni player");
 
         return music.getEventInstance();
+    }
+
+    public void changeZone(ZoneType type)
+    {
+        if(drumsEffect == null)
+        {
+            Debug.LogWarning("El controlador de luces (objeto con script DrumsEffect) es nulo");
+            return;
+        }
+        zoneType = type;
+        Color c;
+        if (type == ZoneType.HIGH) c = Color.red;
+        else if (type == ZoneType.LOW) c = Color.red+ Color.blue;
+        else c = Color.blue;
+        drumsEffect.SetLightColor(c);
     }
 }

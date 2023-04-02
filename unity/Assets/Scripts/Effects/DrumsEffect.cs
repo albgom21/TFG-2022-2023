@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using ZoneCode;
 
 public class DrumsEffect : MonoBehaviour
 {
@@ -8,27 +10,31 @@ public class DrumsEffect : MonoBehaviour
     private Light2D light_;
     private float intensity, maxIntensity;
     List<float> onset;
-    private int i,onsetCount;
-    private float offset, time;
-
+    private int i, onsetCount;
+    private double time;
+    private float offset;
 
     void Start()
     {
         light_ = gameObject.GetComponent<Light2D>();
         onset = input.getOnset();
-        intensity = i = 9;
-        maxIntensity = light_.intensity;
+        i = 0;
+        intensity = maxIntensity = light_.intensity;
         onsetCount = onset.Count;
+        GameManager.instance.setDrumsEffect(this);
     }
 
     private void Update()
     {
-        light_.intensity = intensity;
         if (GameManager.instance.getEnd()) return;
+        //if (GameManager.instance.getDeath())
+        //{
+        //    time = GameManager.instance.getDeathTime();
+        //    i = 0;
+        //    while (onset[i] < time) i++;
+        //}
 
-        if (GameManager.instance.getDeath()) time = i = 0;
         time += Time.deltaTime;
-        //Debug.Log(time + "  "+ onset[0]);
 
         if (i < onsetCount && time >= onset[i])
         {
@@ -44,4 +50,6 @@ public class DrumsEffect : MonoBehaviour
         light_.intensity = intensity;
         intensity -= maxIntensity * (Time.deltaTime / offset);
     }
+
+    public void SetLightColor(Color c) { light_.color = c; }
 }

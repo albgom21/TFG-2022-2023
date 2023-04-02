@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ZoneCode
 {
-    public enum ZoneType { HIGH, LOW };
+    public enum ZoneType { HIGH, LOW, STANDARD };
     public struct ZoneData
     {
         ZoneType type;
@@ -48,6 +48,5 @@ namespace ZoneCode
         public void setTimeEndZone(float i) { timeEndZone = i; }
         public void setActivatedIni(bool i) { activatedIni = i; }
         public void setActivatedEnd(bool i) { activatedEnd = i; }
-
     }
 }
