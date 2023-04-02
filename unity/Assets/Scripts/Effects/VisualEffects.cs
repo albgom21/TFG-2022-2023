@@ -16,8 +16,8 @@ public class VisualEffects : MonoBehaviour
 
     void Update()
     {
-        if(GameManager.instance.getDeath() && GameManager.instance.getPowerUpGravity())
-            transform.localRotation = new Quaternion(0, 0, 0, 0);
+        //if(GameManager.instance.getDeath() && GameManager.instance.getPowerUpGravity())
+        //    transform.localRotation = new Quaternion(0, 0, 0, 0);
 
 
         if (Input.GetKeyDown(KeyCode.B))

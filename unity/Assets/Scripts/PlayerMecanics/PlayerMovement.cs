@@ -15,19 +15,24 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private ParticleSystem particles;
     [SerializeField] private Crono crono;
     private Rigidbody2D rb;
-    private bool jump, onGround, dieByLeftCollision;
+    private bool jump, onGround;
+    private PowerUpsManager powerUpsManager;
 
     private struct spawnData
     {
         public Vector3 pos;
         public GameObject obj;
         public double time;
+        //Datos de los power Ups (así no hay que cambiar código en PlayerMovement cada vez que se añadan más powerUps)
+        public PowerUpsManager.PowerUpsData powerUpsData; 
 
-        public spawnData(Vector3 position, GameObject o, double t)
+
+        public spawnData(Vector3 position, GameObject o, double t, PowerUpsManager.PowerUpsData puD)
         {
             pos = position;
             obj = o;
             time = t;
+            powerUpsData = puD;
         }
     }
     List<spawnData> spawns = new List<spawnData>();
@@ -47,9 +52,11 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
         jump = false; onGround = true;
-        spawns.Add(new spawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform), 0));
+        spawns.Add(new spawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform), 0,
+            new PowerUpsManager.PowerUpsData()));
         raycastDistance = transform.localScale.y / 2.0f + 0.02f;
-        dieByLeftCollision = false;
+
+        powerUpsManager = GameManager.instance.getPowerUpsManager();
     }
 
     void Update()
@@ -61,7 +68,10 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
             spawns.Add(new spawnData(transform.position,
                                     Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform),
-                                    crono.getActualTime()));
+                                    crono.getActualTime(),
+                                    //Info de los powerUps
+                                    powerUpsManager.getData()
+                                    ));
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -160,13 +170,18 @@ public class PlayerMovement : MonoBehaviour
     {
         GameManager.instance.setDeath(true);
 
+        spawnData lastSpawn = spawns[spawns.Count - 1];
+
         onGround = false;
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
-        transform.position = spawns[spawns.Count - 1].pos;
-        GameManager.instance.setDeathTime(spawns[spawns.Count - 1].time);
-        crono.setActualTime(spawns[spawns.Count - 1].time);
+        transform.position = lastSpawn.pos;
+        GameManager.instance.setDeathTime(lastSpawn.time);
+        crono.setActualTime(lastSpawn.time);
 
-        GetComponent<RestartMusic>().restartMusic((int)(spawns[spawns.Count - 1].time * 1000));
+        GetComponent<RestartMusic>().restartMusic((int)(lastSpawn.time * 1000));
+
+        //Resetear el estado de los powerUps
+        powerUpsManager.resetData(lastSpawn.powerUpsData);
     }
 }
