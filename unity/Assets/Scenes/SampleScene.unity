@@ -6833,7 +6833,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTr: {fileID: 1332534592}
   offsetX: 6
-  offsetY: 1.5
+  offsetY: 3
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
