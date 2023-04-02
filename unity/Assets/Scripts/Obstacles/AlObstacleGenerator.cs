@@ -78,7 +78,7 @@ public class AlObstacleGenerator : MonoBehaviour
         //bool jumpObstacle = false;
         //Coordenadas del obstáculo
         float coordX;
-        float coordY = transform.localScale.y;
+        float coordY = 0;
         float prevX = 0.0f;
         ObstacleStructureData thisObstacle = null;
 

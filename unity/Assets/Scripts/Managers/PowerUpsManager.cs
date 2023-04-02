@@ -24,17 +24,15 @@ public class PowerUpsManager : MonoBehaviour
     private float slowMotionTimer, qualityTimer; //Timers que marcan cuanto tiempo queda del powerUp
     private List<GameObject> powerUpsInstances; //Instancias de los power ups para que reaparezcan al morir
 
-
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        if (GameManager.instance != null)
-            GameManager.instance.setPowerUpsManager(this);
-
         gravityPowerUp = slowMotionPowerUp = qualityPowerUp = false;
         slowMotionTimer = qualityTimer = 0.0f;
 
         powerUpsInstances = new List<GameObject>();
+
+        if (GameManager.instance != null)
+            GameManager.instance.setPowerUpsManager(this);
     }
 
     // Update is called once per frame
@@ -63,16 +61,18 @@ public class PowerUpsManager : MonoBehaviour
 
     public void changeGravity()
     {
+        gravityPowerUp = !gravityPowerUp;
+
         if (gravityPowerUp)
         {
+            //Código de cuando se ha activado la gravedad
 
         }
         else
         {
+            //Código de cuando se ha desactivado la gravedad
 
         }
-
-        gravityPowerUp = !gravityPowerUp;
     }
 
     public bool getGravityChanged() { return gravityPowerUp; }
@@ -96,7 +96,7 @@ public class PowerUpsManager : MonoBehaviour
         slowMotionPowerUp = true;
         slowMotionTimer += time;
 
-        changeTimeScale(0.5f);
+        changeTimeScale(0.7f);
     }
 
     private void slowMotionOff()
@@ -110,7 +110,7 @@ public class PowerUpsManager : MonoBehaviour
     private void changeTimeScale(float newTimeScale)
     {
         Time.timeScale = newTimeScale;
-        //AQUÍ SE HACE EN FMOD :)
+        GameManager.instance.getMusicInstance().setPitch(newTimeScale);
     }
 
     //Devuelve cuanto tiempo queda de power Up (0 si no está activado), para guardarlo en el checkpoint

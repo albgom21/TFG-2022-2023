@@ -48,6 +48,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        powerUpsManager = GameManager.instance.getPowerUpsManager();
+
         int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[2] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY());
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
@@ -55,8 +57,6 @@ public class PlayerMovement : MonoBehaviour
         spawns.Add(new spawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform), 0,
             new PowerUpsManager.PowerUpsData()));
         raycastDistance = transform.localScale.y / 2.0f + 0.02f;
-
-        powerUpsManager = GameManager.instance.getPowerUpsManager();
     }
 
     void Update()
@@ -69,8 +69,7 @@ public class PlayerMovement : MonoBehaviour
             spawns.Add(new spawnData(transform.position,
                                     Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform),
                                     crono.getActualTime(),
-                                    //Info de los powerUps
-                                    powerUpsManager.getData()
+                                    powerUpsManager.getData() //Info de los powerUps
                                     ));
 
         if (Input.GetKeyDown(KeyCode.Z))
@@ -179,7 +178,7 @@ public class PlayerMovement : MonoBehaviour
         GameManager.instance.setDeathTime(lastSpawn.time);
         crono.setActualTime(lastSpawn.time);
 
-        GetComponent<RestartMusic>().restartMusic((int)(lastSpawn.time * 1000));
+        GetComponent<RestartMusic>().restartMusic((int)(lastSpawn.time * 1000.0));
 
         //Resetear el estado de los powerUps
         powerUpsManager.resetData(lastSpawn.powerUpsData);

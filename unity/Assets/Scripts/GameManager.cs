@@ -53,8 +53,6 @@ public class GameManager : MonoBehaviour
 
     public PowerUpsManager getPowerUpsManager() { return powerUpsManager; }
 
-
-
     //Debug mode
     public DebugManager getDebugManager() { return debugManager; }
 
@@ -67,4 +65,12 @@ public class GameManager : MonoBehaviour
 
 
     public void changeAutoJumpMode() { autoJumpManager.changeAutoJumpMode(); }
+
+    public FMOD.Studio.EventInstance getMusicInstance()
+    {
+        SelectMusic music = GameObject.FindGameObjectWithTag("Player").GetComponent<SelectMusic>();
+        if (!music) Debug.Log("Se está intentando llamar a la canción cuando no hay ni player");
+
+        return music.getEventInstance();
+    }
 }
