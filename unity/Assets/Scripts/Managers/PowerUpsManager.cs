@@ -158,7 +158,7 @@ public class PowerUpsManager : MonoBehaviour
         return new PowerUpsData(gravityPowerUp, slowMotionTimer, qualityTimer);
     }
 
-    //Carda de datos del checkPoint al respawnear
+    //Carga de datos del checkPoint al respawnear
     public void resetData(PowerUpsData newData)
     {
         resetInstances();
