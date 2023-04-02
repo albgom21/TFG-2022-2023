@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     private AutoJumpManager autoJumpManager;
     private DebugManager debugManager;
     private PowerUpsManager powerUpsManager;
-    private DrumsEffect drumsEffect;
+    private LightManager drumsEffect;
     private ZoneType zoneType;
 
     void Awake()     // Comprobar que solo hay un GameManager.
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
     public void setDebugManager(DebugManager d) { debugManager = d; }
     public void setPowerUpsManager(PowerUpsManager p) { powerUpsManager = p; }
 
-    public void setDrumsEffect(DrumsEffect d) { drumsEffect = d; }
+    public void setDrumsEffect(LightManager d) { drumsEffect = d; }
 
     public PowerUpsManager getPowerUpsManager() { return powerUpsManager; }
 
