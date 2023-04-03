@@ -8,6 +8,7 @@ public class LightManager : MonoBehaviour
 {
     [SerializeField] private ReadTxt input;
     [SerializeField] private Light2D backgroundLight;
+    [SerializeField] private SpriteRenderer backgroundRenderer;
     private float intensity, maxIntensity;
     List<float> onset;
     private int i, onsetCount;
@@ -50,5 +51,9 @@ public class LightManager : MonoBehaviour
         intensity -= maxIntensity * (Time.deltaTime / offset);
     }
 
-    public void SetLightColor(Color c) { backgroundLight.color = c; }
+    public void SetLightColor(Color lightColor, Color backgroundColor) { 
+        backgroundLight.color = lightColor;
+        Debug.Log(backgroundColor);
+        backgroundRenderer.color = backgroundColor;
+    }
 }

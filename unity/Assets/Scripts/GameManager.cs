@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     private AutoJumpManager autoJumpManager;
     private DebugManager debugManager;
     private PowerUpsManager powerUpsManager;
-    private LightManager drumsEffect;
+    private LightManager lightManager;
     private ZoneType zoneType;
 
     void Awake()     // Comprobar que solo hay un GameManager.
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     public void addCoin() { coins++; }
     public bool getDeath() { return death; }
-    public void setDeath(bool b) { death = b;}
+    public void setDeath(bool b) { death = b; }
     public bool getEnd() { return end; }
     public void setEnd(bool b) { end = b; }
 
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
     public void setDebugManager(DebugManager d) { debugManager = d; }
     public void setPowerUpsManager(PowerUpsManager p) { powerUpsManager = p; }
 
-    public void setDrumsEffect(LightManager d) { drumsEffect = d; }
+    public void setDrumsEffect(LightManager d) { lightManager = d; }
 
     public PowerUpsManager getPowerUpsManager() { return powerUpsManager; }
 
@@ -61,8 +61,8 @@ public class GameManager : MonoBehaviour
     public DebugManager getDebugManager() { return debugManager; }
 
     public void changeDebugMode() { debugManager.changeDebugMode(); }
-       
-    
+
+
 
     //AutoJump
     public AutoJumpManager getAutoJumpManager() { return autoJumpManager; }
@@ -80,16 +80,28 @@ public class GameManager : MonoBehaviour
 
     public void changeZone(ZoneType type)
     {
-        if(drumsEffect == null)
+        if (lightManager == null)
         {
             Debug.LogWarning("El controlador de luces (objeto con script DrumsEffect) es nulo");
             return;
         }
         zoneType = type;
-        Color c;
-        if (type == ZoneType.HIGH) c = Color.red;
-        else if (type == ZoneType.LOW) c = Color.red+ Color.blue;
-        else c = Color.blue;
-        drumsEffect.SetLightColor(c);
+        Color lightColor, backgroundColor;
+        if (type == ZoneType.HIGH)
+        {
+            lightColor = Color.red;
+            backgroundColor = new Color(0.8f, 0.39f, 0.39f, 0.3f);
+        }
+        else if (type == ZoneType.LOW)
+        {
+            lightColor = new Color(0.62f, 0, 1f);
+            backgroundColor = new Color(1f, 0, 1f, 0.3f);
+        }
+        else
+        {
+            lightColor = Color.blue;
+            backgroundColor = new Color(0, 0.64f, 1f, 0.3f);
+        }
+        lightManager.SetLightColor(lightColor, backgroundColor);
     }
 }
