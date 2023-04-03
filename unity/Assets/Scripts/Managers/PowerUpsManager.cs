@@ -23,6 +23,7 @@ public class PowerUpsManager : MonoBehaviour
     private bool gravityPowerUp, slowMotionPowerUp, qualityPowerUp;
     private float slowMotionTimer, qualityTimer; //Timers que marcan cuanto tiempo queda del powerUp
     private List<GameObject> powerUpsInstances; //Instancias de los power ups para que reaparezcan al morir
+    private float smTimeScale; //timeScale de SlowMotion para transicionar lentamente
 
     [SerializeField]
     private RenderTexture lowRes; //Textura de renderizado donde se muestra lo que ve la camara con baja calidad
@@ -39,6 +40,7 @@ public class PowerUpsManager : MonoBehaviour
     {
         gravityPowerUp = slowMotionPowerUp = qualityPowerUp = false;
         slowMotionTimer = qualityTimer = 0.0f;
+        smTimeScale = 1.0f;
 
         powerUpsInstances = new List<GameObject>();
 
@@ -100,25 +102,44 @@ public class PowerUpsManager : MonoBehaviour
     {
         if (slowMotionPowerUp)
         {
+            //Transición lenta de On
+            if (smTimeScale > 0.6f) //Si aún no ha llegado al límite del efecto (x0.6 de velocidad)
+            {
+                smTimeScale -= 0.3f * Time.deltaTime; //Va bajando la velocidad a ritmo de 0.3 por segundo
+
+                if (smTimeScale < 0.6f) smTimeScale = 0.6f; //Si me paso, recoloco en el límite
+
+                changeTimeScale(smTimeScale);
+            }
+
+            //Timer
             slowMotionTimer -= Time.deltaTime;
 
             if (slowMotionTimer <= 0.0f) slowMotionOff();
+        }
+        else
+        {
+            //Transición lenta de Off
+            if (smTimeScale < 1.0f) //Si aún no ha llegado a la velocidad normal
+            {
+                smTimeScale += 0.3f * Time.deltaTime; //Va subiendo la velocidad a ritmo de 0.3 por segundo
+
+                if (smTimeScale > 1.0f) smTimeScale = 1.0f; //Si me paso, recoloco en el límite
+
+                changeTimeScale(smTimeScale);
+            }
         }
     }
     public void slowMotionOn(float time)
     {
         slowMotionPowerUp = true;
         slowMotionTimer += time;
-
-        changeTimeScale(0.7f);
     }
 
     private void slowMotionOff()
     {
         slowMotionPowerUp = false;
         slowMotionTimer = 0.0f;
-
-        changeTimeScale(1.0f);
     }
 
     private void changeTimeScale(float newTimeScale)
@@ -150,6 +171,7 @@ public class PowerUpsManager : MonoBehaviour
 
         cam.targetTexture = lowRes;
         rawImageLow.SetActive(true);
+        GameManager.instance.getMusicInstance().setParameterByName("Quality", 0.0f);
     }
 
     private void badQualityOff()
@@ -159,6 +181,7 @@ public class PowerUpsManager : MonoBehaviour
 
         cam.targetTexture = null;
         rawImageLow.SetActive(false);
+        GameManager.instance.getMusicInstance().setParameterByName("Quality", 1.0f);
     }
 
     //Devuelve cuanto tiempo queda de power Up (0 si no está activado), para guardarlo en el checkpoint
