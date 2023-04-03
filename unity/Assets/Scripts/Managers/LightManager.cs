@@ -14,13 +14,14 @@ public class LightManager : MonoBehaviour
     private int i, onsetCount;
     private double time;
     private float offset;
-
+    private Color newBackgroundColor, newLightColor;
     void Start()
     {
         onset = input.getOnset();
         i = 0;
         intensity = maxIntensity = backgroundLight.intensity;
         onsetCount = onset.Count;
+        newBackgroundColor = new Color(0, 0.64f, 1f, 0.3f);
         GameManager.instance.setDrumsEffect(this);
     }
 
@@ -49,11 +50,22 @@ public class LightManager : MonoBehaviour
         }
         backgroundLight.intensity = intensity;
         intensity -= maxIntensity * (Time.deltaTime / offset);
+        if (backgroundRenderer != null && backgroundRenderer.color != newBackgroundColor)
+            backgroundRenderer.color = new Color(Mathf.Lerp(backgroundRenderer.color.r, newBackgroundColor.r, Time.deltaTime * 1.5f),
+                Mathf.Lerp(backgroundRenderer.color.g, newBackgroundColor.g, Time.deltaTime * 1.5f),
+                Mathf.Lerp(backgroundRenderer.color.b, newBackgroundColor.b, Time.deltaTime * 1.5f), backgroundRenderer.color.a);
+        if (backgroundLight != null && backgroundLight.color != newLightColor)
+        {
+            backgroundLight.color = new Color(Mathf.Lerp(backgroundLight.color.r, newLightColor.r, Time.deltaTime * 1.5f),
+                Mathf.Lerp(backgroundLight.color.g, newLightColor.g, Time.deltaTime * 1.5f),
+                Mathf.Lerp(backgroundLight.color.b, newLightColor.b, Time.deltaTime * 1.5f), backgroundLight.color.a);
+        }
+
     }
 
-    public void SetLightColor(Color lightColor, Color backgroundColor) { 
-        backgroundLight.color = lightColor;
-        Debug.Log(backgroundColor);
-        backgroundRenderer.color = backgroundColor;
+    public void SetLightColor(Color lightColor, Color backgroundColor)
+    {
+        newLightColor = lightColor;
+        newBackgroundColor = backgroundColor;
     }
 }
