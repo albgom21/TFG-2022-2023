@@ -80,13 +80,14 @@ public class PowerUpsManager : MonoBehaviour
         if (gravityPowerUp)
         {
             //Código de cuando se ha activado la gravedad
+            rawImageNormal.SetActive(true);
+            rawImageLow.SetActive(false);
             cam.targetTexture = highRes;
             rawImageNormal.transform.localRotation = new Quaternion(-180, 0, 0, 0);
         }
         else
         {
             //Código de cuando se ha desactivado la gravedad
-            cam.targetTexture = null;
             rawImageNormal.transform.localRotation = new Quaternion(0, 0, 0, 0);
         }
     }
@@ -163,14 +164,16 @@ public class PowerUpsManager : MonoBehaviour
         }
     }
 
-
     public void badQualityOn(float time)
     {
         qualityPowerUp = true;
         qualityTimer += time;
 
         cam.targetTexture = lowRes;
+        rawImageNormal.SetActive(false);
         rawImageLow.SetActive(true);
+        if (gravityPowerUp)
+            rawImageLow.transform.localRotation = new Quaternion(-180, 0, 0, 0);
         GameManager.instance.getMusicInstance().setParameterByName("Quality", 0.0f);
     }
 
@@ -179,8 +182,10 @@ public class PowerUpsManager : MonoBehaviour
         qualityPowerUp = false;
         qualityTimer = 0.0f;
 
-        cam.targetTexture = null;
+        cam.targetTexture = highRes;
+        rawImageNormal.SetActive(true);
         rawImageLow.SetActive(false);
+        rawImageLow.transform.localRotation = new Quaternion(0, 0, 0, 0);
         GameManager.instance.getMusicInstance().setParameterByName("Quality", 1.0f);
     }
 
@@ -227,5 +232,4 @@ public class PowerUpsManager : MonoBehaviour
             //else si tampoco lo había antes de morir no haces nada
         }
     }
-
 }

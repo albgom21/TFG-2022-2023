@@ -207,7 +207,7 @@ public class AlObstacleGenerator : MonoBehaviour
 
             //No hay ningún problema aparente en que llegue hasta aquí, pero por saber pongo el Debug.Log 
             //(Especialmente no quiero que llegue aquí si debería de haber creado un powerUp)
-            Debug.Log("Aviso de generación de obstáculo no encontrada");
+            //Debug.Log("Aviso de generación de obstáculo no encontrada");
         }
 
         return obstacleStructure;
