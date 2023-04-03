@@ -24,6 +24,17 @@ public class PowerUpsManager : MonoBehaviour
     private float slowMotionTimer, qualityTimer; //Timers que marcan cuanto tiempo queda del powerUp
     private List<GameObject> powerUpsInstances; //Instancias de los power ups para que reaparezcan al morir
 
+    [SerializeField]
+    private RenderTexture lowRes; //Textura de renderizado donde se muestra lo que ve la camara con baja calidad
+    [SerializeField]
+    private RenderTexture highRes; //Textura de renderizado donde se muestra lo que ve la camara con baja calidad
+    [SerializeField]
+    private GameObject rawImageLow; //Imagen donde se muestra la textura de renderizado
+    [SerializeField]
+    private GameObject rawImageNormal; //Imagen donde se muestra la textura de renderizado
+    [SerializeField]
+    private Camera cam;          //Referencia a la cámara
+
     private void Awake()
     {
         gravityPowerUp = slowMotionPowerUp = qualityPowerUp = false;
@@ -34,6 +45,7 @@ public class PowerUpsManager : MonoBehaviour
         if (GameManager.instance != null)
             GameManager.instance.setPowerUpsManager(this);
     }
+
 
     // Update is called once per frame
     void Update()
@@ -66,12 +78,14 @@ public class PowerUpsManager : MonoBehaviour
         if (gravityPowerUp)
         {
             //Código de cuando se ha activado la gravedad
-
+            cam.targetTexture = highRes;
+            rawImageNormal.transform.localRotation = new Quaternion(-180, 0, 0, 0);
         }
         else
         {
             //Código de cuando se ha desactivado la gravedad
-
+            cam.targetTexture = null;
+            rawImageNormal.transform.localRotation = new Quaternion(0, 0, 0, 0);
         }
     }
 
@@ -131,11 +145,11 @@ public class PowerUpsManager : MonoBehaviour
 
     public void badQualityOn(float time)
     {
-        qualityPowerUp = false;
+        qualityPowerUp = true;
         qualityTimer += time;
 
-        Transform tr = GameObject.FindWithTag("RawImage").GetComponent<Transform>();
-        tr.localRotation = new Quaternion(-180, 0, 0, 0);
+        cam.targetTexture = lowRes;
+        rawImageLow.SetActive(true);
     }
 
     private void badQualityOff()
@@ -143,8 +157,8 @@ public class PowerUpsManager : MonoBehaviour
         qualityPowerUp = false;
         qualityTimer = 0.0f;
 
-        Transform tr = GameObject.FindWithTag("RawImage").GetComponent<Transform>();
-        tr.localRotation = new Quaternion(0, 0, 0, 0);
+        cam.targetTexture = null;
+        rawImageLow.SetActive(false);
     }
 
     //Devuelve cuanto tiempo queda de power Up (0 si no está activado), para guardarlo en el checkpoint
