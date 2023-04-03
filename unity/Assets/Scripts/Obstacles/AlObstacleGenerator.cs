@@ -11,7 +11,6 @@ public class AlObstacleGenerator : MonoBehaviour
 
     // PRUEBAS Graves Y Agudos
     //[SerializeField] private GameObject badPrefab;
-    [SerializeField] private GameObject waterPrefab;
     //[SerializeField] private GameObject coinPrefab;
 
     [SerializeField] private GameObject features;
@@ -19,8 +18,17 @@ public class AlObstacleGenerator : MonoBehaviour
 
     // Prefabs
     [SerializeField] private GameObject groundPrefab;
-    [SerializeField] private GameObject groundStartPrefab;
-    private GameObject[] obstaclesStructures;
+    private GameObject[] obstaclesStructures; //Estructuras NORMALES
+
+        //Estructuras que contengan POWER UPS
+    private GameObject[] gravityStructures;
+    private GameObject[] slowMotionStructures;
+    private GameObject[] badQualityStructures;
+
+    private int gravityStartIndex, gravityEndIndex; //Va a haber SIEMPRE solo dos power ups de Gravedad (uno que activa y otro desactiva)
+    private List<int> slowMotionIndexes; //Lista de index donde se crearán los powerUps de slowMotion
+    private List<int> badQualityIndexes; //Lista de index donde se crearán los powerUps de badQuality
+
     [SerializeField] private GameObject endPrefab;
     [SerializeField] private GameObject groundToDestroy;
 
@@ -30,7 +38,6 @@ public class AlObstacleGenerator : MonoBehaviour
 
     // Multipliers
     private float multiplierX;
-    private float minDistanceBetweenObstacles;
 
     private ObstacleStructureData lastObstacle;
 
@@ -49,7 +56,11 @@ public class AlObstacleGenerator : MonoBehaviour
         lowColor = new Color(0.2f, 0.4f, 0.6f, 1.0f);  // DARK BLUE
         highColor = new Color(1.0f, 1.0f, 0.0f, 1.0f); // YELLOW
 
-        obstaclesStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/Estructuras");
+        obstaclesStructures     = Resources.LoadAll<GameObject>("Prefabs/Alvaro/Estructuras");
+        gravityStructures       = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/Gravity");
+        slowMotionStructures    = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/SlowMotion");
+        badQualityStructures    = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/BadQuality");
+
         lastObstacle = null;
         //float width = transform.localScale.x;
         //float height = transform.localScale.y;
@@ -61,8 +72,9 @@ public class AlObstacleGenerator : MonoBehaviour
         //List<int> beatsZonesIndex = zones.getBeatZonesIndexes();
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
-        minDistanceBetweenObstacles = multiplierX / 2.0f;
         //Debug.Log(minDistanceBetweenObstacles);
+
+        GeneratePowerUpsIndexes(beats);
 
         GenerateObstacles(beats/*, beatsZonesIndex*/);
 
@@ -122,8 +134,11 @@ public class AlObstacleGenerator : MonoBehaviour
 
             if (lastObstacle == null || spaceBetweenBeats > lastObstacle.getPostX())
             {
-                thisObstacle = InstantiateRandomObstacle(coordX, coordY, spaceBetweenBeats);
 
+                //CREACIÓN DEL OBSTÁCULO
+                thisObstacle = InstantiateRandomObstacle(getPosibleStructures(i), coordX, coordY, spaceBetweenBeats);
+
+                //CREACIÓN DEL SUELO
                 //El suelo tendrá que ir desde el FINAL (no el centro) del anterior obstáculo hasta el PRINCIPIO de este
                 float floorStart, floorEnd;
 
@@ -154,25 +169,25 @@ public class AlObstacleGenerator : MonoBehaviour
         }
     }
 
-    private ObstacleStructureData InstantiateRandomObstacle(float x, float y, float spaceBetweenBeats)
+    private ObstacleStructureData InstantiateRandomObstacle(GameObject[] posibleStructures, float x, float y, float spaceBetweenBeats)
     {
         bool correctObstacle = false;
         GameObject obstacle;
         ObstacleStructureData obstacleStructure = null;
 
         int intentos = 0;
-        while (!correctObstacle && intentos < 25)
+        while (!correctObstacle && intentos < 40)
         {
-            int rnd = Random.Range(0, obstaclesStructures.Length);
+            int rnd = Random.Range(0, posibleStructures.Length);
 
-            ChangeGroundColor(rnd, lowColorChange, highColorChange);
+            ChangeGroundColor(posibleStructures,rnd, lowColorChange, highColorChange);
 
-            obstacle = Instantiate(obstaclesStructures[rnd], new Vector3(x, y, 0), transform.rotation, obstaclePool);
+            obstacle = Instantiate(posibleStructures[rnd], new Vector3(x, y, 0), transform.rotation, obstaclePool);
 
             obstacleStructure = obstacle.GetComponent<ObstacleStructureData>();
 
             if (lastObstacle == null) correctObstacle = true; //Esto solo se da en el primer obstáculo, aún no hay anterior
-            else correctObstacle = (obstacleStructure.getObstacleEnabled()) && (lastObstacle.getPostX() + obstacleStructure.getPrevX() < spaceBetweenBeats); //Comprueba si es correcto
+            else correctObstacle = obstacleEnabled(obstacleStructure) && (lastObstacle.getPostX() + obstacleStructure.getPrevX() < spaceBetweenBeats); //Comprueba si es correcto
 
             if (!correctObstacle)
             {
@@ -185,23 +200,27 @@ public class AlObstacleGenerator : MonoBehaviour
 
         if (obstacleStructure == null)
         { //Si no se ha encontrado en todos los intentos ninguno
-            ChangeGroundColor(9, lowColorChange, highColorChange);
-            //Pongo A MANO el número 9 (Struct9) porque es el más "fino", cabe seguro (es un obstáculo vacío)
-            obstacle = Instantiate(obstaclesStructures[9], new Vector3(x, y, 0), transform.rotation, obstaclePool);
+            //Pongo A MANO el número 0 porque es el más "fino", cabe seguro (es un obstáculo vacío)
+            ChangeGroundColor(posibleStructures, 0, lowColorChange, highColorChange);
+            obstacle = Instantiate(posibleStructures[0], new Vector3(x, y, 0), transform.rotation, obstaclePool);
             obstacleStructure = obstacle.GetComponent<ObstacleStructureData>();
+
+            //No hay ningún problema aparente en que llegue hasta aquí, pero por saber pongo el Debug.Log 
+            //(Especialmente no quiero que llegue aquí si debería de haber creado un powerUp)
+            Debug.Log("Aviso de generación de obstáculo no encontrada");
         }
 
         return obstacleStructure;
     }
 
     // Cambia el color del suelo a todos los "Ground" de un obstaculo struct según la zona
-    private void ChangeGroundColor(int index, bool lowColorChange, bool highColorChange)
+    private void ChangeGroundColor(GameObject[] structures, int index, bool lowColorChange, bool highColorChange)
     {
         // Recorrer todos los hijos del GameObject padre
-        for (int i = 0; i < obstaclesStructures[index].transform.childCount; i++)
+        for (int i = 0; i < structures[index].transform.childCount; i++)
         {
             // Obtener el GameObject hijo actual
-            GameObject hijo = obstaclesStructures[index].transform.GetChild(i).gameObject;
+            GameObject hijo = structures[index].transform.GetChild(i).gameObject;
 
             // Comprobar si el GameObject hijo tiene el tag "Ground"
             if (hijo.CompareTag("Ground"))
@@ -233,14 +252,100 @@ public class AlObstacleGenerator : MonoBehaviour
         return features;
     }
 
+    //Devuelve si el obstáculo elegido está activado para usarlo y si es posible por su dificultad
     bool obstacleEnabled(ObstacleStructureData obstacleStructure)
     {
-        if (difficulty == -1) return obstacleStructure.getObstacleEnabled();
-
-        //else
         int obstacleDif = obstacleStructure.getDifficulty();
+
+        //Si la dificultad del nivel es -1, me da igual la dificultad del obstáculo
+        //Si la dificultad del obstáculo es -1, me da igual la dificultad del nivel
+        if (difficulty == -1 || obstacleDif == -1) return obstacleStructure.getObstacleEnabled(); 
+
         //Se elegirán obstáculos cuya dificultad sea igual o con 1 de diferencia respecto a la dificultad del script
         //Ejemplo: si la dificultad marcada en script es 3, se elegirá, obstáculos de dificultad 2, 3 y 4
         return obstacleStructure.getObstacleEnabled() && difficulty >= obstacleDif - 1 && difficulty <= obstacleDif + 1;
+    }
+
+    //Devuelve el array de estructuras que se va a utilizar para el siguiente beat
+    private GameObject[] getPosibleStructures(int index)
+    {
+        //Estructuras de powerUp de gravedad
+
+        if (index == gravityStartIndex || index == gravityEndIndex) return gravityStructures;
+        //Estructuras de powerUp de slowMotion
+        if (slowMotionIndexes.Contains(index)) return slowMotionStructures;
+
+        //Estructuras de powerUp de badQuality
+        if (badQualityIndexes.Contains(index)) return badQualityStructures;
+
+        //Si no es ninguna de las anteriores, es cualquier obstáculo "normal"
+        return obstaclesStructures; 
+    }
+
+    //Genera los index de los beats en los que va a haber powerUps
+    private void GeneratePowerUpsIndexes(List<float> beats)
+    {
+        //GRAVITY POWER UP
+        int gravityZoneLength = Random.Range(10, 30); //La zona con gravedad cambiada serán entre 10 y 30 beats
+        int margin = 10; //Margen de la zona de gravedad. Es decir, los primeros "margin" beats no serán zona ni los últimos tampoco
+
+        gravityStartIndex = Random.Range(margin, beats.Count - margin - gravityZoneLength);
+        gravityEndIndex = gravityStartIndex + gravityZoneLength;
+        Debug.Log("El comienzo de la zona Gravedad está creado en el beat " + gravityStartIndex);
+        Debug.Log("El final de la zona Gravedad está creado en el beat " + gravityEndIndex);
+
+
+        //SLOW MOTION POWER UP
+        slowMotionIndexes = new List<int>();
+
+        int numSlowMotions = Random.Range(1, 4); //Va a haber entre 1 y 3 (el 4 es excluído) slowMotions
+        int marginBetweenSMPowerUps = 15; //Mínimo tiene que haber 15 beats entre un SlowMotion y otro
+
+        for (int i = 0; i < numSlowMotions; ++i) //Para cada slowMotion que se vaya a crear
+        {
+            int randomStart;
+            if (i == 0) randomStart = margin;
+            else randomStart = slowMotionIndexes[i - 1] + marginBetweenSMPowerUps;
+
+            int randomEnd;
+            if (i == numSlowMotions - 1) randomEnd = margin;
+            else
+            {
+                int powerUpsLeft = numSlowMotions - 1 - i; //Numero de powerUps que aún quedan por poner para calcular los márgenes
+                randomEnd = beats.Count - margin - (marginBetweenSMPowerUps * powerUpsLeft);
+            }
+
+            int newSlowMotionIndex = Random.Range(randomStart, randomEnd);
+            slowMotionIndexes.Add(newSlowMotionIndex);
+
+            Debug.Log("Power Up de SlowMotion creado en el beat " + newSlowMotionIndex);
+        }
+
+
+        //BAD QUALITY POWER UP
+        badQualityIndexes = new List<int>();
+
+        int numBadQuality = Random.Range(1, 3); //Va a haber entre 1 y 2 (el 3 es excluído) badQuality
+        int marginBetweenBQPowerUps = 30; //Mínimo tiene que haber 30 beats entre un SlowMotion y otro
+
+        for (int i = 0; i < numBadQuality; ++i) //Para cada badQuality que se vaya a crear
+        {
+            int randomStart;
+            if (i == 0) randomStart = margin;
+            else randomStart = badQualityIndexes[i - 1] + marginBetweenBQPowerUps;
+
+            int randomEnd;
+            if (i == numBadQuality - 1) randomEnd = margin;
+            else
+            {
+                int powerUpsLeft = numBadQuality - 1 - i; //Numero de powerUps que aún quedan por poner para calcular los márgenes
+                randomEnd = beats.Count - margin - (marginBetweenBQPowerUps * powerUpsLeft);
+            }
+
+            int newBadQualityIndex = Random.Range(randomStart, randomEnd);
+            badQualityIndexes.Add(newBadQualityIndex);
+
+            Debug.Log("Power Up de BadQuality creado en el beat " + newBadQualityIndex);
+        }
     }
 }
