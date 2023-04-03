@@ -23,11 +23,11 @@ public class AlObstacleGenerator : MonoBehaviour
         //Estructuras que contengan POWER UPS
     private GameObject[] gravityStructures;
     private GameObject[] slowMotionStructures;
-    private GameObject[] badQualityStructures;
+    private GameObject[] lowResStructures;
 
     private int gravityStartIndex, gravityEndIndex; //Va a haber SIEMPRE solo dos power ups de Gravedad (uno que activa y otro desactiva)
     private List<int> slowMotionIndexes; //Lista de index donde se crearán los powerUps de slowMotion
-    private List<int> badQualityIndexes; //Lista de index donde se crearán los powerUps de badQuality
+    private List<int> lowResIndexes; //Lista de index donde se crearán los powerUps de lowRes
 
     [SerializeField] private GameObject endPrefab;
     [SerializeField] private GameObject groundToDestroy;
@@ -59,7 +59,7 @@ public class AlObstacleGenerator : MonoBehaviour
         obstaclesStructures     = Resources.LoadAll<GameObject>("Prefabs/Alvaro/Estructuras");
         gravityStructures       = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/Gravity");
         slowMotionStructures    = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/SlowMotion");
-        badQualityStructures    = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/BadQuality");
+        lowResStructures    = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/LowRes");
 
         lastObstacle = null;
         //float width = transform.localScale.x;
@@ -275,8 +275,8 @@ public class AlObstacleGenerator : MonoBehaviour
         //Estructuras de powerUp de slowMotion
         if (slowMotionIndexes.Contains(index)) return slowMotionStructures;
 
-        //Estructuras de powerUp de badQuality
-        if (badQualityIndexes.Contains(index)) return badQualityStructures;
+        //Estructuras de powerUp de LowRes
+        if (lowResIndexes.Contains(index)) return lowResStructures;
 
         //Si no es ninguna de las anteriores, es cualquier obstáculo "normal"
         return obstaclesStructures; 
@@ -322,30 +322,30 @@ public class AlObstacleGenerator : MonoBehaviour
         }
 
 
-        //BAD QUALITY POWER UP
-        badQualityIndexes = new List<int>();
+        //LOW RES POWER UP
+        lowResIndexes = new List<int>();
 
-        int numBadQuality = Random.Range(1, 3); //Va a haber entre 1 y 2 (el 3 es excluído) badQuality
+        int numLowRes = Random.Range(1, 3); //Va a haber entre 1 y 2 (el 3 es excluído) LowRes
         int marginBetweenBQPowerUps = 30; //Mínimo tiene que haber 30 beats entre un SlowMotion y otro
 
-        for (int i = 0; i < numBadQuality; ++i) //Para cada badQuality que se vaya a crear
+        for (int i = 0; i < numLowRes; ++i) //Para cada LowRes que se vaya a crear
         {
             int randomStart;
             if (i == 0) randomStart = margin;
-            else randomStart = badQualityIndexes[i - 1] + marginBetweenBQPowerUps;
+            else randomStart = lowResIndexes[i - 1] + marginBetweenBQPowerUps;
 
             int randomEnd;
-            if (i == numBadQuality - 1) randomEnd = margin;
+            if (i == numLowRes - 1) randomEnd = margin;
             else
             {
-                int powerUpsLeft = numBadQuality - 1 - i; //Numero de powerUps que aún quedan por poner para calcular los márgenes
+                int powerUpsLeft = numLowRes - 1 - i; //Numero de powerUps que aún quedan por poner para calcular los márgenes
                 randomEnd = beats.Count - margin - (marginBetweenBQPowerUps * powerUpsLeft);
             }
 
-            int newBadQualityIndex = Random.Range(randomStart, randomEnd);
-            badQualityIndexes.Add(newBadQualityIndex);
+            int newLowResIndex = Random.Range(randomStart, randomEnd);
+            lowResIndexes.Add(newLowResIndex);
 
-            Debug.Log("Power Up de BadQuality creado en el beat " + newBadQualityIndex);
+            Debug.Log("Power Up de LowRes creado en el beat " + newLowResIndex);
         }
     }
 }

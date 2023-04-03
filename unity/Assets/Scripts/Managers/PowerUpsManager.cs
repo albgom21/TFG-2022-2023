@@ -1,59 +1,75 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PowerUpsManager : MonoBehaviour
 {
-    
+
     public struct PowerUpsData //Información sobre todos los powerUps que se guardarán y cargarán en los checkPoints
     {
         //Los timeLeft indican si el power up está activo o no (si son 0.0f, está desactivado)
-        public bool gravity;                
+        public bool gravity;
         public float slowMotionTimeLeft;
-        public float qualityTimeLeft;
+        public float lowResTimeLeft;
 
         public PowerUpsData(bool g = false, float smtl = 0.0f, float qtl = 0.0f)
         {
             gravity = g;
             slowMotionTimeLeft = smtl;
-            qualityTimeLeft = qtl;
+            lowResTimeLeft = qtl;
         }
     }
 
-    private bool gravityPowerUp, slowMotionPowerUp, qualityPowerUp;
-    private float slowMotionTimer, qualityTimer; //Timers que marcan cuanto tiempo queda del powerUp
+    private bool gravityPowerUp, slowMotionPowerUp, lowResPowerUp;
+    private float slowMotionTimer, lowResTimer; //Timers que marcan cuanto tiempo queda del powerUp
     private List<GameObject> powerUpsInstances; //Instancias de los power ups para que reaparezcan al morir
     private float smTimeScale; //timeScale de SlowMotion para transicionar lentamente
 
     [SerializeField]
-    private RenderTexture lowRes; //Textura de renderizado donde se muestra lo que ve la camara con baja calidad
+    private RenderTexture lowRes;       //Textura de renderizado donde se muestra lo que ve la camara con baja calidad
     [SerializeField]
-    private RenderTexture highRes; //Textura de renderizado donde se muestra lo que ve la camara con baja calidad
+    private RenderTexture highRes;      //Textura de renderizado donde se muestra lo que ve la camara con alta calidad
     [SerializeField]
-    private GameObject rawImageLow; //Imagen donde se muestra la textura de renderizado
+    private GameObject rawImageLow;     //Imagen donde se muestra la textura de renderizado con baja calidad
     [SerializeField]
-    private GameObject rawImageNormal; //Imagen donde se muestra la textura de renderizado
+    private GameObject rawImageNormal;  //Imagen donde se muestra la textura de renderizado con alta calidad
     [SerializeField]
-    private Camera cam;          //Referencia a la cámara
+    private Camera cam;                 //Referencia a la cámara
+    [SerializeField]
+    private Image powerUpLowImg;
+    [SerializeField]
+    private Image powerUpSlowImg;
 
+    private bool changedPosX = false;
     private void Awake()
     {
-        gravityPowerUp = slowMotionPowerUp = qualityPowerUp = false;
-        slowMotionTimer = qualityTimer = 0.0f;
+        gravityPowerUp = slowMotionPowerUp = lowResPowerUp = false;
+        slowMotionTimer = lowResTimer = 0.0f;
         smTimeScale = 1.0f;
 
         powerUpsInstances = new List<GameObject>();
+
+        powerUpLowImg.fillAmount = 0;
+        powerUpSlowImg.fillAmount = 0;
 
         if (GameManager.instance != null)
             GameManager.instance.setPowerUpsManager(this);
     }
 
-
     // Update is called once per frame
     void Update()
     {
         updateSlowMotion();
-        updateQuality();
+        updateLowRes();
+        if (lowResPowerUp && lowResTimer > 0)
+        {
+            powerUpLowImg.fillAmount = lowResTimer / 5.0f;
+        }
+        if (slowMotionPowerUp && slowMotionTimer > 0)
+        {
+            powerUpSlowImg.fillAmount = slowMotionTimer / 5.0f;
+        }
     }
 
     //Añade una instancia a la lista de powerUps
@@ -135,12 +151,26 @@ public class PowerUpsManager : MonoBehaviour
     {
         slowMotionPowerUp = true;
         slowMotionTimer += time;
+
+        if (lowResPowerUp)
+        {
+            powerUpLowImg.transform.position -= new Vector3(125, 0, 0);
+            changedPosX = true;
+        }
     }
 
     private void slowMotionOff()
     {
         slowMotionPowerUp = false;
         slowMotionTimer = 0.0f;
+
+        powerUpLowImg.fillAmount = 0;
+
+        if (changedPosX)
+        {
+            powerUpLowImg.transform.position += new Vector3(125, 0, 0);
+            changedPosX = false;
+        }
     }
 
     private void changeTimeScale(float newTimeScale)
@@ -151,23 +181,23 @@ public class PowerUpsManager : MonoBehaviour
 
     //Devuelve cuanto tiempo queda de power Up (0 si no está activado), para guardarlo en el checkpoint
     public float getSlowMotionTimer() { return slowMotionTimer; }
-        
-    // ----------------------------------- BAD QUALITY POWER UP --------------------------------
 
-    private void updateQuality()
+    // ----------------------------------- LOW RES POWER UP --------------------------------
+
+    private void updateLowRes()
     {
-        if (qualityPowerUp)
+        if (lowResPowerUp)
         {
-            qualityTimer -= Time.deltaTime;
+            lowResTimer -= Time.deltaTime;
 
-            if (qualityTimer <= 0.0f) badQualityOff();
+            if (lowResTimer <= 0.0f) lowResOff();
         }
     }
 
-    public void badQualityOn(float time)
+    public void lowResOn(float time)
     {
-        qualityPowerUp = true;
-        qualityTimer += time;
+        lowResPowerUp = true;
+        lowResTimer += time;
 
         cam.targetTexture = lowRes;
         rawImageNormal.SetActive(false);
@@ -177,11 +207,12 @@ public class PowerUpsManager : MonoBehaviour
         GameManager.instance.getMusicInstance().setParameterByName("Quality", 0.0f);
     }
 
-    private void badQualityOff()
+    private void lowResOff()
     {
-        qualityPowerUp = false;
-        qualityTimer = 0.0f;
+        lowResPowerUp = false;
+        lowResTimer = 0.0f;
 
+        powerUpLowImg.fillAmount = 0;
         cam.targetTexture = highRes;
         rawImageNormal.SetActive(true);
         rawImageLow.SetActive(false);
@@ -190,14 +221,14 @@ public class PowerUpsManager : MonoBehaviour
     }
 
     //Devuelve cuanto tiempo queda de power Up (0 si no está activado), para guardarlo en el checkpoint
-    public float getBadQualityTimer() { return qualityTimer; }
+    public float getLowResTimer() { return lowResTimer; }
 
     //------------------------ GUARDADO Y CARGA DE DATOS DE POWER UPS -------------------------
 
     //Guardado de datos para crear un checkPoint
     public PowerUpsData getData()
     {
-        return new PowerUpsData(gravityPowerUp, slowMotionTimer, qualityTimer);
+        return new PowerUpsData(gravityPowerUp, slowMotionTimer, lowResTimer);
     }
 
     //Carga de datos del checkPoint al respawnear
@@ -220,15 +251,15 @@ public class PowerUpsManager : MonoBehaviour
             //else si tampoco lo había antes de morir no haces nada
         }
 
-        //---POWER UP BAD QUALITY
-        if (newData.qualityTimeLeft > 0.0f) //Si en el checkpoint si había badQuality
+        //---POWER UP LOW RES
+        if (newData.lowResTimeLeft > 0.0f) //Si en el checkpoint si había lowRes
         {
-            if (!qualityPowerUp) badQualityOn(newData.qualityTimeLeft); //Y antes de morir no, lo activas
-            else qualityTimer = newData.qualityTimeLeft;    //Si antes de morir también lo había, solo hay que cambiar el timer
+            if (!lowResPowerUp) lowResOn(newData.lowResTimeLeft); //Y antes de morir no, lo activas
+            else lowResTimer = newData.lowResTimeLeft;    //Si antes de morir también lo había, solo hay que cambiar el timer
         }
-        else //Si en el checkPoint no había badQuality
+        else //Si en el checkPoint no había lowRes
         {
-            if (qualityPowerUp) badQualityOff(); //Y antes de morir sí, lo desactivas
+            if (lowResPowerUp) lowResOff(); //Y antes de morir sí, lo desactivas
             //else si tampoco lo había antes de morir no haces nada
         }
     }

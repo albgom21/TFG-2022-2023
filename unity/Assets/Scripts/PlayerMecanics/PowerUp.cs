@@ -7,7 +7,7 @@ public class PowerUp : MonoBehaviour
     public enum powerUpTypes { 
         Gravity, 
         SlowMotion, 
-        BadQuality 
+        LowRes 
     };
 
     [SerializeField] private powerUpTypes powerUpType;
@@ -43,10 +43,10 @@ public class PowerUp : MonoBehaviour
                 powerUpsManager.changeGravity();
                 break;
             case powerUpTypes.SlowMotion:
-                powerUpsManager.slowMotionOn(5.0f);
+                powerUpsManager.slowMotionOn(5.0f); // HACER REFACTOR DE ESTA VARIABLE 
                 break;
-            case powerUpTypes.BadQuality:
-                powerUpsManager.badQualityOn(5.0f);
+            case powerUpTypes.LowRes:
+                powerUpsManager.lowResOn(5.0f);
                 break;
             default:
                 Debug.Log("KA PASAO POWER UP SIN TIPO O KHÉ");

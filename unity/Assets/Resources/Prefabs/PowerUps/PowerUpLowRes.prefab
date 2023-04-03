@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -5072820768090266218}
   - component: {fileID: 2117759031493089314}
   m_Layer: 0
-  m_Name: PowerUpQuality
+  m_Name: PowerUpLowRes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
