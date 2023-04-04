@@ -32,10 +32,10 @@ public class ButtonFunc : MonoBehaviour
         path = "Assets/StreamingAssets/" + songName + extension;
         checkPath = "Assets/FeaturesExtraction/Txt/" + songName;
 
-        // Llamada a spleeter
-        spleeter.commandCall(path);
+        // Llamada a spleeter con 1er arg la canción y 2do arg el lugar donde deja las pistas generadas
+        RunPythonScript("Assets/FeaturesExtraction/spleeter_ex.py", "./"+path, "./Assets/StreamingAssets/");
 
-        // Si no existen los ficheros llamar a Python
+        // Si no existen los ficheros llamar a Python para la extracción de las características
         if (!checkFiles(checkPath))
             RunPythonScript("Assets/FeaturesExtraction/librosa_ex.py", path);
 
@@ -45,7 +45,7 @@ public class ButtonFunc : MonoBehaviour
 
     // Ejecuta el archivo python que se encuentra en filePath con los argumentos arguments
     // En caso de error escribe en consola el error capturado así como la salida de consola del script
-    public void RunPythonScript(string filePath, string arguments)
+    public void RunPythonScript(string filePath, string argument0, string argument1 = "")
     {
         string pythonExecutablePath = "python";
 
@@ -60,7 +60,7 @@ public class ButtonFunc : MonoBehaviour
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
             FileName = pythonExecutablePath,
-            Arguments = string.Format("\"{0}\" \"{1}\"", filePath, arguments),
+            Arguments = string.Format("\"{0}\" \"{1}\" \"{2}\"", filePath, argument0, argument1),
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
