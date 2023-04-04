@@ -19,9 +19,11 @@ public class LightManager : MonoBehaviour
     {
         onset = input.getOnset();
         i = 0;
+        time = 0;
         intensity = maxIntensity = backgroundLight.intensity;
         onsetCount = onset.Count;
         newBackgroundColor = new Color(0, 0.64f, 1f, 0.3f);
+        newLightColor = Color.blue;
         GameManager.instance.setDrumsEffect(this);
     }
 
@@ -50,6 +52,7 @@ public class LightManager : MonoBehaviour
         }
         backgroundLight.intensity = intensity;
         intensity -= maxIntensity * (Time.deltaTime / offset);
+        
         if (backgroundRenderer != null && backgroundRenderer.color != newBackgroundColor)
             backgroundRenderer.color = new Color(Mathf.Lerp(backgroundRenderer.color.r, newBackgroundColor.r, Time.deltaTime * 1.5f),
                 Mathf.Lerp(backgroundRenderer.color.g, newBackgroundColor.g, Time.deltaTime * 1.5f),
