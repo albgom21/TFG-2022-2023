@@ -1,12 +1,11 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
-using UnityEditor.Timeline;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float speed;
+    [SerializeField] private float jumpForce;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private Transform sprite;
     [SerializeField] private GameObject obstacleGenerator;
@@ -17,14 +16,13 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private bool jump, onGround;
     private PowerUpsManager powerUpsManager;
-
     private struct spawnData
     {
         public Vector3 pos;
         public GameObject obj;
         public double time;
         //Datos de los power Ups (así no hay que cambiar código en PlayerMovement cada vez que se añadan más powerUps)
-        public PowerUpsManager.PowerUpsData powerUpsData; 
+        public PowerUpsManager.PowerUpsData powerUpsData;
 
 
         public spawnData(Vector3 position, GameObject o, double t, PowerUpsManager.PowerUpsData puD)
@@ -37,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
     }
     List<spawnData> spawns = new List<spawnData>();
 
-    private RaycastHit2D raycast;
+    //private RaycastHit2D raycast;
     private float raycastDistance;
 
     private void Awake()
@@ -49,7 +47,6 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         powerUpsManager = GameManager.instance.getPowerUpsManager();
-
         int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[2] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY());
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
@@ -121,12 +118,11 @@ public class PlayerMovement : MonoBehaviour
         {
             //Jump
             rb.velocity = Vector2.zero;
-            rb.AddForce(Vector2.up * 26.6581f, ForceMode2D.Impulse);
+            rb.AddForce(Vector2.up * jumpForce/*26.6581f*/, ForceMode2D.Impulse);
+            onGround = false;
+            Debug.Log("JUMP");
         }
-
-        raycast = Physics2D.Raycast(transform.position, Vector2.down, raycastDistance);
-        if (raycast.collider != null) onGround = true;
-        else onGround = false;
+        if (rb.velocity.y < 0) onGround = false;
     }
 
     void Unrotate()
@@ -136,15 +132,13 @@ public class PlayerMovement : MonoBehaviour
         sprite.rotation = Quaternion.Euler(rotation);
     }
 
-    public float getPlayerSpeed()
-    {
-        return speed;
-    }
+    public float getPlayerSpeed() { return speed; }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
         if (normal == Vector2.down) playerDeath();
+        else if (normal == Vector2.up) onGround = true;
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -152,6 +146,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 normal = collision.GetContact(0).normal;
         if (normal == Vector2.left) playerDeath();
     }
+
 
     public void playerDeath()
     {
@@ -171,4 +166,8 @@ public class PlayerMovement : MonoBehaviour
         //Resetear el estado de los powerUps
         powerUpsManager.resetData(lastSpawn.powerUpsData);
     }
+
+    internal void AutoJump() {onGround = false; }
+
+    internal float GetJumpForce() { return jumpForce; }
 }

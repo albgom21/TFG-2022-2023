@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
     public AutoJumpManager getAutoJumpManager() { return autoJumpManager; }
 
 
-    public void changeAutoJumpMode() { autoJumpManager.changeAutoJumpMode(); }
+    public void changeAutoJumpMode() { autoJumpManager.ChangeAutoJumpMode(); }
 
     public FMOD.Studio.EventInstance getMusicInstance()
     {

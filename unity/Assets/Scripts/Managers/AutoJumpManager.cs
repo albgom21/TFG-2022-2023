@@ -8,25 +8,26 @@ public class AutoJumpManager : MonoBehaviour
     [SerializeField] private bool autoJumpEnabled;
     private List<GameObject> autoJumpInstances;
     private Color autoJumpOnColor, autoJumpOffColor;
+    private GameObject player;
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         if (GameManager.instance != null)
             GameManager.instance.setAutoJumpManager(this);
         autoJumpInstances = new List<GameObject>();
         autoJumpOnColor = Color.green;
         autoJumpOffColor = Color.red;
-        //updateInstances();
     }
 
-    public bool getAutoJumpEnabled() { return autoJumpEnabled; }
-    public void changeAutoJumpMode()
+    public bool GetAutoJumpEnabled() { return autoJumpEnabled; }
+    public void ChangeAutoJumpMode()
     {
         autoJumpEnabled = !autoJumpEnabled;
-        updateInstances();
+        UpdateInstances();
     }
 
-    public void updateInstances()
+    public void UpdateInstances()
     {
         Color newColor;
         if (autoJumpEnabled) newColor = autoJumpOnColor;
@@ -39,8 +40,10 @@ public class AutoJumpManager : MonoBehaviour
         }
     }
 
-    public void addInstance(GameObject newAutoJump)
+    public void AddInstance(GameObject newAutoJump)
     {
+        if (player != null) newAutoJump.GetComponent<AutoJump>().SetPlayerVariables(player);
+        else Debug.LogError("No player attached to the AutoJump Manager");       
         autoJumpInstances.Add(newAutoJump);
     }
 }
