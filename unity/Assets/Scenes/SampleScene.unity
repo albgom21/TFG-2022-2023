@@ -12201,7 +12201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pruebasDesdeMenu: 0
-  song: Level6
+  song: bzrp
 --- !u!4 &1277446152
 Transform:
   m_ObjectHideFlags: 0
@@ -12336,7 +12336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  jumpForce: 27
+  jumpForce: 28
   groundMask:
     serializedVersion: 2
     m_Bits: 65

@@ -156,8 +156,6 @@ class SelectMusic : MonoBehaviour
     public void Play()
     {
         PlayMusic(fileName);
-        if (underWaterEffect) underWaterEffect.setEventInstance(eventInstance);
-        if (zones) zones.setEventInstance(eventInstance);
     }
     public void playTime(int t)
     {
@@ -171,9 +169,6 @@ class SelectMusic : MonoBehaviour
         eventInstance.setTimelinePosition(t);
         eventInstance.start();
         eventInstance.release();
-
-        if (underWaterEffect) underWaterEffect.setEventInstance(eventInstance);
-        if (zones) zones.setEventInstance(eventInstance);
     }
 
     public void Stop()

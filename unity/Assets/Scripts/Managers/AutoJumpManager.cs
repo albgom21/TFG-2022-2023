@@ -42,8 +42,8 @@ public class AutoJumpManager : MonoBehaviour
 
     public void AddInstance(GameObject newAutoJump)
     {
-        if (player != null) newAutoJump.GetComponent<AutoJump>().SetPlayerVariables(player);
-        else Debug.LogError("No player attached to the AutoJump Manager");       
+        //if (player != null) newAutoJump.GetComponent<AutoJump>().SetPlayerVariables(player);
+        //else Debug.LogError("No player attached to the AutoJump Manager");       
         autoJumpInstances.Add(newAutoJump);
     }
 }

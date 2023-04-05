@@ -15,10 +15,58 @@ MonoBehaviour:
   Path: ../FMOD/ProyectoFmod/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638160547606822739
+  lastModified: 638163092238484763
   FileSizes:
   - Name: Desktop
-    Value: 942
+    Value: 998
+  Exists: 1
+--- !u!114 &-7239688635830222700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/GravityPowerUp/Reverb
+  m_EditorClassIdentifier: 
+  Name: Reverb
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 1101896077
+    data2: 1282880331
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &-6281359423528933666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Reverb
+  m_EditorClassIdentifier: 
+  Name: Reverb
+  StudioPath: parameter:/Reverb
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 1101896077
+    data2: 1282880331
+  Type: 0
+  IsGlobal: 1
+  Labels: []
   Exists: 1
 --- !u!114 &-5005023143138083606
 MonoBehaviour:
@@ -41,7 +89,79 @@ MonoBehaviour:
     data1: 2205031200
     data2: 2420999056
   Type: 0
-  IsGlobal: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &-3255610275654834125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Quality
+  m_EditorClassIdentifier: 
+  Name: Quality
+  StudioPath: parameter:/Quality
+  Min: 0
+  Max: 1
+  Default: 1
+  ID:
+    data1: 2205031200
+    data2: 2420999056
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &-2966994568063850063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/GravityPowerUp/Underwater
+  m_EditorClassIdentifier: 
+  Name: Underwater
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 603318696
+    data2: 3247746894
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &-2798298855956296765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Underwater
+  m_EditorClassIdentifier: 
+  Name: Underwater
+  StudioPath: parameter:/Underwater
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 603318696
+    data2: 3247746894
+  Type: 0
+  IsGlobal: 1
   Labels: []
   Exists: 1
 --- !u!114 &-2352769852790566634
@@ -65,7 +185,7 @@ MonoBehaviour:
     data1: 603318696
     data2: 3247746894
   Type: 0
-  IsGlobal: 0
+  IsGlobal: 1
   Labels: []
   Exists: 1
 --- !u!114 &-1465764669733535214
@@ -88,9 +208,9 @@ MonoBehaviour:
     Data4: 1005660459
   Banks:
   - {fileID: 4236473184428288406}
-  IsStream: 0
+  IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters:
   - {fileID: -5005023143138083606}
   - {fileID: -2352769852790566634}
@@ -116,13 +236,47 @@ MonoBehaviour:
   - {fileID: 4236473184428288406}
   EditorEvents:
   - {fileID: -1465764669733535214}
-  EditorParameters: []
+  - {fileID: 1510850140409146660}
+  EditorParameters:
+  - {fileID: -3255610275654834125}
+  - {fileID: -2798298855956296765}
+  - {fileID: -6281359423528933666}
   MasterBanks:
   - {fileID: 2813485004033085234}
   StringsBanks:
   - {fileID: -8282175085137117510}
-  cacheTime: 638160547606832722
+  cacheTime: 638163092238754025
   cacheVersion: 131593
+--- !u!114 &1510850140409146660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GravityPowerUp
+  m_EditorClassIdentifier: 
+  Path: event:/GravityPowerUp
+  Guid:
+    Data1: 187818022
+    Data2: 1321378650
+    Data3: -171552324
+    Data4: -144980139
+  Banks:
+  - {fileID: 4236473184428288406}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: -7239688635830222700}
+  - {fileID: 4474961541526584791}
+  - {fileID: -2966994568063850063}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1044
 --- !u!114 &2085106078082836605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,7 +298,7 @@ MonoBehaviour:
     data1: 1101896077
     data2: 1282880331
   Type: 0
-  IsGlobal: 0
+  IsGlobal: 1
   Labels: []
   Exists: 1
 --- !u!114 &2813485004033085234
@@ -162,10 +316,10 @@ MonoBehaviour:
   Path: ../FMOD/ProyectoFmod/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638144887623861465
+  lastModified: 638163092238474774
   FileSizes:
   - Name: Desktop
-    Value: 1036
+    Value: 1540
   Exists: 1
 --- !u!114 &4236473184428288406
 MonoBehaviour:
@@ -182,8 +336,32 @@ MonoBehaviour:
   Path: ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank
   Name: MyBank
   StudioPath: bank:/MyBank
-  lastModified: 638160547606832722
+  lastModified: 638163092238754025
   FileSizes:
   - Name: Desktop
-    Value: 4458
+    Value: 176896
+  Exists: 1
+--- !u!114 &4474961541526584791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/GravityPowerUp/Quality
+  m_EditorClassIdentifier: 
+  Name: Quality
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 1
+  ID:
+    data1: 2205031200
+    data2: 2420999056
+  Type: 0
+  IsGlobal: 1
+  Labels: []
   Exists: 1

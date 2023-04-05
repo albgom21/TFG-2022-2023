@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private ParticleSystem particles;
     [SerializeField] private Crono crono;
     private Rigidbody2D rb;
-    private bool jump, onGround;
+    private bool autoJump, jump, onGround;
     private PowerUpsManager powerUpsManager;
     private struct spawnData
     {
@@ -50,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
         int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[2] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY());
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
-        jump = false; onGround = true;
+        jump = autoJump = false; onGround = true;
         spawns.Add(new spawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform), 0,
             new PowerUpsManager.PowerUpsData()));
         raycastDistance = transform.localScale.y / 2.0f + 0.02f;
@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
     {
         transform.position += Vector3.right * speed * Time.deltaTime;
         if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space)) jump = true;
-        else jump = false;
+        else if (!autoJump) jump = false;
 
         if (Input.GetMouseButtonDown(1))
             spawns.Add(new spawnData(transform.position,
@@ -114,14 +114,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (onGround && jump)
-        {
-            //Jump
-            rb.velocity = Vector2.zero;
-            rb.AddForce(Vector2.up * jumpForce/*26.6581f*/, ForceMode2D.Impulse);
-            onGround = false;
-            Debug.Log("JUMP");
-        }
+        if (jump) Jump();
         if (rb.velocity.y < 0) onGround = false;
     }
 
@@ -167,7 +160,18 @@ public class PlayerMovement : MonoBehaviour
         powerUpsManager.resetData(lastSpawn.powerUpsData);
     }
 
-    internal void AutoJump() {onGround = false; }
+    private void Jump()
+    {
+        if (onGround)
+        {
+            rb.velocity = Vector2.zero;
+            rb.AddForce(Vector2.up * jumpForce/*26.6581f*/, ForceMode2D.Impulse);
+            autoJump = jump = onGround = false;
+            Debug.Log("JUMP");
+            
+        } 
+    }
+    internal void AutoJump() { jump = true; autoJump = true; }
 
     internal float GetJumpForce() { return jumpForce; }
 }

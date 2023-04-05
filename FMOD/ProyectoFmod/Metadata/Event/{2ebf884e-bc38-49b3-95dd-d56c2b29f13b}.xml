@@ -5,7 +5,7 @@
 			<value>Music</value>
 		</property>
 		<property name="outputFormat">
-			<value>5</value>
+			<value>1</value>
 		</property>
 		<relationship name="folder">
 			<destination>{12d16daf-3e0e-4360-89e1-f08b25a0af0b}</destination>
@@ -140,6 +140,9 @@
 		<property name="length">
 			<value>0.10000000000000003</value>
 		</property>
+		<property name="volume">
+			<value>-6.5</value>
+		</property>
 		<property name="polyphony">
 			<value>3</value>
 		</property>
@@ -153,10 +156,10 @@
 			<value>10000</value>
 		</property>
 		<property name="minimumScatterDistance">
-			<value>2</value>
+			<value>0</value>
 		</property>
 		<property name="maximumScatterDistance">
-			<value>10</value>
+			<value>0</value>
 		</property>
 		<property name="pitchRandomization">
 			<value>4</value>

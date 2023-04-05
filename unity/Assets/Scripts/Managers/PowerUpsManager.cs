@@ -62,14 +62,7 @@ public class PowerUpsManager : MonoBehaviour
     {
         updateSlowMotion();
         updateLowRes();
-        if (lowResPowerUp && lowResTimer > 0)
-        {
-            powerUpLowImg.fillAmount = lowResTimer / 5.0f;
-        }
-        if (slowMotionPowerUp && slowMotionTimer > 0)
-        {
-            powerUpSlowImg.fillAmount = slowMotionTimer / 5.0f;
-        }
+        updateHUD();
     }
 
     //Añade una instancia a la lista de powerUps
@@ -109,9 +102,6 @@ public class PowerUpsManager : MonoBehaviour
     }
 
     public bool getGravityChanged() { return gravityPowerUp; }
-
-    //Resetea el powerUp al respawnear
-    public void restartGravity(bool gravity) { gravityPowerUp = gravity; }
 
     // ----------------------------------- SLOW MOTION POWER UP --------------------------------
 
@@ -204,7 +194,7 @@ public class PowerUpsManager : MonoBehaviour
         rawImageLow.SetActive(true);
         if (gravityPowerUp)
             rawImageLow.transform.localRotation = new Quaternion(-180, 0, 0, 0);
-        GameManager.instance.getMusicInstance().setParameterByName("Quality", 0.0f);
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Quality", 0.0f);
     }
 
     private void lowResOff()
@@ -217,7 +207,8 @@ public class PowerUpsManager : MonoBehaviour
         rawImageNormal.SetActive(true);
         rawImageLow.SetActive(false);
         rawImageLow.transform.localRotation = new Quaternion(0, 0, 0, 0);
-        GameManager.instance.getMusicInstance().setParameterByName("Quality", 1.0f);
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Quality", 1.0f);
+
     }
 
     //Devuelve cuanto tiempo queda de power Up (0 si no está activado), para guardarlo en el checkpoint
@@ -237,7 +228,7 @@ public class PowerUpsManager : MonoBehaviour
         resetInstances();
 
         //---POWER UP GRAVITY
-        gravityPowerUp = newData.gravity;
+        if (newData.gravity != gravityPowerUp) changeGravity();
 
         //---POWER UP SLOWMOTION
         if (newData.slowMotionTimeLeft > 0.0f) //Si en el checkpoint si había SlowMotion
@@ -261,6 +252,18 @@ public class PowerUpsManager : MonoBehaviour
         {
             if (lowResPowerUp) lowResOff(); //Y antes de morir sí, lo desactivas
             //else si tampoco lo había antes de morir no haces nada
+        }
+    }
+
+    private void updateHUD()
+    {
+        if (lowResPowerUp && lowResTimer > 0)
+        {
+            powerUpLowImg.fillAmount = lowResTimer / 5.0f;
+        }
+        if (slowMotionPowerUp && slowMotionTimer > 0)
+        {
+            powerUpSlowImg.fillAmount = slowMotionTimer / 5.0f;
         }
     }
 }

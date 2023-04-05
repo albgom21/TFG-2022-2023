@@ -13,7 +13,6 @@ public class Zone : MonoBehaviour
     [SerializeField] private Color highColor;
     [SerializeField] private Color lowColor;
 
-    FMOD.Studio.EventInstance eventInstance;
     private Color originalColor;
     private Material originalSkyBox;
     private List<int> beatsZones = new List<int>();
@@ -98,7 +97,7 @@ public class Zone : MonoBehaviour
         else if (type == ZoneType.LOW)
         {
             waterEnabled = true;
-            eventInstance.setParameterByName("Underwater", 1);
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Underwater", 1.0f);
             RenderSettings.skybox = lowSky;
             playerSprite.color = lowColor;
         }
@@ -108,7 +107,7 @@ public class Zone : MonoBehaviour
     void EndZone(bool death = false)
     {
         waterEnabled = false;
-        eventInstance.setParameterByName("Underwater", 0);
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Underwater", 0.0f);
         RenderSettings.skybox = originalSkyBox;
         playerSprite.color = originalColor;
         if (death) water.fillAmount = 0;
@@ -264,11 +263,6 @@ public class Zone : MonoBehaviour
         //Debug.Log("BEST low: " + bestLength);
         //Debug.Log("Ini zona low: " + zData[zData.Count - 1].getTimeIniZone());
         //Debug.Log("Fin zona low: " + zData[zData.Count - 1].getTimeEndZone());
-    }
-
-    public void setEventInstance(FMOD.Studio.EventInstance eI)
-    {
-        eventInstance = eI;
     }
 
     // GETTERS

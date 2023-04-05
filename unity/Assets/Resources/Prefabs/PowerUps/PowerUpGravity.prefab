@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -7105674069528179612}
   - component: {fileID: 3247184281453711364}
   - component: {fileID: 6845859343965143306}
+  - component: {fileID: 3834307921033728882}
   m_Layer: 0
   m_Name: PowerUpGravity
   m_TagString: Untagged
@@ -99,7 +100,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUpType: 0
-  time: 10
 --- !u!61 &6845859343965143306
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -126,3 +126,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &3834307921033728882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8476976511320236115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: Player
+  EventReference:
+    Guid:
+      Data1: 187818022
+      Data2: 1321378650
+      Data3: -171552324
+      Data4: -144980139
+    Path: event:/GravityPowerUp
+  Event: 
+  PlayEvent: 5
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20

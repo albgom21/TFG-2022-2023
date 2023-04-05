@@ -5,15 +5,11 @@ using UnityEngine;
 
 public class AutoJump : MonoBehaviour
 {
-    private float jumpForce;
-    private Rigidbody2D rb;
     private AutoJumpManager autoJumpManager;
     private DebugManager debugManager;
 
     private void Start()
     {
-        rb = null;
-        jumpForce = 0;
 
         //DebugMode
         debugManager = GameManager.instance.getDebugManager();
@@ -33,22 +29,6 @@ public class AutoJump : MonoBehaviour
     {
         PlayerMovement playerMov = collision.gameObject.GetComponent<PlayerMovement>();
 
-        if (playerMov != null)
-        {
-            playerMov.AutoJump();
-            if (rb != null)
-            {
-                rb.velocity = Vector2.zero;
-                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            }
-            else Debug.LogError("RigidBody2D not found in AutoJump Script");
-
-        }
-    }
-
-    public void SetPlayerVariables(GameObject p)
-    {
-        rb = p.GetComponent<Rigidbody2D>();
-        jumpForce = p.GetComponent<PlayerMovement>().GetJumpForce();
+        if (playerMov != null) playerMov.AutoJump();
     }
 }

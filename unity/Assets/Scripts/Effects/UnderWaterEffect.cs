@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class UnderWaterEffect : MonoBehaviour
 {
-
-    FMOD.Studio.EventInstance eventInstance;
     float underWaterParameter;
 
     [SerializeField]
@@ -30,14 +28,14 @@ public class UnderWaterEffect : MonoBehaviour
         {
             //Al fondo del agua, el parámetro es 1.0f
             underWaterParameter = 1.0f;
-            eventInstance.setParameterByName("Underwater", underWaterParameter);
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Underwater", underWaterParameter);
         }
 
         else if (underWaterParameter != 0.0f && transform.position.y > alturaComienzoAgua)
         {
             //Fuera del agua, el parámetro es 0.0f
             underWaterParameter = 0.0f;
-            eventInstance.setParameterByName("Underwater", underWaterParameter);
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Underwater", underWaterParameter);
         }
 
         else if (transform.position.y > alturaAguaMaxima && transform.position.y < alturaComienzoAgua)
@@ -50,13 +48,8 @@ public class UnderWaterEffect : MonoBehaviour
             float region = (transform.position.y - alturaAguaMaxima) / regionAgua;  //Valor entre 0.0 y 1.0
             underWaterParameter = (region / 2.0f) + 0.5f;                           //Valor entre 0.5 y 1.0
 
-            eventInstance.setParameterByName("Underwater", underWaterParameter);
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Underwater", underWaterParameter);
         }
 
-    }
-    
-    public void setEventInstance(FMOD.Studio.EventInstance eI)
-    {
-        eventInstance = eI;
     }
 }
