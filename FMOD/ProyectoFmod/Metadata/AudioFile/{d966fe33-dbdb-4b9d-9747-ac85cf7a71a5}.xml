@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.02.02.00">
 	<object class="AudioFile" id="{d966fe33-dbdb-4b9d-9747-ac85cf7a71a5}">
 		<property name="assetPath">
-			<value>bzrp.wav</value>
+			<value>Musicas/bzrp.wav</value>
 		</property>
 		<property name="isStreaming">
 			<value>true</value>
