@@ -10,10 +10,9 @@ using UnityEngine.UI;
 
 public class ButtonFunc : MonoBehaviour
 {
-    private string extension;
-    private string songName;
+    private string songName, extension;
     private string path, checkPath;
-    private SpleeterAuto spleeter;
+    List<string> pathsSpleeter, pathsFeatures;
 
     public void PlayLvl()
     {
@@ -22,26 +21,45 @@ public class ButtonFunc : MonoBehaviour
 
         // Obtener componentes
         songName = GetComponent<TextMeshProUGUI>().text;
-        spleeter = GetComponent<SpleeterAuto>();
 
         // Establecer la canción y su extensión en el GM
         GameManager.instance.setSong(songName);
         GameManager.instance.setExtension(extension);
 
         // Rutas para leer las canciones y para comprobar ficheros generados
-        path = "Assets/StreamingAssets/" + songName + extension;
-        checkPath = "Assets/FeaturesExtraction/Txt/" + songName;
+        creatrePaths();
 
         // Llamada a spleeter con 1er arg la canción y 2do arg el lugar donde deja las pistas generadas
-        //if (!checkFiles(checkPath))
-        RunPythonScript("Assets/FeaturesExtraction/spleeter_ex.py", "./"+path, "./Assets/StreamingAssets/");
+        if (!checkFiles(pathsSpleeter))
+            RunPythonScript("Assets/FeaturesExtraction/spleeter_ex.py", "./" + path, "./Assets/StreamingAssets/");
 
         // Si no existen los ficheros llamar a Python para la extracción de las características
-        if (!checkFiles(checkPath))
+        if (!checkFiles(pathsFeatures))
             RunPythonScript("Assets/FeaturesExtraction/librosa_ex.py", path);
 
         // Cargar escena del juego
         SceneManager.LoadScene("SampleScene");
+    }
+
+    // Crea las rutas necesarias para comprobar si ya existen los archivos y no ejecutar de nuevo los scripts de Python
+    //----- AÑADIR MAS RUTAS ----
+    private void creatrePaths()
+    {
+        path = "Assets/StreamingAssets/" + songName + extension;  // Ruta donde se encuentra la canción seleccionada
+        checkPath = "Assets/FeaturesExtraction/Txt/" + songName;  // Ruta donde se encuentran las características de la canción
+
+        pathsSpleeter = new string[] {                            // Lista de rutas que se esperan haber generado una vez se haya ejecutado spleeter
+            "Assets/StreamingAssets/" + songName + "_drums" + extension // Audio de las baterías de la canción
+        }.ToList();
+
+        pathsFeatures = new string[]{   // Lista de rutas que se esperan haber generado una vez se haya ejecutado la extracción de características
+            checkPath + "_beats.txt",
+            checkPath + "_scopt.txt",
+            checkPath + "_rmse.txt",
+            checkPath + "_sr.txt",
+            checkPath + "_duration.txt",
+            checkPath + "_onsetDetection.txt" 
+        }.ToList();
     }
 
     // Ejecuta el archivo python que se encuentra en filePath con los argumentos arguments
@@ -93,13 +111,10 @@ public class ButtonFunc : MonoBehaviour
     // Comprueba si existen todos los ficheros de una lista de rutas
     // True -> existen todos los ficheros de la lista
     // False -> al menos un fichero de la lista no existe
-    private bool checkFiles(string checkPath) // REFACTOR DE TODAS LAS RUTAS - AÑADIR MAS RUTAS
+    private bool checkFiles(List<string> paths) 
     {
-        List<string> rutas = new string[]{checkPath + "_beats.txt", checkPath + "_scopt.txt" , checkPath + "_rmse.txt", checkPath + "_sr.txt",
-        checkPath + "_duration.txt", checkPath + "_onsetDetection.txt" }.ToList();
-
         // Comprobar si existen todos los ficheros
-        foreach (string s in rutas)
+        foreach (string s in paths)
             if (!File.Exists(s))
             {
                 UnityEngine.Debug.Log("NO ESTA GENERADO EL FICHERO" + s);

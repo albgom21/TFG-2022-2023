@@ -240,6 +240,12 @@ public class PowerUpsManager : MonoBehaviour
         if (gravityPowerUp)
             rawImageLow.transform.localRotation = new Quaternion(-180, 0, 0, 0);
         FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Quality", 0.0f);
+
+        if (slowMotionPowerUp)
+        {
+            powerUpLowImg.transform.position -= new Vector3(125, 0, 0);
+            changedPosX = true;
+        }
     }
 
     private void lowResOff()
@@ -254,6 +260,11 @@ public class PowerUpsManager : MonoBehaviour
         rawImageLow.transform.localRotation = new Quaternion(0, 0, 0, 0);
         FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Quality", 1.0f);
 
+        if (changedPosX)
+        {
+            powerUpLowImg.transform.position += new Vector3(125, 0, 0);
+            changedPosX = false;
+        }
     }
 
     //Devuelve cuanto tiempo queda de power Up (0 si no está activado), para guardarlo en el checkpoint
@@ -304,6 +315,5 @@ public class PowerUpsManager : MonoBehaviour
 
         //Resetear el efecto de LowRes
         resetLowRes(newData.lowResTimeLeft);
-
     }
 }
