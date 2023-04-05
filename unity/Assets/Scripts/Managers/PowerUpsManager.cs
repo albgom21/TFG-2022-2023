@@ -62,7 +62,6 @@ public class PowerUpsManager : MonoBehaviour
     {
         updateSlowMotion();
         updateLowRes();
-        updateHUD();
     }
 
     //Añade una instancia a la lista de powerUps
@@ -103,6 +102,12 @@ public class PowerUpsManager : MonoBehaviour
 
     public bool getGravityChanged() { return gravityPowerUp; }
 
+    //Reseteo de gravity al Respawnear
+    private void resetGravity(bool newGravity)
+    {
+        if (newGravity != gravityPowerUp) changeGravity();
+    }
+
     // ----------------------------------- SLOW MOTION POWER UP --------------------------------
 
     private void updateSlowMotion()
@@ -136,11 +141,17 @@ public class PowerUpsManager : MonoBehaviour
                 changeTimeScale(smTimeScale);
             }
         }
+
+        //HUD
+        if (lowResPowerUp && lowResTimer > 0)
+        {
+            powerUpLowImg.fillAmount = lowResTimer / 5.0f;
+        }
     }
     public void slowMotionOn(float time)
     {
         slowMotionPowerUp = true;
-        slowMotionTimer += time;
+        slowMotionTimer = time;
 
         if (lowResPowerUp)
         {
@@ -172,6 +183,38 @@ public class PowerUpsManager : MonoBehaviour
     //Devuelve cuanto tiempo queda de power Up (0 si no está activado), para guardarlo en el checkpoint
     public float getSlowMotionTimer() { return slowMotionTimer; }
 
+    //Resetea el efecto SlowMotion al respawnear
+    private void resetSlowMotion(float newTime)
+    {
+        if (newTime > 0.0f) //Si en el checkpoint si había SlowMotion
+        {
+            slowMotionTimer = newTime;
+            if (!slowMotionPowerUp) //Si al morir, no tenías el powerUp activado
+            {
+                //Cambia a activado SIN transición
+                slowMotionPowerUp = true;
+                smTimeScale = 0.6f;
+                changeTimeScale(smTimeScale);
+            }
+
+            //CAMBIO DE HUD, AÑADIENDO EL POWER UP SI NO LO ESTABA O CAMBIANDOLO A newTime SI LO HABÍA ANTES TAMBIÉN
+
+        }
+        else if (slowMotionPowerUp)//Si en el checkPoint no había SlowMotion y al morir si lo tenías
+        {
+            slowMotionTimer = 0.0f;
+            slowMotionPowerUp = false;
+            smTimeScale = 1.0f;
+            changeTimeScale(smTimeScale);
+
+            //CAMBIO HUD, QUITANDO EL POWER UP
+
+            
+        }
+
+        //En el caso de no tenerlo ni en el checkpoint ni al morir, no hay que hacer nada.
+    }
+
     // ----------------------------------- LOW RES POWER UP --------------------------------
 
     private void updateLowRes()
@@ -182,12 +225,18 @@ public class PowerUpsManager : MonoBehaviour
 
             if (lowResTimer <= 0.0f) lowResOff();
         }
+
+        //HUD
+        if (slowMotionPowerUp && slowMotionTimer > 0.0f)
+        {
+            powerUpSlowImg.fillAmount = slowMotionTimer / 5.0f;
+        }
     }
 
     public void lowResOn(float time)
     {
         lowResPowerUp = true;
-        lowResTimer += time;
+        lowResTimer = time;
 
         cam.targetTexture = lowRes;
         rawImageNormal.SetActive(false);
@@ -214,6 +263,30 @@ public class PowerUpsManager : MonoBehaviour
     //Devuelve cuanto tiempo queda de power Up (0 si no está activado), para guardarlo en el checkpoint
     public float getLowResTimer() { return lowResTimer; }
 
+    //Resetea el efecto LowRes al respawnear
+    private void resetLowRes(float newTime)
+    {
+        if (newTime > 0.0f) //Si en el checkpoint si había LowRes
+        {
+            lowResTimer = newTime; //Cambio el tiempo que queda (independientemente de si antes estaba activado o no)
+
+            if (!lowResPowerUp) //Si al morir, no tenías el powerUp activado, lo activas
+            {
+                lowResOn(newTime);
+                FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Quality", 0.0f, true); //Cambio SIN TRANSICIÓN
+            } 
+
+        }
+        else if (lowResPowerUp)//Si en el checkPoint no había losRes y al morir si lo tenías
+        {
+            lowResOff();
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Quality", 1.0f, true); //Cambio SIN TRANSICIÓN
+
+        }
+
+        //En el caso de no tenerlo ni en el checkpoint ni al morir, no hay que hacer nada.
+    }
+
     //------------------------ GUARDADO Y CARGA DE DATOS DE POWER UPS -------------------------
 
     //Guardado de datos para crear un checkPoint
@@ -225,45 +298,16 @@ public class PowerUpsManager : MonoBehaviour
     //Carga de datos del checkPoint al respawnear
     public void resetData(PowerUpsData newData)
     {
-        resetInstances();
+        resetInstances(); //Hacer reaparecer las instancias de los powerups
 
-        //---POWER UP GRAVITY
-        if (newData.gravity != gravityPowerUp) changeGravity();
+        //Resetear el efecto de Gravity
+        resetGravity(newData.gravity);
 
-        //---POWER UP SLOWMOTION
-        if (newData.slowMotionTimeLeft > 0.0f) //Si en el checkpoint si había SlowMotion
-        {
-            if (!slowMotionPowerUp) slowMotionOn(newData.slowMotionTimeLeft); //Y antes de morir no, lo activas
-            else slowMotionTimer = newData.slowMotionTimeLeft;    //Si antes de morir también lo había, solo hay que cambiar el timer
-        }
-        else //Si en el checkPoint no había SlowMotion
-        {
-            if (slowMotionPowerUp) slowMotionOff(); //Y antes de morir sí, lo desactivas
-            //else si tampoco lo había antes de morir no haces nada
-        }
+        //Resetear el efecto de SlowMotion
+        resetSlowMotion(newData.slowMotionTimeLeft);
 
-        //---POWER UP LOW RES
-        if (newData.lowResTimeLeft > 0.0f) //Si en el checkpoint si había lowRes
-        {
-            if (!lowResPowerUp) lowResOn(newData.lowResTimeLeft); //Y antes de morir no, lo activas
-            else lowResTimer = newData.lowResTimeLeft;    //Si antes de morir también lo había, solo hay que cambiar el timer
-        }
-        else //Si en el checkPoint no había lowRes
-        {
-            if (lowResPowerUp) lowResOff(); //Y antes de morir sí, lo desactivas
-            //else si tampoco lo había antes de morir no haces nada
-        }
-    }
-
-    private void updateHUD()
-    {
-        if (lowResPowerUp && lowResTimer > 0)
-        {
-            powerUpLowImg.fillAmount = lowResTimer / 5.0f;
-        }
-        if (slowMotionPowerUp && slowMotionTimer > 0)
-        {
-            powerUpSlowImg.fillAmount = slowMotionTimer / 5.0f;
-        }
+        //Resetear el efecto de LowRes
+        resetLowRes(newData.lowResTimeLeft);
+        
     }
 }
