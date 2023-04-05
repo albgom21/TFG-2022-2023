@@ -33,6 +33,7 @@ public class ButtonFunc : MonoBehaviour
         checkPath = "Assets/FeaturesExtraction/Txt/" + songName;
 
         // Llamada a spleeter con 1er arg la canción y 2do arg el lugar donde deja las pistas generadas
+        //if (!checkFiles(checkPath))
         RunPythonScript("Assets/FeaturesExtraction/spleeter_ex.py", "./"+path, "./Assets/StreamingAssets/");
 
         // Si no existen los ficheros llamar a Python para la extracción de las características
@@ -95,7 +96,7 @@ public class ButtonFunc : MonoBehaviour
     private bool checkFiles(string checkPath) // REFACTOR DE TODAS LAS RUTAS - AÑADIR MAS RUTAS
     {
         List<string> rutas = new string[]{checkPath + "_beats.txt", checkPath + "_scopt.txt" , checkPath + "_rmse.txt", checkPath + "_sr.txt",
-        checkPath + "_duration.txt"/*, checkPath + "_onsetDetection.txt"*/ }.ToList();
+        checkPath + "_duration.txt", checkPath + "_onsetDetection.txt" }.ToList();
 
         // Comprobar si existen todos los ficheros
         foreach (string s in rutas)

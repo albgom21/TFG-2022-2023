@@ -13,7 +13,7 @@ def main(input_file, output_folder):
     # ruta_actual = os.getcwd()
     # print("1", ruta_actual)
 
-    command = [ 'cmd', '/c', 'spleeter', 'separate', '-p', 'spleeter:2stems',  '-o', output_folder, '-f', '{filename}_{instrument}.{codec}', input_file]
+    command = [ 'cmd', '/c', 'spleeter', 'separate', '-p', 'spleeter:5stems',  '-o', output_folder, '-f', '{filename}_{instrument}.{codec}', input_file]
     subprocess.call(command)
 
 

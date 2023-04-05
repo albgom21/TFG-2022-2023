@@ -458,12 +458,15 @@ samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
 def onset_detection(filename):
-    y,sr = load_Wave("drums_" + filename)
+    os.path.splitext(filename)
+    filename_without_extension = os.path.splitext(filename)[0]
+    extension = os.path.splitext(filename)[1]
+    y,sr = load_Wave(filename_without_extension + "_drums"+ extension) 
     o_env = o_env = librosa.onset.onset_strength(y=y, sr=sr, aggregate=np.median)
     o_env = normalize(o_env)    
     onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
-    print ("Total frames: ", y.size)
-    print("OnsetFrames size: ", onset_frames.size)
+    # print ("Total frames: ", y.size)
+    # print("OnsetFrames size: ", onset_frames.size)
     onset_time = librosa.frames_to_time(onset_frames)    
     return onset_time
 
@@ -678,10 +681,10 @@ def features_to_txt(filename):
     aValorNorm = normalize(a[:, 1])
 
     # Golpes de batería (onset)
-    # onset = onset_detection(filename)
+    onset = onset_detection(filename)
 
     name = os.path.splitext(filename)[0]
-    # np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
+    np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
     np.savetxt(name + '_duration.txt', dur,fmt='%.0f')
     np.savetxt(name + '_sr.txt', np_sr, fmt='%.0f')
     np.savetxt(name + '_beats.txt', beats, fmt='%.3f')
@@ -691,7 +694,7 @@ def features_to_txt(filename):
     np.savetxt(name + '_gravesValorNorm.txt', gValorNorm, fmt='%.3f')
     np.savetxt(name + '_agudosTiempo.txt', aTiempo, fmt='%.3f')
     np.savetxt(name + '_agudosValorNorm.txt', aValorNorm, fmt='%.3f')
-    # np.savetxt(name + '_onsetDetection.txt', onset, fmt='%.3f')
+    np.savetxt(name + '_onsetDetection.txt', onset, fmt='%.3f')
 
     # Ruta de la carpeta de origen
     ruta_origen = 'Assets/StreamingAssets'
@@ -733,8 +736,10 @@ def extract_features(signal):
 Método para depurar y sacar gráficas de los golpes de batería
 '''
 def depuracion_onset(filename, v1):
-    filename = 'drums_'+filename
-    y,sr = load_Wave(filename)
+    os.path.splitext(filename)
+    filename_without_extension = os.path.splitext(filename)[0]
+    extension = os.path.splitext(filename)[1]
+    y,sr = load_Wave(filename_without_extension + "_drums"+ extension) 
     if v1:  o_env = librosa.onset.onset_strength(y=y, sr=sr)
     else:  o_env = librosa.onset.onset_strength(y=y, sr=sr, aggregate=np.median)
     o_env = normalize(o_env)
@@ -777,4 +782,4 @@ def main(filename):
 # Main para usarlo desde Unity con la canción como 1er argumento (equivale a :"Assets/StreamingAssets/200-BPM.wav")
 main(sys.argv[1])
 # Main para usarlo desde VScode
-# main("../StreamingAssets/200-BPM.wav") 
+# main("../StreamingAssets/bzrp.wav") 

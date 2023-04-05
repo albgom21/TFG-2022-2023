@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,7 +64,7 @@ public class PowerUpsManager : MonoBehaviour
         updateSlowMotion();
         updateLowRes();
     }
-
+        
     //Añade una instancia a la lista de powerUps
     public void addPowerUpInstance(GameObject newPowerUp)
     {
@@ -143,10 +144,7 @@ public class PowerUpsManager : MonoBehaviour
         }
 
         //HUD
-        if (lowResPowerUp && lowResTimer > 0)
-        {
-            powerUpLowImg.fillAmount = lowResTimer / 5.0f;
-        }
+        powerUpLowImg.fillAmount = lowResTimer / 5.0f;
     }
     public void slowMotionOn(float time)
     {
@@ -209,8 +207,9 @@ public class PowerUpsManager : MonoBehaviour
 
             //CAMBIO HUD, QUITANDO EL POWER UP
 
-            
+
         }
+        powerUpSlowImg.fillAmount = slowMotionTimer / 5.0f;
 
         //En el caso de no tenerlo ni en el checkpoint ni al morir, no hay que hacer nada.
     }
@@ -227,10 +226,7 @@ public class PowerUpsManager : MonoBehaviour
         }
 
         //HUD
-        if (slowMotionPowerUp && slowMotionTimer > 0.0f)
-        {
-            powerUpSlowImg.fillAmount = slowMotionTimer / 5.0f;
-        }
+        powerUpSlowImg.fillAmount = slowMotionTimer / 5.0f;
     }
 
     public void lowResOn(float time)
@@ -274,7 +270,7 @@ public class PowerUpsManager : MonoBehaviour
             {
                 lowResOn(newTime);
                 FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Quality", 0.0f, true); //Cambio SIN TRANSICIÓN
-            } 
+            }
 
         }
         else if (lowResPowerUp)//Si en el checkPoint no había losRes y al morir si lo tenías
@@ -308,6 +304,6 @@ public class PowerUpsManager : MonoBehaviour
 
         //Resetear el efecto de LowRes
         resetLowRes(newData.lowResTimeLeft);
-        
+
     }
 }
