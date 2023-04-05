@@ -167,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = Vector2.zero;
             rb.AddForce(Vector2.up * jumpForce/*26.6581f*/, ForceMode2D.Impulse);
             autoJump = jump = onGround = false;
-            Debug.Log("JUMP");
+            //Debug.Log("JUMP");
             
         } 
     }

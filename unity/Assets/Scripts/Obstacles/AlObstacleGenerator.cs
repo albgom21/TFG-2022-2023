@@ -62,8 +62,7 @@ public class AlObstacleGenerator : MonoBehaviour
         lowResStructures    = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/LowRes");
 
         lastObstacle = null;
-        //float width = transform.localScale.x;
-        //float height = transform.localScale.y;
+
         List<float> beats = features.GetComponent<ReadTxt>().getBeatsInTime();
         zonesData = zones.getZonesData();
 
@@ -78,8 +77,7 @@ public class AlObstacleGenerator : MonoBehaviour
 
         GenerateObstacles(beats/*, beatsZonesIndex*/);
 
-        Instantiate(endPrefab, new Vector3(50000, 0, 0), transform.rotation, obstaclePool);
-
+  
         Destroy(groundToDestroy);
     }
 
@@ -87,11 +85,8 @@ public class AlObstacleGenerator : MonoBehaviour
     {
         //bool portal = false;
         int offsetI = 2;
-        //bool jumpObstacle = false;
-        //Coordenadas del obstáculo
-        float coordX;
-        float coordY = 0;
-        float prevX = 0.0f;
+        //Coordenadas del obstáculo y del previo
+        float coordX, coordY, prevX;    coordX = coordY = prevX = 0.0f;
         ObstacleStructureData thisObstacle = null;
 
 
@@ -164,9 +159,16 @@ public class AlObstacleGenerator : MonoBehaviour
                 prevX = coordX;
                 coordY += thisObstacle.getUnlevel();
                 lastObstacle = thisObstacle;
-                thisObstacle = null;
+                thisObstacle = null; //Si es el último, quiero que se guarde para la creación del END
             }
         }
+
+        //END
+        coordX = coordX + lastObstacle.getPostX() + (endPrefab.transform.localScale.x / 2);
+        //Coord X estaba en el centro del beat anterior, ahora está tras el resto del obstáculo anterior y movido
+        //a la mitad del prefab de end
+
+        Instantiate(endPrefab, new Vector3(coordX , coordY, 0), transform.rotation, obstaclePool);
     }
 
     private ObstacleStructureData InstantiateRandomObstacle(GameObject[] posibleStructures, float x, float y, float spaceBetweenBeats)
@@ -176,7 +178,7 @@ public class AlObstacleGenerator : MonoBehaviour
         ObstacleStructureData obstacleStructure = null;
 
         int intentos = 0;
-        while (!correctObstacle && intentos < 40)
+        while (!correctObstacle && intentos < 50)
         {
             int rnd = Random.Range(0, posibleStructures.Length);
 
@@ -270,8 +272,8 @@ public class AlObstacleGenerator : MonoBehaviour
     private GameObject[] getPosibleStructures(int index)
     {
         //Estructuras de powerUp de gravedad
-
         if (index == gravityStartIndex || index == gravityEndIndex) return gravityStructures;
+
         //Estructuras de powerUp de slowMotion
         if (slowMotionIndexes.Contains(index)) return slowMotionStructures;
 
@@ -285,10 +287,11 @@ public class AlObstacleGenerator : MonoBehaviour
     //Genera los index de los beats en los que va a haber powerUps
     private void GeneratePowerUpsIndexes(List<float> beats)
     {
+        int margin = 15; //Ni los primeros "margin" beats ni los últimos habrá power ups
+
         //GRAVITY POWER UP
         int gravityZoneLength = Random.Range(10, 30); //La zona con gravedad cambiada serán entre 10 y 30 beats
-        int margin = 10; //Margen de la zona de gravedad. Es decir, los primeros "margin" beats no serán zona ni los últimos tampoco
-
+        
         gravityStartIndex = Random.Range(margin, beats.Count - margin - gravityZoneLength);
         gravityEndIndex = gravityStartIndex + gravityZoneLength;
         Debug.Log("El comienzo de la zona Gravedad está creado en el beat " + gravityStartIndex);
@@ -299,23 +302,32 @@ public class AlObstacleGenerator : MonoBehaviour
         slowMotionIndexes = new List<int>();
 
         int numSlowMotions = Random.Range(1, 4); //Va a haber entre 1 y 3 (el 4 es excluído) slowMotions
-        int marginBetweenSMPowerUps = 15; //Mínimo tiene que haber 15 beats entre un SlowMotion y otro
+        int marginBetweenSMPowerUps = 25; //Mínimo tiene que haber 15 beats entre un SlowMotion y otro
 
         for (int i = 0; i < numSlowMotions; ++i) //Para cada slowMotion que se vaya a crear
         {
-            int randomStart;
-            if (i == 0) randomStart = margin;
-            else randomStart = slowMotionIndexes[i - 1] + marginBetweenSMPowerUps;
-
-            int randomEnd;
-            if (i == numSlowMotions - 1) randomEnd = margin;
-            else
+            //Index válido: no seleccionado por otro powerUp anterior (gravity) y con marginBetweenBQPowerUps entre los de su propio tipo
+            int newSlowMotionIndex = 0;
+            bool indexValido = false;
+            while (!indexValido)
             {
-                int powerUpsLeft = numSlowMotions - 1 - i; //Numero de powerUps que aún quedan por poner para calcular los márgenes
-                randomEnd = beats.Count - margin - (marginBetweenSMPowerUps * powerUpsLeft);
-            }
+                newSlowMotionIndex = Random.Range(margin, beats.Count - 1 - margin);
 
-            int newSlowMotionIndex = Random.Range(randomStart, randomEnd);
+                //Esto indica si este index es válido comprobando que no se haya usado en otro powerUp anterior (gravity)
+                indexValido = newSlowMotionIndex != gravityStartIndex && newSlowMotionIndex != gravityEndIndex;
+
+                //Aún falta comprobar la separacion entre los powerUps del mismo tipo (si i = 0 no hace falta)
+                if (i > 0)
+                {
+                    int j = 0;
+                    while (indexValido && j < i) //Mientras siga siendo válido, seguimos comprobando (si no es válido ya no hace falta comprobar)
+                    {
+                        indexValido = newSlowMotionIndex > slowMotionIndexes[j] + marginBetweenSMPowerUps || newSlowMotionIndex < slowMotionIndexes[j] - marginBetweenSMPowerUps;
+                        j++;
+                    }
+                }
+            }
+            
             slowMotionIndexes.Add(newSlowMotionIndex);
 
             Debug.Log("Power Up de SlowMotion creado en el beat " + newSlowMotionIndex);
@@ -326,23 +338,32 @@ public class AlObstacleGenerator : MonoBehaviour
         lowResIndexes = new List<int>();
 
         int numLowRes = Random.Range(1, 3); //Va a haber entre 1 y 2 (el 3 es excluído) LowRes
-        int marginBetweenBQPowerUps = 30; //Mínimo tiene que haber 30 beats entre un SlowMotion y otro
+        int marginBetweenBQPowerUps = 50; //Mínimo tiene que haber 30 beats entre un SlowMotion y otro
 
         for (int i = 0; i < numLowRes; ++i) //Para cada LowRes que se vaya a crear
         {
-            int randomStart;
-            if (i == 0) randomStart = margin;
-            else randomStart = lowResIndexes[i - 1] + marginBetweenBQPowerUps;
-
-            int randomEnd;
-            if (i == numLowRes - 1) randomEnd = margin;
-            else
+            //Index válido: no seleccionado por otro powerUp anterior (gravity y SlowMotion) y con marginBetweenBQPowerUps entre los de su propio tipo
+            int newLowResIndex = 0;
+            bool indexValido = false;
+            while(!indexValido)
             {
-                int powerUpsLeft = numLowRes - 1 - i; //Numero de powerUps que aún quedan por poner para calcular los márgenes
-                randomEnd = beats.Count - margin - (marginBetweenBQPowerUps * powerUpsLeft);
-            }
+                newLowResIndex = Random.Range(margin, beats.Count - 1 - margin);
 
-            int newLowResIndex = Random.Range(randomStart, randomEnd);
+                //Esto indica si este index es válido comprobando que no se haya usado en otro powerUp anterior (gravity y slowMotion)
+                indexValido = newLowResIndex != gravityStartIndex && newLowResIndex != gravityEndIndex && !slowMotionIndexes.Contains(newLowResIndex);
+            
+                //Aún falta comprobar la separacion entre los powerUps del mismo tipo (si i = 0 no hace falta)
+                if (i > 0)
+                {
+                    int j = 0;
+                    while (indexValido && j < i) //Mientras siga siendo válido, seguimos comprobando (si no es válido ya no hace falta comprobar)
+                    {
+                        indexValido = newLowResIndex > lowResIndexes[j] + marginBetweenBQPowerUps || newLowResIndex < lowResIndexes[j] - marginBetweenBQPowerUps;
+                        j++;
+                    }
+                }
+            }
+            
             lowResIndexes.Add(newLowResIndex);
 
             Debug.Log("Power Up de LowRes creado en el beat " + newLowResIndex);
