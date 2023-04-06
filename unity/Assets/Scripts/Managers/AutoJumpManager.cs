@@ -14,7 +14,7 @@ public class AutoJumpManager : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         if (GameManager.instance != null)
-            GameManager.instance.setAutoJumpManager(this);
+            GameManager.instance.SetAutoJumpManager(this);
         autoJumpInstances = new List<GameObject>();
         autoJumpOnColor = Color.green;
         autoJumpOffColor = Color.red;

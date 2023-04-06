@@ -35,42 +35,42 @@ public class GameManager : MonoBehaviour
         deathTime = 0;
     }
 
-    public void addCoin() { coins++; }
-    public bool getDeath() { return death; }
-    public void setDeath(bool b) { death = b; }
-    public bool getEnd() { return end; }
-    public void setEnd(bool b) { end = b; }
+    public void AddCoin() { coins++; }
+    public bool GetDeath() { return death; }
+    public void SetDeath(bool b) { death = b; }
+    public bool GetEnd() { return end; }
+    public void SetEnd(bool b) { end = b; }
 
-    public double getDeathTime() { return deathTime; }
-    public void setDeathTime(double t) { deathTime = t; }
+    public double GetDeathTime() { return deathTime; }
+    public void SetDeathTime(double t) { deathTime = t; }
 
-    public void setSong(string s) { song = s; }
-    public string getSong() { return song; }
-    public void setExtension(string s) { extension = s; }
-    public string getExtension() { return extension; }
+    public void SetSong(string s) { song = s; }
+    public string GetSong() { return song; }
+    public void SetExtension(string s) { extension = s; }
+    public string GetExtension() { return extension; }
 
-    public void setAutoJumpManager(AutoJumpManager a) { autoJumpManager = a; }
-    public void setDebugManager(DebugManager d) { debugManager = d; }
-    public void setPowerUpsManager(PowerUpsManager p) { powerUpsManager = p; }
+    public void SetAutoJumpManager(AutoJumpManager a) { autoJumpManager = a; }
+    public void SetDebugManager(DebugManager d) { debugManager = d; }
+    public void SetPowerUpsManager(PowerUpsManager p) { powerUpsManager = p; }
 
-    public void setDrumsEffect(LightManager d) { lightManager = d; }
+    public void SetDrumsEffect(LightManager d) { lightManager = d; }
 
-    public PowerUpsManager getPowerUpsManager() { return powerUpsManager; }
+    public PowerUpsManager GetPowerUpsManager() { return powerUpsManager; }
 
     //Debug mode
-    public DebugManager getDebugManager() { return debugManager; }
+    public DebugManager GetDebugManager() { return debugManager; }
 
-    public void changeDebugMode() { debugManager.changeDebugMode(); }
+    public void ChangeDebugMode() { debugManager.changeDebugMode(); }
 
 
 
     //AutoJump
-    public AutoJumpManager getAutoJumpManager() { return autoJumpManager; }
+    public AutoJumpManager GetAutoJumpManager() { return autoJumpManager; }
 
 
-    public void changeAutoJumpMode() { autoJumpManager.ChangeAutoJumpMode(); }
+    public void ChangeAutoJumpMode() { autoJumpManager.ChangeAutoJumpMode(); }
 
-    public FMOD.Studio.EventInstance getMusicInstance()
+    public FMOD.Studio.EventInstance GetMusicInstance()
     {
         SelectMusic music = GameObject.FindGameObjectWithTag("Player").GetComponent<SelectMusic>();
         if (!music) Debug.Log("Se está intentando llamar a la canción cuando no hay ni player");
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
         return music.getEventInstance();
     }
 
-    public void changeZone(ZoneType type)
+    public void ChangeZone(ZoneType type)
     {
         if (lightManager == null)
         {

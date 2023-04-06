@@ -36,12 +36,12 @@ public class Zone : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.getEnd()) return;
+        if (GameManager.instance.GetEnd()) return;
 
-        if (GameManager.instance.getDeath())
+        if (GameManager.instance.GetDeath())
         {
             EndZone(true);
-            timeCount = GameManager.instance.getDeathTime();
+            timeCount = GameManager.instance.GetDeathTime();
             for (int i = 0; i < zData.Count; i++)
             {
                 ZoneData aux = zData[i];
@@ -101,7 +101,7 @@ public class Zone : MonoBehaviour
             RenderSettings.skybox = lowSky;
             playerSprite.color = lowColor;
         }
-        GameManager.instance.changeZone(type);
+        GameManager.instance.ChangeZone(type);
     }
 
     void EndZone(bool death = false)
@@ -111,7 +111,7 @@ public class Zone : MonoBehaviour
         RenderSettings.skybox = originalSkyBox;
         playerSprite.color = originalColor;
         if (death) water.fillAmount = 0;
-        GameManager.instance.changeZone(ZoneType.STANDARD);
+        GameManager.instance.ChangeZone(ZoneType.STANDARD);
     }
 
     private void HighZone(List<float> beats, List<float> rmse)

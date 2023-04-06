@@ -24,15 +24,15 @@ public class LightManager : MonoBehaviour
         onsetCount = onset.Count;
         newBackgroundColor = new Color(0, 0.64f, 1f, 0.3f);
         newLightColor = Color.blue;
-        GameManager.instance.setDrumsEffect(this);
+        GameManager.instance.SetDrumsEffect(this);
     }
 
     private void Update()
     {
-        if (GameManager.instance.getEnd()) return;
-        if (GameManager.instance.getDeath())
+        if (GameManager.instance.GetEnd()) return;
+        if (GameManager.instance.GetDeath())
         {
-            time = GameManager.instance.getDeathTime();
+            time = GameManager.instance.GetDeathTime();
             i = 0;
             while (onset[i] < time) i++;
         }

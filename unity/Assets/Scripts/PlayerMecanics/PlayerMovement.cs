@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -23,8 +24,6 @@ public class PlayerMovement : MonoBehaviour
         public double time;
         //Datos de los power Ups (así no hay que cambiar código en PlayerMovement cada vez que se añadan más powerUps)
         public PowerUpsManager.PowerUpsData powerUpsData;
-
-
         public spawnData(Vector3 position, GameObject o, double t, PowerUpsManager.PowerUpsData puD)
         {
             pos = position;
@@ -40,13 +39,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        GameManager.instance.setDeath(false);
-        GameManager.instance.setEnd(false);
+        GameManager.instance.SetDeath(false);
+        GameManager.instance.SetEnd(false);
     }
 
     void Start()
     {
-        powerUpsManager = GameManager.instance.getPowerUpsManager();
+        powerUpsManager = GameManager.instance.GetPowerUpsManager();
         int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().getScopt()[2] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY());
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
@@ -86,18 +85,18 @@ public class PlayerMovement : MonoBehaviour
                 var obj = spawns[i].obj;
                 Destroy(obj);
                 spawns.RemoveAt(i);
-                playerDeath();
+                PlayerDeath();
             }
         }
 
         if (Input.GetKeyDown(KeyCode.J))
         {
-            GameManager.instance.changeAutoJumpMode();
+            GameManager.instance.ChangeAutoJumpMode();
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            GameManager.instance.changeDebugMode();
+            GameManager.instance.ChangeDebugMode();
         }
 
         if (onGround)
@@ -130,34 +129,32 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.down) playerDeath();
+        if (normal == Vector2.down) PlayerDeath();
         else if (normal == Vector2.up) onGround = true;
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.left) playerDeath();
+        if (normal == Vector2.left) PlayerDeath();
     }
 
 
-    public void playerDeath()
+    public void PlayerDeath()
     {
-        GameManager.instance.setDeath(true);
-
+        GameManager.instance.SetDeath(true);
         spawnData lastSpawn = spawns[spawns.Count - 1];
-
         onGround = false;
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
         transform.position = lastSpawn.pos;
-        GameManager.instance.setDeathTime(lastSpawn.time);
+        GameManager.instance.SetDeathTime(lastSpawn.time);
         crono.setActualTime(lastSpawn.time);
 
         GetComponent<RestartMusic>().restartMusic((int)(lastSpawn.time * 1000.0));
 
         //Resetear el estado de los powerUps
-        powerUpsManager.resetData(lastSpawn.powerUpsData);
+        powerUpsManager.ResetData(lastSpawn.powerUpsData);
     }
 
     private void Jump()
@@ -165,10 +162,8 @@ public class PlayerMovement : MonoBehaviour
         if (onGround)
         {
             rb.velocity = Vector2.zero;
-            rb.AddForce(Vector2.up * jumpForce/*26.6581f*/, ForceMode2D.Impulse);
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             autoJump = jump = onGround = false;
-            //Debug.Log("JUMP");
-            
         } 
     }
     internal void AutoJump() { jump = true; autoJump = true; }

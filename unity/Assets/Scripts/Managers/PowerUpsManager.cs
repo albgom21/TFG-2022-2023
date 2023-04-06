@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,6 +43,7 @@ public class PowerUpsManager : MonoBehaviour
     [SerializeField]
     private Image powerUpSlowImg;
 
+    private Animator cameraAnimator;
     private bool changedPosX = false;
     private void Awake()
     {
@@ -55,34 +57,47 @@ public class PowerUpsManager : MonoBehaviour
         powerUpSlowImg.fillAmount = 0;
 
         if (GameManager.instance != null)
-            GameManager.instance.setPowerUpsManager(this);
+            GameManager.instance.SetPowerUpsManager(this);
+    }
+
+    private void Start()
+    {
+        cameraAnimator = cam.gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        updateSlowMotion();
-        updateLowRes();
+        UpdateSlowMotion();
+        UpdateLowRes();
+
+        //if (cam.transform.rotation.eulerAngles != newCameraRotation.eulerAngles)
+        //{
+        //    Debug.Log(cam.transform.rotation.eulerAngles + "    " + newCameraRotation.eulerAngles);
+        //    cam.transform.transform.rotation = Quaternion.Euler(0, 0,
+        //            Mathf.MoveTowards(cam.transform.rotation.eulerAngles.z, newCameraRotation.eulerAngles.z, Time.deltaTime * rotationSpeed));
+        //    Debug.Log("PRIMERA ROTACIÓN");
+        //}
     }
-        
+
     //Añade una instancia a la lista de powerUps
-    public void addPowerUpInstance(GameObject newPowerUp)
+    public void AddPowerUpInstance(GameObject newPowerUp)
     {
         powerUpsInstances.Add(newPowerUp);
     }
 
     //Resetea todos los power ups (vuelven a aparecer cuando mueres)
-    public void resetInstances()
+    public void ResetInstances()
     {
         for (int i = 0; i < powerUpsInstances.Count; ++i)
         {
-            powerUpsInstances[i].GetComponent<PowerUp>().resetPowerUp();
+            powerUpsInstances[i].GetComponent<PowerUp>().ResetPowerUp();
         }
     }
 
     // ----------------------------------- GRAVITY POWER UP --------------------------------
 
-    public void changeGravity()
+    public void ChangeGravity()
     {
         gravityPowerUp = !gravityPowerUp;
 
@@ -92,26 +107,26 @@ public class PowerUpsManager : MonoBehaviour
             rawImageNormal.SetActive(true);
             rawImageLow.SetActive(false);
             cam.targetTexture = highRes;
-            rawImageNormal.transform.localRotation = new Quaternion(-180, 0, 0, 0);
+            cameraAnimator.SetBool("GravityOn", true);
+
         }
-        else
-        {
-            //Código de cuando se ha desactivado la gravedad
-            rawImageNormal.transform.localRotation = new Quaternion(0, 0, 0, 0);
-        }
+        else //Código de cuando se ha desactivado la gravedad
+            cameraAnimator.SetBool("GravityOn", false);
+
+        
     }
 
-    public bool getGravityChanged() { return gravityPowerUp; }
+    public bool GetGravityChanged() { return gravityPowerUp; }
 
     //Reseteo de gravity al Respawnear
-    private void resetGravity(bool newGravity)
+    private void ResetGravity(bool newGravity)
     {
-        if (newGravity != gravityPowerUp) changeGravity();
+        if (newGravity != gravityPowerUp) ChangeGravity();
     }
 
     // ----------------------------------- SLOW MOTION POWER UP --------------------------------
 
-    private void updateSlowMotion()
+    private void UpdateSlowMotion()
     {
         if (slowMotionPowerUp)
         {
@@ -122,13 +137,13 @@ public class PowerUpsManager : MonoBehaviour
 
                 if (smTimeScale < 0.6f) smTimeScale = 0.6f; //Si me paso, recoloco en el límite
 
-                changeTimeScale(smTimeScale);
+                ChangeTimeScale(smTimeScale);
             }
 
             //Timer
             slowMotionTimer -= Time.deltaTime;
 
-            if (slowMotionTimer <= 0.0f) slowMotionOff();
+            if (slowMotionTimer <= 0.0f) SlowMotionOff();
         }
         else
         {
@@ -139,14 +154,14 @@ public class PowerUpsManager : MonoBehaviour
 
                 if (smTimeScale > 1.0f) smTimeScale = 1.0f; //Si me paso, recoloco en el límite
 
-                changeTimeScale(smTimeScale);
+                ChangeTimeScale(smTimeScale);
             }
         }
 
         //HUD
         powerUpLowImg.fillAmount = lowResTimer / 5.0f;
     }
-    public void slowMotionOn(float time)
+    public void SlowMotionOn(float time)
     {
         slowMotionPowerUp = true;
         slowMotionTimer = time;
@@ -158,7 +173,7 @@ public class PowerUpsManager : MonoBehaviour
         }
     }
 
-    private void slowMotionOff()
+    private void SlowMotionOff()
     {
         slowMotionPowerUp = false;
         slowMotionTimer = 0.0f;
@@ -172,17 +187,17 @@ public class PowerUpsManager : MonoBehaviour
         }
     }
 
-    private void changeTimeScale(float newTimeScale)
+    private void ChangeTimeScale(float newTimeScale)
     {
         Time.timeScale = newTimeScale;
-        GameManager.instance.getMusicInstance().setPitch(newTimeScale);
+        GameManager.instance.GetMusicInstance().setPitch(newTimeScale);
     }
 
     //Devuelve cuanto tiempo queda de power Up (0 si no está activado), para guardarlo en el checkpoint
-    public float getSlowMotionTimer() { return slowMotionTimer; }
+    public float GetSlowMotionTimer() { return slowMotionTimer; }
 
     //Resetea el efecto SlowMotion al respawnear
-    private void resetSlowMotion(float newTime)
+    private void ResetSlowMotion(float newTime)
     {
         if (newTime > 0.0f) //Si en el checkpoint si había SlowMotion
         {
@@ -192,7 +207,7 @@ public class PowerUpsManager : MonoBehaviour
                 //Cambia a activado SIN transición
                 slowMotionPowerUp = true;
                 smTimeScale = 0.6f;
-                changeTimeScale(smTimeScale);
+                ChangeTimeScale(smTimeScale);
             }
 
             //CAMBIO DE HUD, AÑADIENDO EL POWER UP SI NO LO ESTABA O CAMBIANDOLO A newTime SI LO HABÍA ANTES TAMBIÉN
@@ -203,7 +218,7 @@ public class PowerUpsManager : MonoBehaviour
             slowMotionTimer = 0.0f;
             slowMotionPowerUp = false;
             smTimeScale = 1.0f;
-            changeTimeScale(smTimeScale);
+            ChangeTimeScale(smTimeScale);
 
             //CAMBIO HUD, QUITANDO EL POWER UP
 
@@ -216,20 +231,20 @@ public class PowerUpsManager : MonoBehaviour
 
     // ----------------------------------- LOW RES POWER UP --------------------------------
 
-    private void updateLowRes()
+    private void UpdateLowRes()
     {
         if (lowResPowerUp)
         {
             lowResTimer -= Time.deltaTime;
 
-            if (lowResTimer <= 0.0f) lowResOff();
+            if (lowResTimer <= 0.0f) LowResOff();
         }
 
         //HUD
         powerUpSlowImg.fillAmount = slowMotionTimer / 5.0f;
     }
 
-    public void lowResOn(float time)
+    public void LowResOn(float time)
     {
         lowResPowerUp = true;
         lowResTimer = time;
@@ -248,7 +263,7 @@ public class PowerUpsManager : MonoBehaviour
         }
     }
 
-    private void lowResOff()
+    private void LowResOff()
     {
         lowResPowerUp = false;
         lowResTimer = 0.0f;
@@ -268,10 +283,10 @@ public class PowerUpsManager : MonoBehaviour
     }
 
     //Devuelve cuanto tiempo queda de power Up (0 si no está activado), para guardarlo en el checkpoint
-    public float getLowResTimer() { return lowResTimer; }
+    public float GetLowResTimer() { return lowResTimer; }
 
     //Resetea el efecto LowRes al respawnear
-    private void resetLowRes(float newTime)
+    private void ResetLowRes(float newTime)
     {
         if (newTime > 0.0f) //Si en el checkpoint si había LowRes
         {
@@ -279,14 +294,14 @@ public class PowerUpsManager : MonoBehaviour
 
             if (!lowResPowerUp) //Si al morir, no tenías el powerUp activado, lo activas
             {
-                lowResOn(newTime);
+                LowResOn(newTime);
                 FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Quality", 0.0f, true); //Cambio SIN TRANSICIÓN
             }
 
         }
         else if (lowResPowerUp)//Si en el checkPoint no había losRes y al morir si lo tenías
         {
-            lowResOff();
+            LowResOff();
             FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Quality", 1.0f, true); //Cambio SIN TRANSICIÓN
 
         }
@@ -303,17 +318,17 @@ public class PowerUpsManager : MonoBehaviour
     }
 
     //Carga de datos del checkPoint al respawnear
-    public void resetData(PowerUpsData newData)
+    public void ResetData(PowerUpsData newData)
     {
-        resetInstances(); //Hacer reaparecer las instancias de los powerups
+        ResetInstances(); //Hacer reaparecer las instancias de los powerups
 
         //Resetear el efecto de Gravity
-        resetGravity(newData.gravity);
+        ResetGravity(newData.gravity);
 
         //Resetear el efecto de SlowMotion
-        resetSlowMotion(newData.slowMotionTimeLeft);
+        ResetSlowMotion(newData.slowMotionTimeLeft);
 
         //Resetear el efecto de LowRes
-        resetLowRes(newData.lowResTimeLeft);
+        ResetLowRes(newData.lowResTimeLeft);
     }
 }

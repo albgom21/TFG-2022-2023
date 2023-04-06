@@ -8,6 +8,6 @@ public class Spawn : MonoBehaviour
     {
         PlayerMovement mov = collision.gameObject.GetComponent<PlayerMovement>();
         if (mov != null)
-            GameManager.instance.setDeath(false);
+            GameManager.instance.SetDeath(false);
     }
 }

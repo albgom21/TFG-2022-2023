@@ -12,12 +12,12 @@ public class AutoJump : MonoBehaviour
     {
 
         //DebugMode
-        debugManager = GameManager.instance.getDebugManager();
+        debugManager = GameManager.instance.GetDebugManager();
         debugManager.addAutoJumpInstance(this.gameObject);
         this.GetComponent<SpriteRenderer>().enabled = debugManager.getDebugMode();
 
         //AutoJumpMode
-        autoJumpManager = GameManager.instance.getAutoJumpManager();
+        autoJumpManager = GameManager.instance.GetAutoJumpManager();
         autoJumpManager.AddInstance(this.gameObject);
         bool startEnabled = autoJumpManager.GetAutoJumpEnabled();
         if (startEnabled) GetComponent<SpriteRenderer>().color = Color.green;

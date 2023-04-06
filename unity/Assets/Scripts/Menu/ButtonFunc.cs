@@ -23,8 +23,8 @@ public class ButtonFunc : MonoBehaviour
         songName = GetComponent<TextMeshProUGUI>().text;
 
         // Establecer la canción y su extensión en el GM
-        GameManager.instance.setSong(songName);
-        GameManager.instance.setExtension(extension);
+        GameManager.instance.SetSong(songName);
+        GameManager.instance.SetExtension(extension);
 
         // Rutas para leer las canciones y para comprobar ficheros generados
         creatrePaths();

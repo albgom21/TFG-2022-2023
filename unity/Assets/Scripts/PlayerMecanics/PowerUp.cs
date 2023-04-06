@@ -18,21 +18,21 @@ public class PowerUp : MonoBehaviour
 
     void Start()
     {
-        powerUpsManager = GameManager.instance.getPowerUpsManager();
+        powerUpsManager = GameManager.instance.GetPowerUpsManager();
         sprite = GetComponent<SpriteRenderer>();
         collider = GetComponent<BoxCollider2D>();
 
-        powerUpsManager.addPowerUpInstance(this.gameObject);
+        powerUpsManager.AddPowerUpInstance(this.gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         PlayerMovement pm = collision.gameObject.GetComponent<PlayerMovement>();
 
-        if (pm != null) consumePowerUp();
+        if (pm != null) ConsumePowerUp();
     }
 
-    public void consumePowerUp()
+    public void ConsumePowerUp()
     { 
         sprite.enabled = false;
         collider.enabled = false;
@@ -40,13 +40,13 @@ public class PowerUp : MonoBehaviour
         switch (powerUpType)
         {
             case powerUpTypes.Gravity:
-                powerUpsManager.changeGravity();
+                powerUpsManager.ChangeGravity();
                 break;
             case powerUpTypes.SlowMotion:
-                powerUpsManager.slowMotionOn(5.0f); // HACER REFACTOR DE ESTA VARIABLE 
+                powerUpsManager.SlowMotionOn(5.0f); // HACER REFACTOR DE ESTA VARIABLE 
                 break;
             case powerUpTypes.LowRes:
-                powerUpsManager.lowResOn(5.0f);
+                powerUpsManager.LowResOn(5.0f);
                 break;
             default:
                 Debug.Log("KA PASAO POWER UP SIN TIPO O KHÉ");
@@ -54,7 +54,7 @@ public class PowerUp : MonoBehaviour
         }
     }
 
-    public void resetPowerUp() {
+    public void ResetPowerUp() {
         sprite.enabled = true;
         collider.enabled = true;
     }

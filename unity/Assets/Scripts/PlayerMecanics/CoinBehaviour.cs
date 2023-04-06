@@ -9,7 +9,7 @@ public class CoinBehaviour : MonoBehaviour
         PlayerMovement pm = collision.gameObject.GetComponent<PlayerMovement>();
         if (pm != null)
         {
-            GameManager.instance.addCoin();
+            GameManager.instance.AddCoin();
             Destroy(gameObject);
         }
     }

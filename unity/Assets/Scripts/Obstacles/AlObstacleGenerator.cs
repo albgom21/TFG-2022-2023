@@ -291,7 +291,7 @@ public class AlObstacleGenerator : MonoBehaviour
 
         //GRAVITY POWER UP
         int gravityZoneLength = Random.Range(10, 30); //La zona con gravedad cambiada serán entre 10 y 30 beats
-        
+
         gravityStartIndex = Random.Range(margin, beats.Count - margin - gravityZoneLength);
         gravityEndIndex = gravityStartIndex + gravityZoneLength;
         Debug.Log("El comienzo de la zona Gravedad está creado en el beat " + gravityStartIndex);

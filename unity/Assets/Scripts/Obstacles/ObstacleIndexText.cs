@@ -8,7 +8,7 @@ public class ObstacleIndexText : MonoBehaviour
   
     void Start()
     {
-        debugManager = GameManager.instance.getDebugManager();
+        debugManager = GameManager.instance.GetDebugManager();
         debugManager.addObstacleIndexTextInstance(this.gameObject);
         this.GetComponent<MeshRenderer>().enabled = debugManager.getDebugMode();
     }

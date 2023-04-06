@@ -16,7 +16,7 @@ public class DebugManager : MonoBehaviour
     void Start()
     {
         if (GameManager.instance != null)
-            GameManager.instance.setDebugManager(this);
+            GameManager.instance.SetDebugManager(this);
         syncInstances = new List<GameObject>();
         autoJumpInstances = new List<GameObject>();
         obstacleIndexTextInstances = new List<GameObject>();

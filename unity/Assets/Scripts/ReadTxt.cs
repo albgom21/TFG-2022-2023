@@ -47,11 +47,11 @@ public class ReadTxt : MonoBehaviour
         //Desde la escena del propio nivel
         if (!pruebasDesdeMenu)
         {
-            GameManager.instance.setSong(song);
-            GameManager.instance.setExtension(".wav");
+            GameManager.instance.SetSong(song);
+            GameManager.instance.SetExtension(".wav");
         }
         else   //Desde el menú
-            song = GameManager.instance.getSong();
+            song = GameManager.instance.GetSong();
 
         // Crear las rutas de los txt
         rutaBeats = path + song + "_beats.txt";

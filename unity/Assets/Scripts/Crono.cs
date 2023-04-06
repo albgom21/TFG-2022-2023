@@ -17,16 +17,16 @@ public class Crono : MonoBehaviour
         textoCrono = GetComponent<Text>();
         timeActivated = Time.time;
 
-        debugManager = GameManager.instance.getDebugManager();
+        debugManager = GameManager.instance.GetDebugManager();
         debugManager.setCronoInstance(textoCrono);
         textoCrono.enabled = debugManager.getDebugMode();
     }
 
     private void Update()
     {
-        if (!GameManager.instance.getEnd())
+        if (!GameManager.instance.GetEnd())
         {
-            if (GameManager.instance.getDeath())
+            if (GameManager.instance.GetDeath())
                 timeActivated = Time.time;
             t = Time.time - timeActivated + spawnTime;                   // Calcular el tiempo que lleva el crono activado         
             textoCrono.text = t.ToString("F2") + "s";        // Mostrar el tiempo sin decimales   

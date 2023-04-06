@@ -36,10 +36,10 @@ public class PulseEffect : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.instance.getEnd())
+        if (!GameManager.instance.GetEnd())
         {
 
-            if (GameManager.instance.getDeath())
+            if (GameManager.instance.GetDeath())
             {
                 timeCount = 0;
                 cont = 0;

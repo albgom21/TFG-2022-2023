@@ -28,7 +28,7 @@ public class EndBehaviour : MonoBehaviour
                 b.gameObject.SetActive(true);
             music.stopMusic();
             pm.gameObject.SetActive(false);
-            GameManager.instance.setEnd(true);
+            GameManager.instance.SetEnd(true);
         }           
     }
 }

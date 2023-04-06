@@ -59,7 +59,7 @@ class SelectMusic : MonoBehaviour
 #endif
     private void Awake()
     {
-        fileName = GameManager.instance.getSong() + GameManager.instance.getExtension();
+        fileName = GameManager.instance.GetSong() + GameManager.instance.GetExtension();
         underWaterEffect = GetComponent<UnderWaterEffect>();
     }
 
