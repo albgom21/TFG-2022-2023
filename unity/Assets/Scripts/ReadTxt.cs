@@ -8,23 +8,24 @@ using System;
 public class ReadTxt : MonoBehaviour
 {
     /*
-     Clase para leer las características del audio extraidas por el programa de Python
+     Clase para leer las caracterï¿½sticas del audio extraidas por el programa de Python
     */
 
     // DEBUG
     public bool pruebasDesdeMenu = false;
 
     // RUTAS
-    public string song = "200-BPM";         // Título del audio analizado
+    public string song = "200-BPM";         // Tï¿½tulo del audio analizado
+    public string format = ".wav";
     string path = "Assets/FeaturesExtraction/Txt/";            // Ruta dentro del proyecto donde se guardan los txt
-    string rutaBeats, rutaSC, rutaRMSE,     // Nombre de cada característica en los txt
+    string rutaBeats, rutaSC, rutaRMSE,     // Nombre de cada caracterï¿½stica en los txt
            rutaSamples, rutaSr, rutaDuration, rutaPlpBeats,
            rutaAgudosTiempo, rutaAgudosValoresNorm, rutaAgudos,
            rutaGravesTiempo, rutaGravesValoresNorm, rutaGraves,
            rutaOnset;
 
 
-    // ESTRUCTURAS DE DATOS PARA GUARDAS LAS CARACTERÍSTICAS
+    // ESTRUCTURAS DE DATOS PARA GUARDAS LAS CARACTERï¿½STICAS
     List<float> beats = new List<float>();      // Tiempo en seg cuando se producen los beats
     List<float> plpBeats = new List<float>();
     List<float> scopt = new List<float>();      // Valor del centroide espectral en los instantes en los que hay beats
@@ -40,7 +41,7 @@ public class ReadTxt : MonoBehaviour
     float[,] matriz_graves;                     // Tiempo y valor en db de los graves
 
     int sr;                                     // Sample rate (Frecuencia de muestreo)    
-    float duration;                             // Duración en segundos del audio
+    float duration;                             // Duraciï¿½n en segundos del audio
 
     void Awake()
     {
@@ -48,9 +49,9 @@ public class ReadTxt : MonoBehaviour
         if (!pruebasDesdeMenu)
         {
             GameManager.instance.SetSong(song);
-            GameManager.instance.SetExtension(".wav");
+            GameManager.instance.SetExtension(format);
         }
-        else   //Desde el menú
+        else   //Desde el menï¿½
             song = GameManager.instance.GetSong();
 
         // Crear las rutas de los txt
@@ -91,10 +92,10 @@ public class ReadTxt : MonoBehaviour
         //readMatriz(ref matriz_graves, rutaGraves);
     }
 
-    // Lee una caracterísitca de audio que este en un txt, con una valor float por fila
+    // Lee una caracterï¿½sitca de audio que este en un txt, con una valor float por fila
     private void readFeature(ref List<float> lista, string ruta)
     {
-        // Lectura por líneas y luego palabras
+        // Lectura por lï¿½neas y luego palabras
         if (File.Exists(ruta))
         {
             string[] lines = File.ReadAllLines(ruta);
@@ -104,10 +105,10 @@ public class ReadTxt : MonoBehaviour
         else Debug.LogError("El archivo de texto para leer una FEATURE no existe en la ruta especificada: " + ruta);
     }
 
-    // Lee una caracterísitca de audio que este en un txt, siendo esta un único int
+    // Lee una caracterï¿½sitca de audio que este en un txt, siendo esta un ï¿½nico int
     private void readInt(ref int n, string ruta)
     {
-        // Lectura por líneas y luego palabras
+        // Lectura por lï¿½neas y luego palabras
         if (File.Exists(ruta))
         {
             string[] lines = File.ReadAllLines(ruta);
@@ -116,10 +117,10 @@ public class ReadTxt : MonoBehaviour
         else Debug.LogError("El archivo de texto para leer un INT no existe en la ruta especificada: " + ruta);
     }
 
-    // Lee una caracterísitca de audio que este en un txt, siendo esta un único float
+    // Lee una caracterï¿½sitca de audio que este en un txt, siendo esta un ï¿½nico float
     private void readFloat(ref float n, string ruta)
     {
-        // Lectura por líneas y luego palabras
+        // Lectura por lï¿½neas y luego palabras
         if (File.Exists(ruta))
         {
             string[] lines = File.ReadAllLines(ruta);
@@ -128,7 +129,7 @@ public class ReadTxt : MonoBehaviour
         else Debug.LogError("El archivo de texto para leer un FLOAT no existe en la ruta especificada: " + ruta);
     }
 
-    // Lee una caracterísitca de audio que este en un txt, con la forma de una matriz bidimensional,
+    // Lee una caracterï¿½sitca de audio que este en un txt, con la forma de una matriz bidimensional,
     // las filas compuestas por un valor float separado por un espacio seguido del otro valor float
     // el cambio de fila viene dado por cambio de linea \n
     private void readMatriz(ref float[,] matriz, string ruta)
@@ -146,7 +147,7 @@ public class ReadTxt : MonoBehaviour
                 string[] numeros = lineas[i].Split(' ');
                 for (int j = 0; j < columnas; j++)
                 {
-                    if (numeros.Length != columnas) // Línea vacía o incompleta, salta esa iteración del bucle
+                    if (numeros.Length != columnas) // Lï¿½nea vacï¿½a o incompleta, salta esa iteraciï¿½n del bucle
                         continue;
                     matriz[i, j] = float.Parse(numeros[j]) / 1000.0f;
                 }

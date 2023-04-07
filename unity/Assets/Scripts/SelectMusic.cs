@@ -169,6 +169,8 @@ class SelectMusic : MonoBehaviour
         eventInstance.setTimelinePosition(t);
         eventInstance.start();
         eventInstance.release();
+
+        eventInstance.setPitch(Time.timeScale);
     }
 
     public void Stop()

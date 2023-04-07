@@ -27,11 +27,11 @@ public class ButtonFunc : MonoBehaviour
         GameManager.instance.SetExtension(extension);
 
         // Rutas para leer las canciones y para comprobar ficheros generados
-        creatrePaths();
+        createPaths();
 
         // Llamada a spleeter con 1er arg la canción y 2do arg el lugar donde deja las pistas generadas
-        if (!checkFiles(pathsSpleeter))
-            RunPythonScript("Assets/FeaturesExtraction/spleeter_ex.py", "./" + path, "./Assets/StreamingAssets/");
+        //if (!checkFiles(pathsSpleeter))
+        //    RunPythonScript("Assets/FeaturesExtraction/spleeter_ex.py", "./" + path, "./Assets/StreamingAssets/");
 
         // Si no existen los ficheros llamar a Python para la extracción de las características
         if (!checkFiles(pathsFeatures))
@@ -43,7 +43,7 @@ public class ButtonFunc : MonoBehaviour
 
     // Crea las rutas necesarias para comprobar si ya existen los archivos y no ejecutar de nuevo los scripts de Python
     //----- AÑADIR MAS RUTAS ----
-    private void creatrePaths()
+    private void createPaths()
     {
         path = "Assets/StreamingAssets/" + songName + extension;  // Ruta donde se encuentra la canción seleccionada
         checkPath = "Assets/FeaturesExtraction/Txt/" + songName;  // Ruta donde se encuentran las características de la canción

@@ -10,11 +10,11 @@ public class AutoJump : MonoBehaviour
 
     private void Start()
     {
-
         //DebugMode
         debugManager = GameManager.instance.GetDebugManager();
         debugManager.addAutoJumpInstance(this.gameObject);
-        this.GetComponent<SpriteRenderer>().enabled = debugManager.getDebugMode();
+        GetComponent<SpriteRenderer>().enabled = debugManager.getDebugMode();
+
 
         //AutoJumpMode
         autoJumpManager = GameManager.instance.GetAutoJumpManager();
@@ -22,7 +22,7 @@ public class AutoJump : MonoBehaviour
         bool startEnabled = autoJumpManager.GetAutoJumpEnabled();
         if (startEnabled) GetComponent<SpriteRenderer>().color = Color.green;
         else GetComponent<SpriteRenderer>().color = Color.red;
-        this.enabled = startEnabled;
+        GetComponent<Collider2D>().enabled = startEnabled;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

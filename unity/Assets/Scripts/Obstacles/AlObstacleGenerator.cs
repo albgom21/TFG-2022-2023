@@ -29,6 +29,8 @@ public class AlObstacleGenerator : MonoBehaviour
     private List<int> slowMotionIndexes; //Lista de index donde se crearán los powerUps de slowMotion
     private List<int> lowResIndexes; //Lista de index donde se crearán los powerUps de lowRes
 
+    private List<int> allPowerUpsIndexes; //Lista de index con TODOS los powerUps
+
     [SerializeField] private GameObject endPrefab;
     [SerializeField] private GameObject groundToDestroy;
 
@@ -129,9 +131,14 @@ public class AlObstacleGenerator : MonoBehaviour
 
             if (lastObstacle == null || spaceBetweenBeats > lastObstacle.getPostX())
             {
-
                 //CREACIÓN DEL OBSTÁCULO
-                thisObstacle = InstantiateRandomObstacle(getPosibleStructures(i), coordX, coordY, spaceBetweenBeats);
+                //Si este index es justo el anterior a donde va a haber un PowerUp, quiero instanciar uno vacío (Default).
+                if (allPowerUpsIndexes.Contains(i + 1)) thisObstacle = InstantiateDefaultObstacle(getPosibleStructures(i), coordX, coordY);
+                    
+
+                //Si no, uno aleatorio
+                else
+                    thisObstacle = InstantiateRandomObstacle(getPosibleStructures(i), coordX, coordY, spaceBetweenBeats);
 
                 //CREACIÓN DEL SUELO
                 //El suelo tendrá que ir desde el FINAL (no el centro) del anterior obstáculo hasta el PRINCIPIO de este
@@ -174,7 +181,6 @@ public class AlObstacleGenerator : MonoBehaviour
     private ObstacleStructureData InstantiateRandomObstacle(GameObject[] posibleStructures, float x, float y, float spaceBetweenBeats)
     {
         bool correctObstacle = false;
-        GameObject obstacle;
         ObstacleStructureData obstacleStructure = null;
 
         int intentos = 0;
@@ -184,12 +190,12 @@ public class AlObstacleGenerator : MonoBehaviour
 
             ChangeGroundColor(posibleStructures,rnd, lowColorChange, highColorChange);
 
-            obstacle = Instantiate(posibleStructures[rnd], new Vector3(x, y, 0), transform.rotation, obstaclePool);
+            GameObject obstacle = Instantiate(posibleStructures[rnd], new Vector3(x, y, 0), transform.rotation, obstaclePool);
 
             obstacleStructure = obstacle.GetComponent<ObstacleStructureData>();
 
             if (lastObstacle == null) correctObstacle = true; //Esto solo se da en el primer obstáculo, aún no hay anterior
-            else correctObstacle = obstacleEnabled(obstacleStructure) && (lastObstacle.getPostX() + obstacleStructure.getPrevX() < spaceBetweenBeats); //Comprueba si es correcto
+            else correctObstacle = ObstacleEnabled(obstacleStructure) && (lastObstacle.getPostX() + obstacleStructure.getPrevX() < spaceBetweenBeats); //Comprueba si es correcto
 
             if (!correctObstacle)
             {
@@ -200,19 +206,19 @@ public class AlObstacleGenerator : MonoBehaviour
             intentos++;
         }
 
-        if (obstacleStructure == null)
-        { //Si no se ha encontrado en todos los intentos ninguno
-            //Pongo A MANO el número 0 porque es el más "fino", cabe seguro (es un obstáculo vacío)
-            ChangeGroundColor(posibleStructures, 0, lowColorChange, highColorChange);
-            obstacle = Instantiate(posibleStructures[0], new Vector3(x, y, 0), transform.rotation, obstaclePool);
-            obstacleStructure = obstacle.GetComponent<ObstacleStructureData>();
-
-            //No hay ningún problema aparente en que llegue hasta aquí, pero por saber pongo el Debug.Log 
-            //(Especialmente no quiero que llegue aquí si debería de haber creado un powerUp)
-            //Debug.Log("Aviso de generación de obstáculo no encontrada");
-        }
+        //Si ha llegado hasta aquí siendo null, significa que tras todos los intentos no ha encontrado ninguno que quepe.
+        //Pongo A MANO el número 0 porque es el más "fino", cabe seguro (es un obstáculo vacío)
+        if (obstacleStructure == null) obstacleStructure = InstantiateDefaultObstacle(posibleStructures, x, y);
 
         return obstacleStructure;
+    }
+
+    //Instancia dentro de los posiblesStructures el por defecto (0) en las coordenadas x,y
+    private ObstacleStructureData InstantiateDefaultObstacle(GameObject[] posibleStructures, float x, float y)
+    {
+        ChangeGroundColor(posibleStructures, 0, lowColorChange, highColorChange);
+        GameObject defaultObstacle = Instantiate(posibleStructures[0], new Vector3(x, y, 0), transform.rotation, obstaclePool);
+        return defaultObstacle.GetComponent<ObstacleStructureData>();
     }
 
     // Cambia el color del suelo a todos los "Ground" de un obstaculo struct según la zona
@@ -255,7 +261,7 @@ public class AlObstacleGenerator : MonoBehaviour
     }
 
     //Devuelve si el obstáculo elegido está activado para usarlo y si es posible por su dificultad
-    bool obstacleEnabled(ObstacleStructureData obstacleStructure)
+    private bool ObstacleEnabled(ObstacleStructureData obstacleStructure)
     {
         int obstacleDif = obstacleStructure.getDifficulty();
 
@@ -287,6 +293,8 @@ public class AlObstacleGenerator : MonoBehaviour
     //Genera los index de los beats en los que va a haber powerUps
     private void GeneratePowerUpsIndexes(List<float> beats)
     {
+        allPowerUpsIndexes = new List<int>();
+
         int margin = 15; //Ni los primeros "margin" beats ni los últimos habrá power ups
 
         //GRAVITY POWER UP
@@ -294,8 +302,11 @@ public class AlObstacleGenerator : MonoBehaviour
 
         gravityStartIndex = Random.Range(margin, beats.Count - margin - gravityZoneLength);
         gravityEndIndex = gravityStartIndex + gravityZoneLength;
-        Debug.Log("El comienzo de la zona Gravedad está creado en el beat " + gravityStartIndex);
-        Debug.Log("El final de la zona Gravedad está creado en el beat " + gravityEndIndex);
+
+        allPowerUpsIndexes.Add(gravityStartIndex);
+        allPowerUpsIndexes.Add(gravityEndIndex);
+        //Debug.Log("El comienzo de la zona Gravedad está creado en el beat " + gravityStartIndex);
+        //Debug.Log("El final de la zona Gravedad está creado en el beat " + gravityEndIndex);
 
 
         //SLOW MOTION POWER UP
@@ -314,7 +325,7 @@ public class AlObstacleGenerator : MonoBehaviour
                 newSlowMotionIndex = Random.Range(margin, beats.Count - 1 - margin);
 
                 //Esto indica si este index es válido comprobando que no se haya usado en otro powerUp anterior (gravity)
-                indexValido = newSlowMotionIndex != gravityStartIndex && newSlowMotionIndex != gravityEndIndex;
+                indexValido = !allPowerUpsIndexes.Contains(newSlowMotionIndex);
 
                 //Aún falta comprobar la separacion entre los powerUps del mismo tipo (si i = 0 no hace falta)
                 if (i > 0)
@@ -329,6 +340,7 @@ public class AlObstacleGenerator : MonoBehaviour
             }
             
             slowMotionIndexes.Add(newSlowMotionIndex);
+            allPowerUpsIndexes.Add(newSlowMotionIndex);
 
             Debug.Log("Power Up de SlowMotion creado en el beat " + newSlowMotionIndex);
         }
@@ -350,8 +362,8 @@ public class AlObstacleGenerator : MonoBehaviour
                 newLowResIndex = Random.Range(margin, beats.Count - 1 - margin);
 
                 //Esto indica si este index es válido comprobando que no se haya usado en otro powerUp anterior (gravity y slowMotion)
-                indexValido = newLowResIndex != gravityStartIndex && newLowResIndex != gravityEndIndex && !slowMotionIndexes.Contains(newLowResIndex);
-            
+                indexValido = !allPowerUpsIndexes.Contains(newLowResIndex);
+
                 //Aún falta comprobar la separacion entre los powerUps del mismo tipo (si i = 0 no hace falta)
                 if (i > 0)
                 {
@@ -369,4 +381,5 @@ public class AlObstacleGenerator : MonoBehaviour
             Debug.Log("Power Up de LowRes creado en el beat " + newLowResIndex);
         }
     }
+
 }
