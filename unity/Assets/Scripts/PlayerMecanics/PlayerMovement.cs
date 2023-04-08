@@ -166,7 +166,8 @@ public class PlayerMovement : MonoBehaviour
             autoJump = jump = onGround = false;
         } 
     }
+
     internal void AutoJump() { jump = true; autoJump = true; }
 
-    internal float GetJumpForce() { return jumpForce; }
+    public float getJumpForce() { return jumpForce; }
 }

@@ -20,7 +20,11 @@ public class AlObstacleGenerator : MonoBehaviour
     [SerializeField] private GameObject groundPrefab;
     private GameObject[] obstaclesStructures; //Estructuras NORMALES
 
-        //Estructuras que contengan POWER UPS
+    //Estructuras de comienzos/finales de zonas
+    private GameObject[] lowZoneStartStructures;
+    private GameObject[] lowZoneEndStructures;
+
+    //Estructuras que contengan POWER UPS
     private GameObject[] gravityStructures;
     private GameObject[] slowMotionStructures;
     private GameObject[] lowResStructures;
@@ -29,7 +33,7 @@ public class AlObstacleGenerator : MonoBehaviour
     private List<int> slowMotionIndexes; //Lista de index donde se crearán los powerUps de slowMotion
     private List<int> lowResIndexes; //Lista de index donde se crearán los powerUps de lowRes
 
-    private List<int> allPowerUpsIndexes; //Lista de index con TODOS los powerUps
+    private List<int> importantIndexes; //Lista de index con TODOS los structs especiales (powerUps, cambios de zona etc)
 
     [SerializeField] private GameObject endPrefab;
     [SerializeField] private GameObject groundToDestroy;
@@ -52,6 +56,7 @@ public class AlObstacleGenerator : MonoBehaviour
     bool lowColorChange = false;
     bool highColorChange = false;
 
+    private int lowZoneStartIndex, lowZoneEndIndex;
 
     void Start()
     {
@@ -59,14 +64,18 @@ public class AlObstacleGenerator : MonoBehaviour
         highColor = new Color(1.0f, 1.0f, 0.0f, 1.0f); // YELLOW
 
         obstaclesStructures     = Resources.LoadAll<GameObject>("Prefabs/Alvaro/Estructuras");
+        lowZoneStartStructures  = Resources.LoadAll<GameObject>("Prefabs/Alvaro/ChangeZone/LowZoneStart");
+        lowZoneEndStructures    = Resources.LoadAll<GameObject>("Prefabs/Alvaro/ChangeZone/LowZoneEnd");
         gravityStructures       = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/Gravity");
         slowMotionStructures    = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/SlowMotion");
-        lowResStructures    = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/LowRes");
+        lowResStructures        = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/LowRes");
 
         lastObstacle = null;
 
         List<float> beats = features.GetComponent<ReadTxt>().getBeatsInTime();
         zonesData = zones.getZonesData();
+
+        importantIndexes = new List<int>();
 
         //List<float> scopt = features.GetComponent<ReadTxt>().getScopt();
 
@@ -74,6 +83,8 @@ public class AlObstacleGenerator : MonoBehaviour
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
         //Debug.Log(minDistanceBetweenObstacles);
+
+        InitZonesIndexes();
 
         GeneratePowerUpsIndexes(beats);
 
@@ -91,7 +102,7 @@ public class AlObstacleGenerator : MonoBehaviour
         float coordX, coordY, prevX;    coordX = coordY = prevX = 0.0f;
         ObstacleStructureData thisObstacle = null;
 
-
+        bool zoneIsChanging;
         for (int i = offsetI; i < beats.Count() - 1; i++)
         {
             groundPrefab.GetComponent<SpriteRenderer>().color = Color.white;
@@ -132,8 +143,9 @@ public class AlObstacleGenerator : MonoBehaviour
             if (lastObstacle == null || spaceBetweenBeats > lastObstacle.getPostX())
             {
                 //CREACIÓN DEL OBSTÁCULO
-                //Si este index es justo el anterior a donde va a haber un PowerUp, quiero instanciar uno vacío (Default).
-                if (allPowerUpsIndexes.Contains(i + 1)) thisObstacle = InstantiateDefaultObstacle(getPosibleStructures(i), coordX, coordY);
+
+                //Si este index es justo el anterior a donde va a haber uno importante, quiero instanciar uno vacío (Default).
+                if (importantIndexes.Contains(i + 1)) thisObstacle = InstantiateDefaultObstacle(getPosibleStructures(i), coordX, coordY);
                     
 
                 //Si no, uno aleatorio
@@ -243,6 +255,7 @@ public class AlObstacleGenerator : MonoBehaviour
         }
     }
 
+    //Genera un suelo en la altura y entre las coordenadasX floorStart y floorEnd
     private void GenerateFloor(float floorStart, float floorEnd, float y)
     {
         float width = floorEnd - floorStart;
@@ -277,6 +290,12 @@ public class AlObstacleGenerator : MonoBehaviour
     //Devuelve el array de estructuras que se va a utilizar para el siguiente beat
     private GameObject[] getPosibleStructures(int index)
     {
+        //Estructuras de comienzo de zonaLow (agua)
+        if (index == lowZoneStartIndex) return lowZoneStartStructures;
+
+        //Estructuras de final de zonaLow (agua)
+        if (index == lowZoneEndIndex) return lowZoneEndStructures;
+
         //Estructuras de powerUp de gravedad
         if (index == gravityStartIndex || index == gravityEndIndex) return gravityStructures;
 
@@ -291,22 +310,28 @@ public class AlObstacleGenerator : MonoBehaviour
     }
 
     //Genera los index de los beats en los que va a haber powerUps
-    private void GeneratePowerUpsIndexes(List<float> beats)
-    {
-        allPowerUpsIndexes = new List<int>();
-
+    private void GeneratePowerUpsIndexes(List<float> beats) 
+    { 
         int margin = 15; //Ni los primeros "margin" beats ni los últimos habrá power ups
+
+        bool indexValido = false;
 
         //GRAVITY POWER UP
         int gravityZoneLength = Random.Range(10, 30); //La zona con gravedad cambiada serán entre 10 y 30 beats
 
-        gravityStartIndex = Random.Range(margin, beats.Count - margin - gravityZoneLength);
-        gravityEndIndex = gravityStartIndex + gravityZoneLength;
+        while (!indexValido)
+        {
+            gravityStartIndex = Random.Range(margin, beats.Count - margin - gravityZoneLength);
+            gravityEndIndex = gravityStartIndex + gravityZoneLength;
 
-        allPowerUpsIndexes.Add(gravityStartIndex);
-        allPowerUpsIndexes.Add(gravityEndIndex);
-        //Debug.Log("El comienzo de la zona Gravedad está creado en el beat " + gravityStartIndex);
-        //Debug.Log("El final de la zona Gravedad está creado en el beat " + gravityEndIndex);
+            indexValido = (!importantIndexes.Contains(gravityStartIndex)) && (!importantIndexes.Contains(gravityEndIndex));
+        }
+        
+
+        importantIndexes.Add(gravityStartIndex);
+        importantIndexes.Add(gravityEndIndex);
+        Debug.Log("El comienzo de la zona Gravedad está creado en el beat " + gravityStartIndex);
+        Debug.Log("El final de la zona Gravedad está creado en el beat " + gravityEndIndex);
 
 
         //SLOW MOTION POWER UP
@@ -319,13 +344,13 @@ public class AlObstacleGenerator : MonoBehaviour
         {
             //Index válido: no seleccionado por otro powerUp anterior (gravity) y con marginBetweenBQPowerUps entre los de su propio tipo
             int newSlowMotionIndex = 0;
-            bool indexValido = false;
+            indexValido = false;
             while (!indexValido)
             {
                 newSlowMotionIndex = Random.Range(margin, beats.Count - 1 - margin);
 
                 //Esto indica si este index es válido comprobando que no se haya usado en otro powerUp anterior (gravity)
-                indexValido = !allPowerUpsIndexes.Contains(newSlowMotionIndex);
+                indexValido = !importantIndexes.Contains(newSlowMotionIndex);
 
                 //Aún falta comprobar la separacion entre los powerUps del mismo tipo (si i = 0 no hace falta)
                 if (i > 0)
@@ -340,7 +365,7 @@ public class AlObstacleGenerator : MonoBehaviour
             }
             
             slowMotionIndexes.Add(newSlowMotionIndex);
-            allPowerUpsIndexes.Add(newSlowMotionIndex);
+            importantIndexes.Add(newSlowMotionIndex);
 
             Debug.Log("Power Up de SlowMotion creado en el beat " + newSlowMotionIndex);
         }
@@ -356,13 +381,13 @@ public class AlObstacleGenerator : MonoBehaviour
         {
             //Index válido: no seleccionado por otro powerUp anterior (gravity y SlowMotion) y con marginBetweenBQPowerUps entre los de su propio tipo
             int newLowResIndex = 0;
-            bool indexValido = false;
+            indexValido = false;
             while(!indexValido)
             {
                 newLowResIndex = Random.Range(margin, beats.Count - 1 - margin);
 
                 //Esto indica si este index es válido comprobando que no se haya usado en otro powerUp anterior (gravity y slowMotion)
-                indexValido = !allPowerUpsIndexes.Contains(newLowResIndex);
+                indexValido = !importantIndexes.Contains(newLowResIndex);
 
                 //Aún falta comprobar la separacion entre los powerUps del mismo tipo (si i = 0 no hace falta)
                 if (i > 0)
@@ -380,6 +405,21 @@ public class AlObstacleGenerator : MonoBehaviour
 
             Debug.Log("Power Up de LowRes creado en el beat " + newLowResIndex);
         }
+    }
+
+    private void InitZonesIndexes()
+    {
+        foreach (ZoneData z in zonesData)
+        {
+            if (z.getType() == ZoneType.LOW)
+            {
+                lowZoneStartIndex = z.getBeatIni();
+                lowZoneEndIndex = z.getBeatEnd();
+            }
+        }
+
+        importantIndexes.Add(lowZoneStartIndex);
+        importantIndexes.Add(lowZoneEndIndex);
     }
 
 }

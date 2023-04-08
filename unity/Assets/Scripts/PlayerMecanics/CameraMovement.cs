@@ -3,7 +3,7 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     [SerializeField] private Transform playerTr;
-    [SerializeField] private float offsetX, offsetY;
+    [SerializeField] private float offsetX, offsetY, maxSpeed;
     float posZ;
     private Quaternion newCameraRotation;
     private bool putamierda;
@@ -21,7 +21,7 @@ public class CameraMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.O)) newCameraRotation = Quaternion.Euler(0, 0, 0);
         //Debug.Log(newCameraRotation+  "  " + transform.localRotation);
         if (Mathf.Abs(transform.position.y - playerTr.position.y) > offsetY)
-            transform.position = new Vector3(playerTr.position.x + offsetX, Mathf.Lerp(transform.position.y, playerTr.position.y, Time.deltaTime), posZ);
+            transform.position = new Vector3(playerTr.position.x + offsetX, Mathf.Lerp(transform.position.y, playerTr.position.y, Time.deltaTime * maxSpeed), posZ);
         else transform.position = new Vector3(playerTr.position.x + offsetX, transform.position.y, posZ);
 
 
