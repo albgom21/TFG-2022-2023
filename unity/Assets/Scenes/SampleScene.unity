@@ -5816,7 +5816,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3987629, g: 0.72735256, b: 0.8207547, a: 0.19607843}
+  m_Color: {r: 0.3987629, g: 0.72735256, b: 0.8207547, a: 0.27450982}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12237,7 +12237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pruebasDesdeMenu: 0
-  song: bzrp
+  song: 200-BPM
   format: .wav
 --- !u!4 &1277446152
 Transform:
