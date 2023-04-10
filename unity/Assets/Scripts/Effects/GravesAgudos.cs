@@ -19,14 +19,14 @@ public class GravesAgudos : MonoBehaviour
 
     void Start()
     {
-        gravesTiempo = input.getGravesTiempo();
-        gravesValoresNorm = input.getGravesValoresNorm();
+        gravesTiempo = input.GetGravesTiempo();
+        gravesValoresNorm = input.GetGravesValoresNorm();
 
         foreach (float time in gravesTiempo)
             Invoke("ChangeSizeGrave", time);
 
-        agudosTiempo = input.getAgudosTiempo();
-        agudosValoresNorm = input.getAgudosValoresNorm();
+        agudosTiempo = input.GetAgudosTiempo();
+        agudosValoresNorm = input.GetAgudosValoresNorm();
 
         foreach (float time in agudosTiempo)
             Invoke("ChangeSizeAgudo", time);

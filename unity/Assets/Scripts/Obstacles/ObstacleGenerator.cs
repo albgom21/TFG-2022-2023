@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Analytics;
 using ZoneCode;
 
 public class ObstacleGenerator : MonoBehaviour
@@ -43,6 +40,7 @@ public class ObstacleGenerator : MonoBehaviour
     private float multiplierX;
     private float minDistanceBetweenObstacles;
 
+    public int TIPODEOBSTACULOS; //0 bpm, 1piano, 2other
 
     List<ZoneData> zonesData;
     Color lowColor, highColor;
@@ -54,22 +52,27 @@ public class ObstacleGenerator : MonoBehaviour
 
         float width = transform.localScale.x;
         float height = transform.localScale.y;
-        List<float> beats = features.GetComponent<ReadTxt>().getBeatsInTime();
-        List<float> scopt = features.GetComponent<ReadTxt>().getScopt();
-        zonesData = zones.getZonesData();
+        List<float> beats = TIPODEOBSTACULOS switch
+        {
+            1 => features.GetComponent<ReadTxt>().GetOnsetPiano(),
+            2 => features.GetComponent<ReadTxt>().GetOnsetOther(),
+            _ => features.GetComponent<ReadTxt>().GetBeatsInTime(),
+        };
+
+        List<float> scopt = features.GetComponent<ReadTxt>().GetScopt();
+        //zonesData = zones.getZonesData();
         // PRUEBAS Graves Y Agudos
         //List<float> agudosTiempo = features.GetComponent<ReadTxt>().getAgudosTiempo();
         //List<float> gravesTiempo = features.GetComponent<ReadTxt>().getGravesTiempo();
         //List<float> agudosValoresNorm = features.GetComponent<ReadTxt>().getAgudosValoresNorm();
         //List<float> gravesValoresNorm = features.GetComponent<ReadTxt>().getGravesValoresNorm();
 
-        List<int> beatsZonesIndex = zones.getBeatsZonesIndex();
+        //List<int> beatsZonesIndex = zones.getBeatsZonesIndex();
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
         minDistanceBetweenObstacles = multiplierX / 2f;
-        //Debug.Log(minDistanceBetweenObstacles);
 
-        GenerateLevel(width, height, beats, scopt, beatsZonesIndex);
+        PruebaOnsets(beats);
 
         #region pruebas GyA
         // PRUEBAS Graves Y Agudos
@@ -96,7 +99,7 @@ public class ObstacleGenerator : MonoBehaviour
         #endregion
     }
 
-    private void GenerateLevel(float width, float height, List<float> beats, List<float> scopt, List<int> beatsZonesIndex)
+    private void GenerateLevel(float width, float height, List<float> beats, List<float> scopt/*, List<int> beatsZonesIndex*/)
     {
         bool portal = false;
         int offsetI = 2;
@@ -113,39 +116,39 @@ public class ObstacleGenerator : MonoBehaviour
                 continue;
             }
 
-            // PORTALES
-            foreach (int b in beatsZonesIndex)
-            {
-                if (b == i)
-                {
-                    portal = true;
-                    break;
-                }
-            }
+            //// PORTALES
+            //foreach (int b in beatsZonesIndex)
+            //{
+            //    if (b == i)
+            //    {
+            //        portal = true;
+            //        break;
+            //    }
+            //}
 
             // CAMBIO DE COLOR OBSTACULOS POR ZONAS
             groundPrefab.GetComponent<SpriteRenderer>().color = Color.white;
-            foreach (ZoneData z in zonesData)
-            {
-                //Debug.Log("N: " + cont);
-                //Debug.Log("TYPE: " + z.getType());
+            //foreach (ZoneData z in zonesData)
+            //{
+            //    //Debug.Log("N: " + cont);
+            //    //Debug.Log("TYPE: " + z.getType());
 
-                //Debug.Log("B INI: " + z.getBeatIni());
-                //Debug.Log("B END: " + z.getBeatEnd());
+            //    //Debug.Log("B INI: " + z.getBeatIni());
+            //    //Debug.Log("B END: " + z.getBeatEnd());
 
-                //Debug.Log("T INI: " + z.getTimeIniZone());
-                //Debug.Log("T END: " + z.getTimeEndZone());
+            //    //Debug.Log("T INI: " + z.getTimeIniZone());
+            //    //Debug.Log("T END: " + z.getTimeEndZone());
 
-                if (i >= z.getBeatIni() && i <= z.getBeatEnd())
-                {
-                    if (z.getType() == ZoneType.LOW)
-                        groundPrefab.GetComponent<SpriteRenderer>().color = lowColor;
-                    else if (z.getType() == ZoneType.HIGH)
-                        groundPrefab.GetComponent<SpriteRenderer>().color = highColor;
+            //    if (i >= z.getBeatIni() && i <= z.getBeatEnd())
+            //    {
+            //        if (z.getType() == ZoneType.LOW)
+            //            groundPrefab.GetComponent<SpriteRenderer>().color = lowColor;
+            //        else if (z.getType() == ZoneType.HIGH)
+            //            groundPrefab.GetComponent<SpriteRenderer>().color = highColor;
 
-                    break;
-                }
-            }
+            //        break;
+            //    }
+            //}
 
 
             float prevX = beats[i - 1] * multiplierX;
@@ -174,19 +177,30 @@ public class ObstacleGenerator : MonoBehaviour
             }
             //if(x-prevX < minDistanceBetweenObstacles) Ground0_1(prevX, nextY, distance, width, height);
             Ground0_1(prevX, y, distance, width, height);
-            if (x - prevX < minDistanceBetweenObstacles && !jumpObstacle)
-            {
-                jumpObstacle = true;
-                continue;
-            }
-            jumpObstacle = false;
+            //if (x - prevX < minDistanceBetweenObstacles && !jumpObstacle)
+            //{
+            //    jumpObstacle = true;
+            //    continue;
+            //}
+            //jumpObstacle = false;
             if (y - prevY == 0 && nextY - y == 0) InstantiateRandomObstacle(x, y);
             else if (nextY - y == 2) InstantiateObstacle2Up(x, y);
             else Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(x, y, 0), transform.rotation, obstaclePool);
         }
         groundPrefab.GetComponent<SpriteRenderer>().color = Color.white;
-        Instantiate(endPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
+        //Instantiate(endPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
     }
+
+
+    private void PruebaOnsets(List<float> beats)
+    {
+        Debug.Log("Número de obstáculos: " + beats.Count);
+        for (int i = 0; i < beats.Count; i++)
+        {
+            Instantiate(obstacles[(int)ObstacleType.obstacle], new Vector3(beats[i]* multiplierX,0, 0), transform.rotation, obstaclePool);
+        }
+    }
+
 
     private void Obstacle(float x, int y, float prevX, int prevY)
     {

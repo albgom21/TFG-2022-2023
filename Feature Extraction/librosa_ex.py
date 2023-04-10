@@ -5,7 +5,6 @@ import sklearn
 import sklearn.preprocessing
 import numpy as np
 import matplotlib.pyplot as plt
-# import spleeter as sp
 import sys
 
 '''
@@ -458,14 +457,31 @@ samples : muestras del audio
 sr : frecuencia del audio (Sample Rate)
 '''
 def onset_detection(filename):
+    #aggregate=np.median
     y,sr = load_Wave("drums_" + filename)
-    o_env = o_env = librosa.onset.onset_strength(y=y, sr=sr, aggregate=np.median)
+    o_env = o_env = librosa.onset.onset_strength(y=y, sr=sr)
     o_env = normalize(o_env)    
     onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
     print ("Total frames: ", y.size)
-    print("OnsetFrames size: ", onset_frames.size)
-    onset_time = librosa.frames_to_time(onset_frames)    
-    return onset_time
+    print("OnsetDrumsFrames size: ", onset_frames.size)
+    onset_time = librosa.frames_to_time(onset_frames)
+
+    # PROVISIONAL 
+    # métodos para obtener los onsets del piano y del other
+    y,sr = load_Wave("piano_" + filename)
+    o_env = librosa.onset.onset_strength(y=y, sr=sr)
+    o_env = normalize(o_env)    
+    onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
+    onset_piano = librosa.frames_to_time(onset_frames)
+
+
+    y,sr = load_Wave("other_" + filename)
+    o_env = librosa.onset.onset_strength(y=y, sr=sr)
+    o_env = normalize(o_env)    
+    onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
+    onset_other = librosa.frames_to_time(onset_frames)
+
+    return onset_time, onset_piano, onset_other
 
 #--------------------OTRAS FUNCIONES-------------------------------
 def graves(y,sr):
@@ -678,7 +694,7 @@ def features_to_txt(filename):
     aValorNorm = normalize(a[:, 1])
 
     # Golpes de batería (onset)
-    onset = onset_detection(filename)
+    onset, onset_piano, onset_other = onset_detection(filename)
 
     name = os.path.splitext(filename)[0]
     np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
@@ -692,6 +708,9 @@ def features_to_txt(filename):
     np.savetxt(name + '_agudosTiempo.txt', aTiempo, fmt='%.3f')
     np.savetxt(name + '_agudosValorNorm.txt', aValorNorm, fmt='%.3f')
     np.savetxt(name + '_onsetDetection.txt', onset, fmt='%.3f')
+    #PROVISIONAL
+    np.savetxt(name + '_onsetPiano.txt', onset_piano, fmt='%.3f')
+    np.savetxt(name + '_onsetOther.txt', onset_other, fmt='%.3f')
 
     # Ruta de la carpeta de origen
     ruta_origen = './'
@@ -732,46 +751,55 @@ def extract_features(signal):
 '''
 Método para depurar y sacar gráficas de los golpes de batería
 '''
-def depuracion_onset(filename, v1):
-    filename = 'drums_'+filename
-    y,sr = load_Wave(filename)
-    if v1:  o_env = librosa.onset.onset_strength(y=y, sr=sr)
-    else:  o_env = librosa.onset.onset_strength(y=y, sr=sr, aggregate=np.median)
+def depuracion_onset(filename):
+    fig, aux = plt.subplots(nrows=3, sharex=True)
+    filenameAux = 'drums_'+filename
+    y,sr = load_Wave(filenameAux)
+    o_env = librosa.onset.onset_strength(y=y, sr=sr, aggregate=np.median)
     o_env = normalize(o_env)
     onset_frames = librosa.onset.onset_detect(onset_envelope = o_env, sr=sr)
-    new_o_env = o_env[onset_frames]
     times = librosa.times_like(o_env, sr=sr)    
 
-
-    #sin mean
     onset_frames_aux  = onset_frames
-    fig, aux = plt.subplots(nrows=2, sharex=True)
-    aux[0].plot(times, o_env, label='Onset strength')
+    aux[0].plot(times, o_env, label='Onset drums strength')
     aux[0].vlines(times[onset_frames_aux], 0, o_env.max(), color='r', alpha=0.9,
-             linestyle='--', label='Onsets')
+              linestyle='--', label='Onsets drums')
     aux[0].legend()
  
-
-    #mean = 0.1
-    if onset_frames.size/y.size >0.0001: color = 'g'
-    else: color = 'y'
-    mean = np.mean(new_o_env)
-    mask = new_o_env > mean
-    onset_frames_aux2 = onset_frames_aux[mask]
-    aux[1].plot(times, o_env, label='Onset strength')
-    aux[1].vlines(times[onset_frames_aux2], 0, o_env.max(), color='r', alpha=0.9,
-             linestyle='--', label='Onsets')
+    filenameAux = 'piano_'+filename
+    y,sr = load_Wave(filenameAux)
+    o_env = librosa.onset.onset_strength(y=y, sr=sr)
+    o_env = normalize(o_env)
+    onset_frames = librosa.onset.onset_detect(onset_envelope = o_env, sr=sr)
+    print("OnsetPianoFrames size: ", onset_frames.size)
+    times = librosa.times_like(o_env, sr=sr)
+    onset_frames_aux  = onset_frames
+    aux[1].plot(times, o_env, label='Onset piano strength')
+    aux[1].vlines(times[onset_frames_aux], 0, o_env.max(), color='g', alpha=0.9,
+              linestyle='--', label='Onsets piano')
     aux[1].legend()
-    aux[1].axhline(y = mean, color = color)
- 
-    print("OnsetFrames 1 size: ",onset_frames_aux.size)
-    print("OnsetFrames 2 size: ", onset_frames_aux2.size)
-    plt.show()
 
+    filenameAux = 'other_'+filename
+    y,sr = load_Wave(filenameAux)
+
+    #aggregate=np.median
+    o_env = librosa.onset.onset_strength(y=y, sr=sr, )
+    o_env = normalize(o_env)
+    onset_frames = librosa.onset.onset_detect(onset_envelope = o_env, sr=sr)
+    print("OnsetOthersFrames size: ", onset_frames.size)
+    times = librosa.times_like(o_env, sr=sr)
+    onset_frames_aux  = onset_frames
+    aux[2].plot(times, o_env, label='Onset other strength')
+    aux[2].vlines(times[onset_frames_aux], 0, o_env.max(), color='y', alpha=0.9,
+             linestyle='--', label='Onsets other')
+
+    aux[2].legend()    
+    plt.show()
 
 
 def main(filename):
     features_to_txt(filename)
 
 #main(sys.argv[1]) #Si se llama desde Unity o desde consola
-main("Level6.wav") #Si se llama ejecutando con F5
+main("gdpiano.wav") #Si se llama ejecutando con F5
+# depuracion_onset("gdpiano.wav")

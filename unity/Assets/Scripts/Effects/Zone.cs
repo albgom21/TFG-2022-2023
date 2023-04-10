@@ -25,8 +25,8 @@ public class Zone : MonoBehaviour
     {
         originalSkyBox = RenderSettings.skybox;
 
-        List<float> beats = features.GetComponent<ReadTxt>().getBeatsInTime();
-        List<float> rmse = features.GetComponent<ReadTxt>().getRMSE();
+        List<float> beats = features.GetComponent<ReadTxt>().GetBeatsInTime();
+        List<float> rmse = features.GetComponent<ReadTxt>().GetRMSE();
 
         HighZone(beats, rmse);
         LowZone(beats, rmse);

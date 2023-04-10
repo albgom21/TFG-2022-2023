@@ -22,7 +22,7 @@ public class ReadTxt : MonoBehaviour
            rutaSamples, rutaSr, rutaDuration, rutaPlpBeats,
            rutaAgudosTiempo, rutaAgudosValoresNorm, rutaAgudos,
            rutaGravesTiempo, rutaGravesValoresNorm, rutaGraves,
-           rutaOnset;
+           rutaOnset, rutaOnsetPiano, rutaOnsetOther; //LAS DOS ÚLTIMAS SON PROVISIONALES
 
 
     // ESTRUCTURAS DE DATOS PARA GUARDAS LAS CARACTER�STICAS
@@ -36,6 +36,8 @@ public class ReadTxt : MonoBehaviour
     List<float> agudosValoresNorm = new List<float>();
     List<float> gravesValoresNorm = new List<float>();
     List<float> onset = new List<float>();
+    List<float> onset_piano = new List<float>(); //PROVISIONAL PARA PRUEBAS
+    List<float> onset_other = new List<float>(); //PROVISIONAL PARA PRUEBAS
 
     float[,] matriz_agudos;                     // Tiempo y valor en db de los agudos
     float[,] matriz_graves;                     // Tiempo y valor en db de los graves
@@ -72,28 +74,34 @@ public class ReadTxt : MonoBehaviour
         rutaGraves = path + song + "_graves.txt";
 
         rutaOnset = path + song + "_onsetDetection.txt";
+        //PROVISIONAL
+        rutaOnsetPiano = path + song + "_onsetPiano.txt";
+        rutaOnsetOther = path + song + "_onsetOther.txt";
 
         // Leer y almacenar las caracteristicas del audio
-        readFeature(ref beats, rutaBeats);
+        ReadFeature(ref beats, rutaBeats);
         //readFeature(ref plpBeats, rutaPlpBeats);
-        readFeature(ref scopt, rutaSC);
-        readFeature(ref rmse, rutaRMSE);
+        ReadFeature(ref scopt, rutaSC);
+        ReadFeature(ref rmse, rutaRMSE);
         //readFeature(ref samples, rutaSamples);
-        readFeature(ref agudosTiempo, rutaAgudosTiempo);
-        readFeature(ref agudosValoresNorm, rutaAgudosValoresNorm);
+        ReadFeature(ref agudosTiempo, rutaAgudosTiempo);
+        ReadFeature(ref agudosValoresNorm, rutaAgudosValoresNorm);
 
-        readFeature(ref gravesTiempo, rutaGravesTiempo);
-        readFeature(ref gravesValoresNorm, rutaGravesValoresNorm);
-        readFeature(ref onset, rutaOnset);
-        readInt(ref sr, rutaSr);
-        readFloat(ref duration, rutaDuration);
+        ReadFeature(ref gravesTiempo, rutaGravesTiempo);
+        ReadFeature(ref gravesValoresNorm, rutaGravesValoresNorm);
+        ReadFeature(ref onset, rutaOnset);
+        ReadInt(ref sr, rutaSr);
+        ReadFloat(ref duration, rutaDuration);
+
+        ReadFeature(ref onset_piano, rutaOnsetPiano);
+        ReadFeature(ref onset_other, rutaOnsetOther);
 
         //readMatriz(ref matriz_agudos, rutaAgudos);
         //readMatriz(ref matriz_graves, rutaGraves);
     }
 
     // Lee una caracter�sitca de audio que este en un txt, con una valor float por fila
-    private void readFeature(ref List<float> lista, string ruta)
+    private void ReadFeature(ref List<float> lista, string ruta)
     {
         // Lectura por l�neas y luego palabras
         if (File.Exists(ruta))
@@ -106,7 +114,7 @@ public class ReadTxt : MonoBehaviour
     }
 
     // Lee una caracter�sitca de audio que este en un txt, siendo esta un �nico int
-    private void readInt(ref int n, string ruta)
+    private void ReadInt(ref int n, string ruta)
     {
         // Lectura por l�neas y luego palabras
         if (File.Exists(ruta))
@@ -118,7 +126,7 @@ public class ReadTxt : MonoBehaviour
     }
 
     // Lee una caracter�sitca de audio que este en un txt, siendo esta un �nico float
-    private void readFloat(ref float n, string ruta)
+    private void ReadFloat(ref float n, string ruta)
     {
         // Lectura por l�neas y luego palabras
         if (File.Exists(ruta))
@@ -132,7 +140,7 @@ public class ReadTxt : MonoBehaviour
     // Lee una caracter�sitca de audio que este en un txt, con la forma de una matriz bidimensional,
     // las filas compuestas por un valor float separado por un espacio seguido del otro valor float
     // el cambio de fila viene dado por cambio de linea \n
-    private void readMatriz(ref float[,] matriz, string ruta)
+    private void ReadMatriz(ref float[,] matriz, string ruta)
     {
         if (File.Exists(ruta))
         {
@@ -163,60 +171,20 @@ public class ReadTxt : MonoBehaviour
     }
 
     // Getters
-    public List<float> getBeatsInTime()
-    {
-        return beats;
-    }
-    public List<float> getPlpBeatsInTime()
-    {
-        return plpBeats;
-    }
-    public List<float> getScopt()
-    {
-        return scopt;
-    }
-    public List<float> getRMSE()
-    {
-        return rmse;
-    }
-    public List<float> getSamples()
-    {
-        return samples;
-    }
-    public List<float> getAgudosTiempo()
-    {
-        return agudosTiempo;
-    }
-    public List<float> getGravesTiempo()
-    {
-        return gravesTiempo;
-    }
-    public List<float> getAgudosValoresNorm()
-    {
-        return agudosValoresNorm;
-    }
-    public List<float> getGravesValoresNorm()
-    {
-        return gravesValoresNorm;
-    }
-    public List<float> getOnset()
-    {
-        return onset;
-    }
-    public int getSr()
-    {
-        return sr;
-    }
-    public float getDuration()
-    {
-        return duration;
-    }
-    public float[,] getAgudos()
-    {
-        return matriz_agudos;
-    }
-    public float[,] getGraves()
-    {
-        return matriz_graves;
-    }
+    public List<float> GetBeatsInTime() { return beats; }
+    public List<float> GetPlpBeatsInTime() { return plpBeats; }
+    public List<float> GetScopt() { return scopt; }
+    public List<float> GetRMSE() { return rmse; }
+    public List<float> GetSamples() { return samples; }
+    public List<float> GetAgudosTiempo() { return agudosTiempo; }
+    public List<float> GetGravesTiempo() { return gravesTiempo; }
+    public List<float> GetAgudosValoresNorm() { return agudosValoresNorm; }
+    public List<float> GetGravesValoresNorm() { return gravesValoresNorm; }
+    public List<float> GetOnset() { return onset; }
+    public List<float> GetOnsetPiano() { return onset_piano; } //PROVISIONAL
+    public List<float> GetOnsetOther() { return onset_other; } //PROVISIONAL
+    public int GetSr() { return sr; }
+    public float GetDuration() { return duration; }
+    public float[,] GetAgudos() { return matriz_agudos; }
+    public float[,] GetGraves() { return matriz_graves; }
 }

@@ -72,7 +72,7 @@ public class AlObstacleGenerator : MonoBehaviour
 
         lastObstacle = null;
 
-        List<float> beats = features.GetComponent<ReadTxt>().getBeatsInTime();
+        List<float> beats = features.GetComponent<ReadTxt>().GetBeatsInTime();
         zonesData = zones.getZonesData();
 
         importantIndexes = new List<int>();

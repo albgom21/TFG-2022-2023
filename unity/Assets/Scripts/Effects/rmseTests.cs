@@ -11,8 +11,8 @@ public class rmseTests : MonoBehaviour
     int cont = 0;
     void Start()
     {
-        rmse = samples.getRMSE();
-        beats = samples.getBeatsInTime();
+        rmse = samples.GetRMSE();
+        beats = samples.GetBeatsInTime();
         foreach (float b in beats)
             Invoke("rmseSize", b);
 

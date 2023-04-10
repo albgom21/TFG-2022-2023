@@ -17,7 +17,7 @@ public class LightManager : MonoBehaviour
     private Color newBackgroundColor, newLightColor;
     void Start()
     {
-        onset = input.getOnset();
+        onset = input.GetOnset();
         i = 0;
         time = 0;
         intensity = maxIntensity = backgroundLight.intensity;

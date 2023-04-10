@@ -39,9 +39,9 @@ public class AudioSpectrum : MonoBehaviour
 
     void Start()
     {
-        sr = samples.getSr();
+        sr = samples.GetSr();
         aumento = sr / updatesPerSec; // Cantidad de samples que deben salir cada vez que se llama a UpdateSpectrum
-        spectrum = samples.getSamples();
+        spectrum = samples.GetSamples();
 
         // Crear las barras con un offset en X
         for (int i = 0; i < nBars; i++)

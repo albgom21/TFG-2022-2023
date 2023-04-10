@@ -18,7 +18,7 @@ public class PulseEffect : MonoBehaviour
     void Start()
     {
         color = sprite.color;
-        beats = input.getBeatsInTime();
+        beats = input.GetBeatsInTime();
         //beats = input.getPlpBeatsInTime();
 
         //foreach (float time in beats)

@@ -15,7 +15,7 @@ public class ProgressBar : MonoBehaviour
     void Start()
     {
         slider = GetComponent<Slider>();
-        changeSongDuration(features.getDuration());
+        changeSongDuration(features.GetDuration());
     }
 
     public void changeSongDuration(float duration)
