@@ -48,7 +48,7 @@ public class AlObstacleGenerator : MonoBehaviour
     private ObstacleStructureData lastObstacle;
 
     // Dificultad
-    [SerializeField] private int difficulty;
+    private int difficulty;
 
     // Zones
     List<ZoneData> zonesData;
@@ -77,9 +77,7 @@ public class AlObstacleGenerator : MonoBehaviour
 
         importantIndexes = new List<int>();
 
-        //List<float> scopt = features.GetComponent<ReadTxt>().getScopt();
-
-        //List<int> beatsZonesIndex = zones.getBeatZonesIndexes();
+        List<float> rmse = features.GetComponent<ReadTxt>().GetRMSE();
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
         //Debug.Log(minDistanceBetweenObstacles);
@@ -88,13 +86,13 @@ public class AlObstacleGenerator : MonoBehaviour
 
         GeneratePowerUpsIndexes(beats);
 
-        GenerateObstacles(beats/*, beatsZonesIndex*/);
+        GenerateObstacles(beats, rmse/*, beatsZonesIndex*/);
 
   
         Destroy(groundToDestroy);
     }
 
-    private void GenerateObstacles(List<float> beats/*, List<int> beatsZonesIndex*/)
+    private void GenerateObstacles(List<float> beats, List<float> rmse/*, List<int> beatsZonesIndex*/)
     {
         //bool portal = false;
         int offsetI = 2;
@@ -142,15 +140,19 @@ public class AlObstacleGenerator : MonoBehaviour
 
             if (lastObstacle == null || spaceBetweenBeats > lastObstacle.getPostX())
             {
+                
+
                 //CREACIÓN DEL OBSTÁCULO
 
                 //Si este index es justo el anterior a donde va a haber uno importante, quiero instanciar uno vacío (Default).
                 if (importantIndexes.Contains(i + 1)) thisObstacle = InstantiateDefaultObstacle(getPosibleStructures(i), coordX, coordY);
-                    
 
-                //Si no, uno aleatorio
-                else
+                else //Si no, uno aleatorio con la dificultad correspondiente
+                {
+                    difficulty = ChooseDifficulty(rmse[i]); //Decisión de dificultad
                     thisObstacle = InstantiateRandomObstacle(getPosibleStructures(i), coordX, coordY, spaceBetweenBeats);
+                }
+
 
                 //CREACIÓN DEL SUELO
                 //El suelo tendrá que ir desde el FINAL (no el centro) del anterior obstáculo hasta el PRINCIPIO de este
@@ -422,4 +424,14 @@ public class AlObstacleGenerator : MonoBehaviour
         importantIndexes.Add(lowZoneEndIndex);
     }
 
+    //Cambia la dificultad dependiendo del rmse de este momento
+    private int ChooseDifficulty(float rmse)
+    {
+        if (rmse < 0.45)    return 0;
+        if (rmse < 0.65)     return 1;
+        if (rmse < 0.8)    return 2;
+        if (rmse < 0.9)     return 3;
+        if (rmse < 0.98)    return 4;
+        return 5; //Si rmse >= 0.98
+    }
 }

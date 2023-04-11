@@ -58,7 +58,7 @@ MonoBehaviour:
   unlevel: 0.5
   prevX: 1
   postX: 6
-  difficulty1To5: 3
+  difficulty1To5: 4
   obstacleEnabled: 1
 --- !u!1001 &457155723168379593
 PrefabInstance:

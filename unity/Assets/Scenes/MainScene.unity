@@ -871,7 +871,6 @@ MonoBehaviour:
   groundToDestroy: {fileID: 2124642413}
   obstaclePool: {fileID: 1962388977}
   groundPool: {fileID: 1052714808}
-  difficulty: -1
 --- !u!1 &312908907
 GameObject:
   m_ObjectHideFlags: 0
@@ -12238,7 +12237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pruebasDesdeMenu: 0
-  song: Electro
+  song: besos
   format: .wav
 --- !u!4 &1277446152
 Transform:
