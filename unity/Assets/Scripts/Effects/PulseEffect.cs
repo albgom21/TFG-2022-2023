@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
+// Cambiar la zona interior del player al ritmo de los beats
 public class PulseEffect : MonoBehaviour
 {
-    //public Image efecto;
     public SpriteRenderer sprite;
     public ReadTxt input;
 
@@ -19,29 +18,16 @@ public class PulseEffect : MonoBehaviour
     {
         color = sprite.color;
         beats = input.GetBeatsInTime();
-        //beats = input.getPlpBeatsInTime();
-
-        //foreach (float time in beats)
-        //{
-        //    Invoke("TriggerEvent", time);
-        //}
     }
-
-    //void TriggerEvent()
-    //{
-    //    color.a = 0.5f;
-    //    efecto.color = color;
-    //    //Debug.Log("Evento activado en " + Time.time + " segundos");
-    //}
 
     private void Update()
     {
+        // Meter lógica de los spawns y Constants.DELAY_TIME
         if (!GameManager.instance.GetEnd())
         {
-
             if (GameManager.instance.GetDeath())
             {
-                timeCount = 0;
+                timeCount = Constants.DELAY_TIME;
                 cont = 0;
             }
 
@@ -54,7 +40,7 @@ public class PulseEffect : MonoBehaviour
                 cont++;
             }
 
-            color.a -= 1f * Time.deltaTime;
+            color.a -= 1.5f * Time.deltaTime;
             sprite.color = color;
         }
     }

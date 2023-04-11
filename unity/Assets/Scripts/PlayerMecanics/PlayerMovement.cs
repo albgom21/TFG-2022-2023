@@ -106,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            sprite.Rotate(Vector3.back);
+            sprite.Rotate(Vector3.back*1.5f); // ROTACIÓN
             particles.enableEmission = false;
         }
     }

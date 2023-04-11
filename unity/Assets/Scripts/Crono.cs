@@ -8,14 +8,14 @@ public class Crono : MonoBehaviour
     private Text textoCrono;
     private DebugManager debugManager;
 
-    private double timeActivated = 0;
-    private double t = 0;
-    private double spawnTime = 0;
+    private double timeActivated = 0;   // Tiempo en el que ha activado el crono
+    private double t = 0;               // Tiempo real de crono activo  
+    private double spawnTime = 0;       // Tiempo en el que se produjo el último spawn
 
     private void Start()
     {
         textoCrono = GetComponent<Text>();
-        timeActivated = Time.time;
+        timeActivated = Time.time ;
 
         debugManager = GameManager.instance.GetDebugManager();
         debugManager.setCronoInstance(textoCrono);
@@ -28,7 +28,7 @@ public class Crono : MonoBehaviour
         {
             if (GameManager.instance.GetDeath())
                 timeActivated = Time.time;
-            t = Time.time - timeActivated + spawnTime;                   // Calcular el tiempo que lleva el crono activado         
+            t = Time.time - timeActivated + spawnTime;       // Calcular el tiempo que lleva el crono activado         
             textoCrono.text = t.ToString("F2") + "s";        // Mostrar el tiempo sin decimales   
         }
     }

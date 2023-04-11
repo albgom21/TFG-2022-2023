@@ -21,6 +21,7 @@ public class Zone : MonoBehaviour
     public bool waterEnabled = false;
     private List<ZoneData> zData = new List<ZoneData>();
 
+
     void Start()
     {
         originalSkyBox = RenderSettings.skybox;
@@ -45,9 +46,9 @@ public class Zone : MonoBehaviour
             for (int i = 0; i < zData.Count; i++)
             {
                 ZoneData aux = zData[i];
-                if (timeCount < zData[i].getTimeIniZone() || (timeCount > zData[i].getTimeIniZone() && timeCount < zData[i].getTimeEndZone()))
+                if (timeCount < zData[i].getTimeIniZone() + Constants.DELAY_TIME || (timeCount > zData[i].getTimeIniZone() + Constants.DELAY_TIME && timeCount < zData[i].getTimeEndZone() + Constants.DELAY_TIME))
                     aux.setActivatedIni(false);
-                if (timeCount < zData[i].getTimeEndZone() || (timeCount > zData[i].getTimeIniZone() && timeCount < zData[i].getTimeEndZone()))
+                if (timeCount < zData[i].getTimeEndZone() + Constants.DELAY_TIME || (timeCount > zData[i].getTimeIniZone() + Constants.DELAY_TIME && timeCount < zData[i].getTimeEndZone() + Constants.DELAY_TIME))
                     aux.setActivatedEnd(false);
                 zData[i] = aux;
             }
@@ -57,7 +58,7 @@ public class Zone : MonoBehaviour
         for (int i = 0; i < zData.Count; i++)
         {
             // Si no se ha pasado el portal de inicio y ha pasado el tiempo de activación
-            if (!zData[i].getActivatedIni() && timeCount >= zData[i].getTimeIniZone())
+            if (!zData[i].getActivatedIni() && timeCount >= zData[i].getTimeIniZone() + Constants.DELAY_TIME)
             {
                 // Poner la zona según su tipo                                    
                 IniZone(zData[i].getType());
@@ -69,7 +70,7 @@ public class Zone : MonoBehaviour
                 break;
             }
             // Si no se había salido de la zona y ha pasado el tiempo de la zona
-            else if (!zData[i].getActivatedEnd() && timeCount >= zData[i].getTimeEndZone())
+            else if (!zData[i].getActivatedEnd() && timeCount >= zData[i].getTimeEndZone() + Constants.DELAY_TIME)
             {
                 // Finalizar la zona
                 EndZone();
