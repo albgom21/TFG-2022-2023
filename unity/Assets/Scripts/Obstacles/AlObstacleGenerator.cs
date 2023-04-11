@@ -63,45 +63,36 @@ public class AlObstacleGenerator : MonoBehaviour
         lowColor = new Color(0.2f, 0.4f, 0.6f, 1.0f);  // DARK BLUE
         highColor = new Color(1.0f, 1.0f, 0.0f, 1.0f); // YELLOW
 
-        obstaclesStructures     = Resources.LoadAll<GameObject>("Prefabs/Alvaro/Estructuras");
-        lowZoneStartStructures  = Resources.LoadAll<GameObject>("Prefabs/Alvaro/ChangeZone/LowZoneStart");
-        lowZoneEndStructures    = Resources.LoadAll<GameObject>("Prefabs/Alvaro/ChangeZone/LowZoneEnd");
-        gravityStructures       = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/Gravity");
-        slowMotionStructures    = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/SlowMotion");
-        lowResStructures        = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/LowRes");
+        InitResources();
 
         lastObstacle = null;
 
         List<float> beats = features.GetComponent<ReadTxt>().GetBeatsInTime();
         zonesData = zones.getZonesData();
 
-        importantIndexes = new List<int>();
-
         List<float> rmse = features.GetComponent<ReadTxt>().GetRMSE();
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
-        //Debug.Log(minDistanceBetweenObstacles);
 
-        InitZonesIndexes();
+        InitIndexes(beats);
+        
+        GenerateObstacles(beats, rmse);
 
-        GeneratePowerUpsIndexes(beats);
-
-        GenerateObstacles(beats, rmse/*, beatsZonesIndex*/);
-
-  
         Destroy(groundToDestroy);
+
+        PositionPlayer();
     }
 
-    private void GenerateObstacles(List<float> beats, List<float> rmse/*, List<int> beatsZonesIndex*/)
+    private void GenerateObstacles(List<float> beats, List<float> rmse)
     {
         //bool portal = false;
-        int offsetI = 2;
         //Coordenadas del obstáculo y del previo
-        float coordX, coordY, prevX;    coordX = coordY = prevX = 0.0f;
+        float coordX, coordY, prevX;
+        coordX = coordY = prevX = 0.0f;
+
         ObstacleStructureData thisObstacle = null;
 
-        bool zoneIsChanging;
-        for (int i = offsetI; i < beats.Count() - 1; i++)
+        for (int i = 0; i < beats.Count() - 1; i++)
         {
             groundPrefab.GetComponent<SpriteRenderer>().color = Color.white;
             foreach (ZoneData z in zonesData)
@@ -158,7 +149,7 @@ public class AlObstacleGenerator : MonoBehaviour
                 //El suelo tendrá que ir desde el FINAL (no el centro) del anterior obstáculo hasta el PRINCIPIO de este
                 float floorStart, floorEnd;
 
-                if (lastObstacle == null) floorStart = 0.0f; //Solo ocurre con el primer obstáculo, el cual no tiene anterior
+                if (lastObstacle == null) floorStart = -2.0f * multiplierX; //Solo ocurre con el primer obstáculo, el cual no tiene anterior
                 else floorStart = prevX + lastObstacle.getPostX();
 
                 floorEnd = coordX - thisObstacle.getPrevX();
@@ -222,7 +213,11 @@ public class AlObstacleGenerator : MonoBehaviour
 
         //Si ha llegado hasta aquí siendo null, significa que tras todos los intentos no ha encontrado ninguno que quepe.
         //Pongo A MANO el número 0 porque es el más "fino", cabe seguro (es un obstáculo vacío)
-        if (obstacleStructure == null) obstacleStructure = InstantiateDefaultObstacle(posibleStructures, x, y);
+        if (obstacleStructure == null)
+        {
+            obstacleStructure = InstantiateDefaultObstacle(posibleStructures, x, y);
+            Debug.Log("Default instanciado por no encontrar");
+        }
 
         return obstacleStructure;
     }
@@ -265,28 +260,20 @@ public class AlObstacleGenerator : MonoBehaviour
         ground.transform.localScale = new Vector3(width, ground.transform.localScale.y, ground.transform.localScale.z);
     }
 
-    public float getMultiplierX()
-    {
-        return multiplierX;
-    }
+    public float getMultiplierX() { return multiplierX; }
+    public GameObject getFeatures() { return features;  }
 
-    public GameObject getFeatures()
-    {
-        return features;
-    }
 
     //Devuelve si el obstáculo elegido está activado para usarlo y si es posible por su dificultad
     private bool ObstacleEnabled(ObstacleStructureData obstacleStructure)
     {
         int obstacleDif = obstacleStructure.getDifficulty();
 
-        //Si la dificultad del nivel es -1, me da igual la dificultad del obstáculo
-        //Si la dificultad del obstáculo es -1, me da igual la dificultad del nivel
-        if (difficulty == -1 || obstacleDif == -1) return obstacleStructure.getObstacleEnabled(); 
+        //Si la dificultad del obstáculo es -1, me da igual la dificultad actual (el obstáculo se puede usar en cualquier dificultad)
+        if (obstacleDif == -1) return obstacleStructure.getObstacleEnabled(); 
 
-        //Se elegirán obstáculos cuya dificultad sea igual o con 1 de diferencia respecto a la dificultad del script
-        //Ejemplo: si la dificultad marcada en script es 3, se elegirá, obstáculos de dificultad 2, 3 y 4
-        return obstacleStructure.getObstacleEnabled() && difficulty >= obstacleDif - 1 && difficulty <= obstacleDif + 1;
+        //Devuelve si el obstáculo está activado y su dificultad es la correcta
+        return obstacleStructure.getObstacleEnabled() && difficulty == obstacleDif;
     }
 
     //Devuelve el array de estructuras que se va a utilizar para el siguiente beat
@@ -409,6 +396,34 @@ public class AlObstacleGenerator : MonoBehaviour
         }
     }
 
+    //Posiciona al jugador
+    private void PositionPlayer()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        player.transform.position = new Vector3(-2.0f * multiplierX, player.transform.position.y, player.transform.position.z);
+    }
+
+    //Inicializa los arrays de estructuras
+    private void InitResources()
+    {
+        obstaclesStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/Estructuras");
+        lowZoneStartStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/ChangeZone/LowZoneStart");
+        lowZoneEndStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/ChangeZone/LowZoneEnd");
+        gravityStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/Gravity");
+        slowMotionStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/SlowMotion");
+        lowResStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/LowRes");
+    }
+
+    //Inicializa todos los Index (zonas y powerUps)
+    private void InitIndexes(List <float> beats)
+    {
+        importantIndexes = new List<int>();
+        InitZonesIndexes();
+
+        GeneratePowerUpsIndexes(beats);
+    }
+
+    //Inicializa los Index de zonas
     private void InitZonesIndexes()
     {
         foreach (ZoneData z in zonesData)
@@ -427,9 +442,8 @@ public class AlObstacleGenerator : MonoBehaviour
     //Cambia la dificultad dependiendo del rmse de este momento
     private int ChooseDifficulty(float rmse)
     {
-        if (rmse < 0.45)    return 0;
-        if (rmse < 0.65)     return 1;
-        if (rmse < 0.8)    return 2;
+        if (rmse < 0.6)    return 1;
+        if (rmse < 0.8)     return 2;
         if (rmse < 0.9)     return 3;
         if (rmse < 0.98)    return 4;
         return 5; //Si rmse >= 0.98

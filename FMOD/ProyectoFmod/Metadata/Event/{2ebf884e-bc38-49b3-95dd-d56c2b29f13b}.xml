@@ -109,6 +109,9 @@
 	</object>
 	<object class="MixerBusPanner" id="{5e6b82f7-cc1f-4043-9841-a48aea9af28a}" />
 	<object class="ProgrammerSound" id="{86770739-78b1-40c2-a0d6-e874822801f0}">
+		<property name="start">
+			<value>2</value>
+		</property>
 		<property name="length">
 			<value>300</value>
 		</property>
