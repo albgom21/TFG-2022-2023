@@ -464,6 +464,7 @@ def onset_detection(filename):
     print ("Total frames: ", y.size)
     print("OnsetDrumsFrames size: ", onset_frames.size)
     onset_time = librosa.frames_to_time(onset_frames)
+    onset_time = onset_time + 2
 
     # PROVISIONAL 
     # métodos para obtener los onsets del piano y del other
@@ -472,13 +473,14 @@ def onset_detection(filename):
     o_env = normalize(o_env)    
     onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
     onset_piano = librosa.frames_to_time(onset_frames)
-
+    onset_piano = onset_piano +2
 
     y,sr = load_Wave("other_" + filename)
     o_env = librosa.onset.onset_strength(y=y, sr=sr)
     o_env = normalize(o_env)    
     onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
     onset_other = librosa.frames_to_time(onset_frames)
+    onset_other = onset_other +2 
 
     return onset_time, onset_piano, onset_other
 
@@ -800,5 +802,5 @@ def main(filename):
     features_to_txt(filename)
 
 #main(sys.argv[1]) #Si se llama desde Unity o desde consola
-main("electro.wav") #Si se llama ejecutando con F5
-# depuracion_onset("electro.wav")
+main("bzrp.wav") #Si se llama ejecutando con F5
+#depuracion_onset("bzrp.wav")

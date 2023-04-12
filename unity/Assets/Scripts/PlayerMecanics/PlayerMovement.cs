@@ -89,15 +89,9 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            GameManager.instance.ChangeAutoJumpMode();
-        }
+        if (Input.GetKeyDown(KeyCode.J)) GameManager.instance.ChangeAutoJumpMode();
 
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            GameManager.instance.ChangeDebugMode();
-        }
+        if (Input.GetKeyDown(KeyCode.D)) GameManager.instance.ChangeDebugMode();
 
         if (onGround)
         {
@@ -109,6 +103,7 @@ public class PlayerMovement : MonoBehaviour
             sprite.Rotate(Vector3.back*1.5f); // ROTACIÓN
             particles.enableEmission = false;
         }
+        if (Input.GetKeyDown(KeyCode.M)) PlayerDeath();
     }
 
     private void FixedUpdate()

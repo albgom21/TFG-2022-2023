@@ -29,7 +29,7 @@ public class LightManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.GetEnd()) return;
+        if (GameManager.instance.GetEnd()) return;       
         if (GameManager.instance.GetDeath())
         {
             time = GameManager.instance.GetDeathTime();
