@@ -60,8 +60,8 @@ public class AlObstacleGenerator : MonoBehaviour
 
     void Start()
     {
-        lowColor = new Color(0.2f, 0.4f, 0.6f, 1.0f);  // DARK BLUE
-        highColor = new Color(1.0f, 1.0f, 0.0f, 1.0f); // YELLOW
+        lowColor = new Color(0.0f, 1.0f, 0.6344354f, 1.0f);  // GREEN-BLUE
+        highColor = new Color(1.0f, 0.2731888f, 0.25f, 1.0f); // RED
 
         InitResources();
 

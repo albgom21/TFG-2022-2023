@@ -30,15 +30,15 @@ public class ButtonFunc : MonoBehaviour
         createPaths();
 
         // Llamada a spleeter con 1er arg la canción y 2do arg el lugar donde deja las pistas generadas
-        //if (!checkFiles(pathsSpleeter))
-        //    RunPythonScript("Assets/FeaturesExtraction/spleeter_ex.py", "./" + path, "./Assets/StreamingAssets/");
+        if (!checkFiles(pathsSpleeter))
+            RunPythonScript("Assets/FeaturesExtraction/spleeter_ex.py", "./" + path, "./Assets/StreamingAssets/");
 
         // Si no existen los ficheros llamar a Python para la extracción de las características
         if (!checkFiles(pathsFeatures))
             RunPythonScript("Assets/FeaturesExtraction/librosa_ex.py", path);
 
         // Cargar escena del juego
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene(Constants.NAME_GAME_SCENE);
     }
 
     // Crea las rutas necesarias para comprobar si ya existen los archivos y no ejecutar de nuevo los scripts de Python

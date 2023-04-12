@@ -7,10 +7,10 @@ public class Scenes : MonoBehaviour
 {
     public void goToMenu()
     {
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene(Constants.NAME_MENU_SCENE);
     }
     public void goToGame()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene(Constants.NAME_GAME_SCENE);
     }
 }
