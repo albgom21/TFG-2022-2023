@@ -1,8 +1,8 @@
+using FMOD;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using ZoneCode;
+using Debug = UnityEngine.Debug;
 
 public class LightManager : MonoBehaviour
 {
@@ -15,21 +15,29 @@ public class LightManager : MonoBehaviour
     private double time;
     private float offset;
     private Color newBackgroundColor, newLightColor;
+    
     void Start()
     {
-        onset = input.GetOnset();
+        Debug.Log("LIGHT MANAGER START");
+        onset = input.GetOnsetOther();
+        for (int j = 0; j < onset.Count; j++)
+        {
+            onset[j] += Constants.DELAY_TIME;
+            if (j == 0) Debug.Log(onset[j]);
+        }
+
         i = 0;
         time = 0;
         intensity = maxIntensity = backgroundLight.intensity;
         onsetCount = onset.Count;
         newBackgroundColor = new Color(0, 0.64f, 1f, 0.3f);
         newLightColor = Color.blue;
-        GameManager.instance.SetDrumsEffect(this);
+        GameManager.instance.SetLightManager(this);
     }
 
     private void Update()
     {
-        if (GameManager.instance.GetEnd()) return;       
+        if (GameManager.instance.GetEnd()) return;
         if (GameManager.instance.GetDeath())
         {
             time = GameManager.instance.GetDeathTime();
@@ -52,7 +60,7 @@ public class LightManager : MonoBehaviour
         }
         backgroundLight.intensity = intensity;
         intensity -= maxIntensity * (Time.deltaTime / offset);
-        
+
         if (backgroundRenderer != null && backgroundRenderer.color != newBackgroundColor)
             backgroundRenderer.color = new Color(Mathf.Lerp(backgroundRenderer.color.r, newBackgroundColor.r, Time.deltaTime * 1.5f),
                 Mathf.Lerp(backgroundRenderer.color.g, newBackgroundColor.g, Time.deltaTime * 1.5f),

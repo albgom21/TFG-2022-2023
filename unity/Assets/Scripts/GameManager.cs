@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
     public void SetDebugManager(DebugManager d) { debugManager = d; }
     public void SetPowerUpsManager(PowerUpsManager p) { powerUpsManager = p; }
 
-    public void SetDrumsEffect(LightManager d) { lightManager = d; }
+    public void SetLightManager(LightManager l) { lightManager = l; }
 
     public PowerUpsManager GetPowerUpsManager() { return powerUpsManager; }
 
@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
     {
         if (lightManager == null)
         {
-            Debug.LogWarning("El controlador de luces (objeto con script DrumsEffect) es nulo");
+            Debug.LogWarning("El controlador de luces (objeto con script LightManager) es nulo");
             return;
         }
         zoneType = type;
