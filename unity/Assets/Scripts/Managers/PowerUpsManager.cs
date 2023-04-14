@@ -130,7 +130,7 @@ public class PowerUpsManager : MonoBehaviour
     {
         if (slowMotionPowerUp)
         {
-            //Transici�n lenta de On
+            //Transición lenta de On
             if (smTimeScale > 0.6f) //Si a�n no ha llegado al l�mite del efecto (x0.6 de velocidad)
             {
                 smTimeScale -= 0.3f * Time.deltaTime; //Va bajando la velocidad a ritmo de 0.3 por segundo

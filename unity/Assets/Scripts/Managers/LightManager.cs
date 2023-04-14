@@ -19,7 +19,7 @@ public class LightManager : MonoBehaviour
     void Start()
     {
         Debug.Log("LIGHT MANAGER START");
-        onset = input.GetOnsetOther();
+        onset = input.GetOnset();
         for (int j = 0; j < onset.Count; j++)
         {
             onset[j] += Constants.DELAY_TIME;
