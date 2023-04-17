@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public class TorchBehaviour : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("TORCH START");
-        GameManager.instance.AddTorchGM(this.gameObject);
+        Light2D l = gameObject.GetComponent<Light2D>();
+        if (l == null) Debug.LogError("Trying to add torch light with no Light2D component");
+        else GameManager.instance.AddTorchGM(l);
     }
 }

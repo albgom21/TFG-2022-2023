@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using ZoneCode;
 
 [DefaultExecutionOrder(-1)]
@@ -105,13 +106,9 @@ public class GameManager : MonoBehaviour
         lightManager.SetLightColor(lightColor, backgroundColor);
     }
 
-    public void AddTorchGM(GameObject t)
+    public void AddTorchGM(Light2D l)
     {
         if (lightManager == null) Debug.LogError("Light Manager is null");
-        else
-        {
-            lightManager.AddTorch(t);
-            Debug.Log("ADD TORCH GM");
-        }
+        else lightManager.AddTorchLight(l);
     }
 }

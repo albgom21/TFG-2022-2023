@@ -76,14 +76,9 @@ public class LightManager : MonoBehaviour
         newBackgroundColor = backgroundColor;
     }
 
-    public void AddTorch(GameObject torch)
+    public void AddTorchLight(Light2D light)
     {
-        if (torch.GetComponent<TorchBehaviour>() == null) Debug.LogError("GameObject is not a torch");
-        else
-        {
-            Debug.Log("NEW TORCH");
-            torchesLights.Add(torch.GetComponent<Light2D>());
-        }
+        torchesLights.Add(light);
     }
 
     private void UpdateLightColors()
