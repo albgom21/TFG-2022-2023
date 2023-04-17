@@ -130,7 +130,7 @@ public class Zone : MonoBehaviour
         for (int i = 0; i < rmse.Count(); i++)
         {
             // Si está dentro del umbral y la zona no se ha iniciado guardar comienzo
-            if (find && rmse[i] >= 0.925f)
+            if (find && rmse[i] >= 0.9f)
             {
                 iniBeat = i;
                 iniZone = beats[i];
@@ -138,11 +138,11 @@ public class Zone : MonoBehaviour
                 balance += rmse[i];
             }
             // Si ya se está en la zona y el balance cumple seguir agrandando la zona
-            else if (iniZone >= 0 && balance >= ((i - iniBeat) * 0.85f) && rmse[i] >= 0.7f)
+            else if (iniZone >= 0 && balance >= ((i - iniBeat) * 0.80f) && rmse[i] >= 0.7f)
             {
-                //Debug.Log("Rmse: " + rmse[i] + " B: " + balance + " BU: " + ((i - contIni) * 0.85f));
-                if ((balance - ((i - iniBeat) * 0.85f)) >= 2)
-                    balance -= 1.75f;
+                //Debug.Log("Rmse: " + rmse[i] + " B: " + balance + " BU: " + ((i - contIni) * 0.80f));
+                if ((balance - ((i - iniBeat) * 0.80f)) >= 2)
+                    balance -= 1.70f;
 
                 actualLength++;
                 balance += rmse[i];
@@ -167,27 +167,31 @@ public class Zone : MonoBehaviour
             }
         }
 
-        aux.setBeatLength(actualLength);
-        aux.setActivatedIni(false);
-        aux.setActivatedEnd(false);
-        zData.Add(aux);
+        // Añadir si se ha encontrado una zona
+        if (actualLength > 0)
+        {
+            aux.setBeatLength(actualLength);
+            aux.setActivatedIni(false);
+            aux.setActivatedEnd(false);
+            zData.Add(aux);
 
-        beatsZones.Add(zData[zData.Count - 1].getBeatIni());
-        beatsZones.Add(zData[zData.Count - 1].getBeatEnd());
+            beatsZones.Add(zData[zData.Count - 1].getBeatIni());
+            beatsZones.Add(zData[zData.Count - 1].getBeatEnd());
 
-        //int cont = 0;
-        //foreach (ZoneData z in zData)
-        //{
-        //    if (z.getType() == ZoneType.HIGH)
-        //    {
-        //        cont++;
-        //        Debug.Log("Z high:" + cont + " ini: " + z.getTimeIniZone() + " end: " + z.getTimeEndZone());
-        //    }
-        //}
-        //Debug.Log("BEST High: " + bestLength);
+            //int cont = 0;
+            //foreach (ZoneData z in zData)
+            //{
+            //    if (z.getType() == ZoneType.HIGH)
+            //    {
+            //        cont++;
+            //        Debug.Log("Z high:" + cont + " ini: " + z.getTimeIniZone() + " end: " + z.getTimeEndZone());
+            //    }
+            //}
+            //Debug.Log("BEST High: " + bestLength);
 
-        //Debug.Log("Ini zona high: " + zData[zData.Count - 1].getTimeIniZone());
-        //Debug.Log("Fin zona high: " + zData[zData.Count - 1].getTimeEndZone());
+            //Debug.Log("Ini zona high: " + zData[zData.Count - 1].getTimeIniZone());
+            //Debug.Log("Fin zona high: " + zData[zData.Count - 1].getTimeEndZone());
+        }
     }
 
     private void LowZone(List<float> beats, List<float> rmse)
@@ -215,12 +219,12 @@ public class Zone : MonoBehaviour
                 //Debug.Log("iniZone: " + iniZone + " i: "+ i);
             }
             // Si ya se está en la zona y el balance cumple seguir agrandando la zona
-            else if (iniZone >= 0 && balance <= ((i - iniBeat) * 0.3f) && (((i - iniBeat) * 0.3f) - balance >= 3) && (rmse[i] <= 0.7f))
+            else if (iniZone >= 0 && balance <= ((i - iniBeat) * 0.3f) && (((i - iniBeat) * 0.5f) >= balance) && ((((i - iniBeat) * 0.3f) - balance) < 5) && (rmse[i] <= 0.7f))
             {
                 //Debug.Log("ampliando zona: " + iniZone + " i: " + i);
                 actualLength++;
                 balance += rmse[i];
-                //Debug.Log(" B: " + balance + " BU: " + ((i - iniBeat) * 0.3f)+" i: "+ i +" iniB: "+iniBeat);
+                //Debug.Log(" B: " + balance + " BU: " + ((i - iniBeat) * 0.3f) + " BU2: " + ((((i - iniBeat) * 0.3f) - balance)) + " i: "+ i +" iniB: "+iniBeat);
 
                 //if (((i - contIni) * 0.3f) - balance >= 3)
                 //    balance += 2.5f;
@@ -243,27 +247,32 @@ public class Zone : MonoBehaviour
                 find = true;
             }
         }
-        aux.setType(ZoneType.LOW);
-        aux.setBeatLength(actualLength);
-        aux.setActivatedIni(false);
-        aux.setActivatedEnd(false);
-        zData.Add(aux);
 
-        beatsZones.Add(zData[zData.Count - 1].getBeatIni());
-        beatsZones.Add(zData[zData.Count - 1].getBeatEnd());
+        // Añadir si se ha encontrado una zona
+        if (actualLength > 0)
+        {
+            aux.setType(ZoneType.LOW);
+            aux.setBeatLength(actualLength);
+            aux.setActivatedIni(false);
+            aux.setActivatedEnd(false);
+            zData.Add(aux);
 
-        //int cont = 0;
-        //foreach(ZoneData z in zData)
-        //{
-        //    if(z.getType() == ZoneType.LOW)
-        //    {
-        //        cont++;
-        //        Debug.Log("Z low:" +cont+" ini: "+z.getTimeIniZone()+ " end: " +z.getTimeEndZone());
-        //    }
-        //}
-        //Debug.Log("BEST low: " + bestLength);
-        //Debug.Log("Ini zona low: " + zData[zData.Count - 1].getTimeIniZone());
-        //Debug.Log("Fin zona low: " + zData[zData.Count - 1].getTimeEndZone());
+            beatsZones.Add(zData[zData.Count - 1].getBeatIni());
+            beatsZones.Add(zData[zData.Count - 1].getBeatEnd());
+
+            //int cont = 0;
+            //foreach (ZoneData z in zData)
+            //{
+            //    if (z.getType() == ZoneType.LOW)
+            //    {
+            //        cont++;
+            //        Debug.Log("Z low:" + cont + " ini: " + z.getTimeIniZone() + " end: " + z.getTimeEndZone());
+            //    }
+            //}
+            //Debug.Log("BEST low: " + bestLength);
+            //Debug.Log("Ini zona low: " + zData[zData.Count - 1].getTimeIniZone());
+            //Debug.Log("Fin zona low: " + zData[zData.Count - 1].getTimeEndZone());
+        }
     }
 
     // GETTERS

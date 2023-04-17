@@ -126,13 +126,13 @@ public class PlayerMovement : MonoBehaviour
         Vector2 normal = collision.GetContact(0).normal;
         if (normal == Vector2.down && rb.velocity.y > 0)
         {
-            Debug.Log("MUERTE EN ONCOLLISIONENTER DOWN con velocidad: " + rb.velocity.y);
+            //Debug.Log("MUERTE EN ONCOLLISIONENTER DOWN con velocidad: " + rb.velocity.y);
             PlayerDeath();
         }
         else if (normal == Vector2.up)
         {
             onGround = true;
-            Debug.Log("VELOCIDAD TOCANDO SUELO: " + rb.velocity.y);
+            //Debug.Log("VELOCIDAD TOCANDO SUELO: " + rb.velocity.y);
 
         }
     }
