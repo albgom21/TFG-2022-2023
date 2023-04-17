@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     private LightManager lightManager;
     private ZoneType zoneType;
 
-    void Awake()     // Comprobar que solo hay un GameManager.
+    void Awake()
     {
         if (instance == null)
         {
@@ -49,10 +49,10 @@ public class GameManager : MonoBehaviour
     public void SetExtension(string s) { extension = s; }
     public string GetExtension() { return extension; }
 
+    // Manager Setters
     public void SetAutoJumpManager(AutoJumpManager a) { autoJumpManager = a; }
     public void SetDebugManager(DebugManager d) { debugManager = d; }
     public void SetPowerUpsManager(PowerUpsManager p) { powerUpsManager = p; }
-
     public void SetLightManager(LightManager l) { lightManager = l; }
 
     public PowerUpsManager GetPowerUpsManager() { return powerUpsManager; }
@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
     {
         if (lightManager == null)
         {
-            Debug.LogWarning("El controlador de luces (objeto con script LightManager) es nulo");
+            Debug.LogError("Light Manager is null");
             return;
         }
         zoneType = type;
@@ -103,5 +103,15 @@ public class GameManager : MonoBehaviour
             backgroundColor = new Color(0, 0.64f, 1f, 0.3f);
         }
         lightManager.SetLightColor(lightColor, backgroundColor);
+    }
+
+    public void AddTorchGM(GameObject t)
+    {
+        if (lightManager == null) Debug.LogError("Light Manager is null");
+        else
+        {
+            lightManager.AddTorch(t);
+            Debug.Log("ADD TORCH GM");
+        }
     }
 }

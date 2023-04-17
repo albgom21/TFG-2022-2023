@@ -100,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            sprite.Rotate(Vector3.back*1.5f); // ROTACIÓN
+            sprite.Rotate(Vector3.back * 1.5f); // ROTACIÓN
             particles.enableEmission = false;
         }
         if (Input.GetKeyDown(KeyCode.M)) PlayerDeath();
@@ -124,8 +124,17 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.down) PlayerDeath();
-        else if (normal == Vector2.up) onGround = true;
+        if (normal == Vector2.down && rb.velocity.y > 0)
+        {
+            Debug.Log("MUERTE EN ONCOLLISIONENTER DOWN con velocidad: " + rb.velocity.y);
+            PlayerDeath();
+        }
+        else if (normal == Vector2.up)
+        {
+            onGround = true;
+            Debug.Log("VELOCIDAD TOCANDO SUELO: " + rb.velocity.y);
+
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -159,10 +168,10 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = Vector2.zero;
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             autoJump = jump = onGround = false;
-        } 
+        }
     }
 
     internal void AutoJump() { jump = true; autoJump = true; }
 
-    public float getJumpForce() { return jumpForce; }
+    public float GetJumpForce() { return jumpForce; }
 }

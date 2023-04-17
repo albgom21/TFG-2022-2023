@@ -5901,7 +5901,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: bb0aa2314c1fde64a8dd1759583fca7c, type: 3}
-  m_Color: {r: 0, g: 0.64, b: 1, a: 0.29803923}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.29803923}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -6982,7 +6982,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 0, g: 0, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -12221,7 +12221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pruebasDesdeMenu: 0
-  song: 200-BPM
+  song: Electro
   format: .wav
 --- !u!4 &1277446152
 Transform:
@@ -12569,7 +12569,6 @@ GameObject:
   - component: {fileID: 1497773961}
   - component: {fileID: 1497773960}
   - component: {fileID: 1497773959}
-  - component: {fileID: 1497773958}
   m_Layer: 5
   m_Name: RawImage Normal
   m_TagString: RawImage
@@ -12597,20 +12596,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1497773958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1497773956}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82752068952250244acadc25cd3adb09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skyboxNew: {fileID: 2100000, guid: 7ed994c1997814049b44c36a823bba6c, type: 2}
-  mainCamera: {fileID: 963194227}
 --- !u!114 &1497773959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13519,8 +13504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82752068952250244acadc25cd3adb09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skyboxNew: {fileID: 2100000, guid: 7ed994c1997814049b44c36a823bba6c, type: 2}
-  mainCamera: {fileID: 963194227}
 --- !u!1 &2124642413
 GameObject:
   m_ObjectHideFlags: 0
