@@ -92,7 +92,7 @@ public class AlObstacleGenerator : MonoBehaviour
 
         ObstacleStructureData thisObstacle = null;
 
-        for (int i = 0; i < beats.Count() - 1; i++)
+        for (int i = 0; i < beats.Count(); i++)
         {
             groundPrefab.GetComponent<SpriteRenderer>().color = Color.white;
             foreach (ZoneData z in zonesData)
@@ -176,11 +176,7 @@ public class AlObstacleGenerator : MonoBehaviour
         }
 
         //END
-        coordX = coordX + lastObstacle.getPostX() + (endPrefab.transform.localScale.x / 2);
-        //Coord X estaba en el centro del beat anterior, ahora está tras el resto del obstáculo anterior y movido
-        //a la mitad del prefab de end
-
-        Instantiate(endPrefab, new Vector3(coordX , coordY, 0), transform.rotation, obstaclePool);
+        GenerateEnd();
     }
 
     private ObstacleStructureData InstantiateRandomObstacle(GameObject[] posibleStructures, float x, float y, float spaceBetweenBeats)
@@ -258,6 +254,24 @@ public class AlObstacleGenerator : MonoBehaviour
         float width = floorEnd - floorStart;
         GameObject ground = Instantiate(groundPrefab, new Vector3(floorStart + (width / 2.0f), y, 0), transform.rotation, groundPool);
         ground.transform.localScale = new Vector3(width, ground.transform.localScale.y, ground.transform.localScale.z);
+    }
+
+    //Genera el final del nivel (suelo desde el último obstáculo hasta el final del .mp3, donde se generará el endPrefab)
+    private void GenerateEnd()
+    {
+        //La coordenada X del suelo va desde EL FINAL del último obstáculo hasta que se acabe el .mp3
+        float floorStartX = lastObstacle.gameObject.transform.position.x + lastObstacle.getPostX();
+        float floorEndX = features.GetComponent<ReadTxt>().GetDuration() * multiplierX;
+
+        //La coordenada y tanto del suelo como del endPrefab será la del último obstáculo + su desnivel
+        float coordY = lastObstacle.gameObject.transform.position.y + lastObstacle.getUnlevel();
+
+        GenerateFloor(floorStartX, floorEndX, coordY);
+
+        //El endPrefab se generá tras el floor en la misma coorY
+        float coordX = floorEndX + endPrefab.transform.localScale.x / 2.0f;
+
+        Instantiate(endPrefab, new Vector3(coordX, coordY, 0), transform.rotation, obstaclePool);
     }
 
     public float getMultiplierX() { return multiplierX; }
