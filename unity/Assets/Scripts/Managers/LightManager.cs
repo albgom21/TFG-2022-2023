@@ -16,8 +16,6 @@ public class LightManager : MonoBehaviour
     private double time;
     private float offset;
     private Color newBackgroundColor, newLightColor;
-
-
     private void Awake()
     {
         GameManager.instance.SetLightManager(this);
@@ -78,6 +76,7 @@ public class LightManager : MonoBehaviour
 
     public void AddTorchLight(Light2D light)
     {
+        light.color = Color.yellow;
         torchesLights.Add(light);
     }
 
@@ -89,10 +88,10 @@ public class LightManager : MonoBehaviour
                 Mathf.Lerp(backgroundRenderer.color.b, newBackgroundColor.b, Time.deltaTime * 1.5f), backgroundRenderer.color.a);
         if (backgroundLight != null && backgroundLight.color != newLightColor)
         {
-            foreach (Light2D l in torchesLights)
-                l.color = new Color(Mathf.Lerp(l.color.r, newLightColor.r, Time.deltaTime * 1.5f),
-                    Mathf.Lerp(l.color.g, newLightColor.g, Time.deltaTime * 1.5f),
-                    Mathf.Lerp(l.color.b, newLightColor.b, Time.deltaTime * 1.5f), backgroundLight.color.a);
+            //foreach (Light2D l in torchesLights)
+            //    l.color = new Color(Mathf.Lerp(l.color.r, newLightColor.r, Time.deltaTime * 1.5f),
+            //        Mathf.Lerp(l.color.g, newLightColor.g, Time.deltaTime * 1.5f),
+            //        Mathf.Lerp(l.color.b, newLightColor.b, Time.deltaTime * 1.5f), backgroundLight.color.a);
 
             backgroundLight.color = new Color(Mathf.Lerp(backgroundLight.color.r, newLightColor.r, Time.deltaTime * 1.5f),
                 Mathf.Lerp(backgroundLight.color.g, newLightColor.g, Time.deltaTime * 1.5f),

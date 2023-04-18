@@ -60,6 +60,8 @@ public class AlObstacleGenerator : MonoBehaviour
 
     void Start()
     {
+        lowZoneStartIndex = -1;
+        lowZoneEndIndex = -1;
         lowColor = new Color(0.0f, 1.0f, 0.6344354f, 1.0f);  // GREEN-BLUE
         highColor = new Color(1.0f, 0.2731888f, 0.25f, 1.0f); // RED
 
@@ -448,9 +450,12 @@ public class AlObstacleGenerator : MonoBehaviour
                 lowZoneEndIndex = z.getBeatEnd();
             }
         }
-
-        importantIndexes.Add(lowZoneStartIndex);
-        importantIndexes.Add(lowZoneEndIndex);
+        // Si hay zona low
+        if(lowZoneStartIndex > 0 && lowZoneEndIndex > 0)
+        {
+            importantIndexes.Add(lowZoneStartIndex);
+            importantIndexes.Add(lowZoneEndIndex);
+        }        
     }
 
     //Cambia la dificultad dependiendo del rmse de este momento
