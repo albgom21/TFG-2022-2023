@@ -13,9 +13,7 @@ public class Trampoline : MonoBehaviour
         if (mov != null)
         {
             if (interactive && !(Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space))) return;
-            Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
-            rb.velocity = Vector2.zero;
-            rb.AddForce(Vector2.up * mov.GetJumpForce() * jumpForce, ForceMode2D.Impulse);
+            mov.Jump(jumpForce);
         }
     }
 

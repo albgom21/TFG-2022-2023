@@ -109,7 +109,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (jump) Jump();
+        if (jump) TryJump();
         if (rb.velocity.y < 0) onGround = false;
 
         if (rb.velocity.y < -maxFallingSpeed) rb.velocity = new Vector2(rb.velocity.x, -maxFallingSpeed);
@@ -163,18 +163,24 @@ public class PlayerMovement : MonoBehaviour
         //Resetear el estado de los powerUps
         powerUpsManager.ResetData(lastSpawn.powerUpsData);
     }
-
-    private void Jump()
+    
+    //Intenta saltar (comprobando si estás en el suelo)
+    private void TryJump()
     {
-        if (onGround)
-        {
-            rb.velocity = Vector2.zero;
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            autoJump = jump = onGround = false;
-        }
+        if (onGround) Jump();
+    }
+
+    //Saltas con una potencia dada (para trampolines)
+    public void Jump(float jumpForceMultiplier = 1.0f)
+    {
+        rb.velocity = Vector2.zero;
+        rb.AddForce(Vector2.up * jumpForce * jumpForceMultiplier, ForceMode2D.Impulse);
+        autoJump = jump = onGround = false;
     }
 
     internal void AutoJump() { jump = true; autoJump = true; }
 
     public float GetJumpForce() { return jumpForce; }
+
+    
 }

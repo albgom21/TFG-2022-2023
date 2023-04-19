@@ -23,6 +23,8 @@ public class AlObstacleGenerator : MonoBehaviour
     //Estructuras de comienzos/finales de zonas
     private GameObject[] lowZoneStartStructures;
     private GameObject[] lowZoneEndStructures;
+    private GameObject[] highZoneStartStructures;
+    private GameObject[] highZoneEndStructures;
 
     //Estructuras que contengan POWER UPS
     private GameObject[] gravityStructures;
@@ -57,11 +59,10 @@ public class AlObstacleGenerator : MonoBehaviour
     bool highColorChange = false;
 
     private int lowZoneStartIndex, lowZoneEndIndex;
+    private int highZoneStartIndex, highZoneEndIndex;
 
     void Start()
     {
-        lowZoneStartIndex = -1;
-        lowZoneEndIndex = -1;
         lowColor = new Color(0.0f, 1.0f, 0.6344354f, 1.0f);  // GREEN-BLUE
         highColor = new Color(1.0f, 0.2731888f, 0.25f, 1.0f); // RED
 
@@ -295,12 +296,20 @@ public class AlObstacleGenerator : MonoBehaviour
     //Devuelve el array de estructuras que se va a utilizar para el siguiente beat
     private GameObject[] getPosibleStructures(int index)
     {
+        //---------ESTRUCTURAS DE ZONAS-------------------------
         //Estructuras de comienzo de zonaLow (agua)
         if (index == lowZoneStartIndex) return lowZoneStartStructures;
 
         //Estructuras de final de zonaLow (agua)
         if (index == lowZoneEndIndex) return lowZoneEndStructures;
 
+        //Estructuras de comienzo de zonaHigh
+        if (index == highZoneStartIndex) return highZoneStartStructures;
+
+        //Estructuras de final de zonaHigh
+        if (index == highZoneEndIndex) return highZoneEndStructures;
+
+        //---------ESTRUCTURAS DE POWER UPS-------------------------
         //Estructuras de powerUp de gravedad
         if (index == gravityStartIndex || index == gravityEndIndex) return gravityStructures;
 
@@ -425,6 +434,8 @@ public class AlObstacleGenerator : MonoBehaviour
         obstaclesStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/Estructuras");
         lowZoneStartStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/ChangeZone/LowZoneStart");
         lowZoneEndStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/ChangeZone/LowZoneEnd");
+        highZoneStartStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/ChangeZone/HighZoneStart");
+        highZoneEndStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/ChangeZone/HighZoneEnd");
         gravityStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/Gravity");
         slowMotionStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/SlowMotion");
         lowResStructures = Resources.LoadAll<GameObject>("Prefabs/Alvaro/PowerUps/LowRes");
@@ -443,13 +454,26 @@ public class AlObstacleGenerator : MonoBehaviour
     private void InitZonesIndexes()
     {
         lowZoneStartIndex = lowZoneEndIndex = -1;
+        highZoneStartIndex = highZoneEndIndex = -1;
+
+        //DEBUG PARA VER LAS ESTRUCTURAS AL PRINCIPIO
+        //lowZoneStartIndex = 3;
+        //lowZoneEndIndex = 8;
+        //highZoneStartIndex = 14;
+        //highZoneEndIndex = 20;
+
 
         foreach (ZoneData z in zonesData)
         {
             if (z.getType() == ZoneType.LOW)
             {
-                lowZoneStartIndex = z.getBeatIni();
-                lowZoneEndIndex = z.getBeatEnd();
+                lowZoneStartIndex   = z.getBeatIni();
+                lowZoneEndIndex     = z.getBeatEnd();
+            }
+            else if (z.getType() == ZoneType.HIGH)
+            {
+                highZoneStartIndex  = z.getBeatIni();
+                highZoneEndIndex    = z.getBeatEnd();
             }
         }
         // Si hay zona low
@@ -457,7 +481,13 @@ public class AlObstacleGenerator : MonoBehaviour
         {
             importantIndexes.Add(lowZoneStartIndex);
             importantIndexes.Add(lowZoneEndIndex);
-        }        
+        }
+        // Si hay zona high
+        if (highZoneStartIndex > 0 && highZoneEndIndex > 0)
+        {
+            importantIndexes.Add(highZoneStartIndex);
+            importantIndexes.Add(highZoneEndIndex);
+        }
     }
 
     //Cambia la dificultad dependiendo del rmse de este momento
