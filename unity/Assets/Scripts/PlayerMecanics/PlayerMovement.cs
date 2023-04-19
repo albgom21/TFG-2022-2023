@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject spawnPool;
     [SerializeField] private ParticleSystem particles;
     [SerializeField] private Crono crono;
+    [SerializeField] private float maxFallingSpeed;
     private Rigidbody2D rb;
     private bool autoJump, jump, onGround;
     private PowerUpsManager powerUpsManager;
@@ -110,6 +111,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (jump) Jump();
         if (rb.velocity.y < 0) onGround = false;
+
+        if (rb.velocity.y < -maxFallingSpeed) rb.velocity = new Vector2(rb.velocity.x, -maxFallingSpeed);
     }
 
     void Unrotate()

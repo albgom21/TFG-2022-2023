@@ -442,6 +442,8 @@ public class AlObstacleGenerator : MonoBehaviour
     //Inicializa los Index de zonas
     private void InitZonesIndexes()
     {
+        lowZoneStartIndex = lowZoneEndIndex = -1;
+
         foreach (ZoneData z in zonesData)
         {
             if (z.getType() == ZoneType.LOW)
