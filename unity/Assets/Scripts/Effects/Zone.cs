@@ -168,7 +168,7 @@ public class Zone : MonoBehaviour
         }
 
         // Añadir si se ha encontrado una zona
-        if (actualLength > 0)
+        if (bestLength > 0)
         {
             aux.setBeatLength(actualLength);
             aux.setActivatedIni(false);
@@ -224,7 +224,7 @@ public class Zone : MonoBehaviour
                 //Debug.Log("ampliando zona: " + iniZone + " i: " + i);
                 actualLength++;
                 balance += rmse[i];
-                //Debug.Log(" B: " + balance + " BU: " + ((i - iniBeat) * 0.3f) + " BU2: " + ((((i - iniBeat) * 0.3f) - balance)) + " i: "+ i +" iniB: "+iniBeat);
+                //Debug.Log(" B: " + balance + " BU: " + ((i - iniBeat) * 0.3f) + " BU2: " + ((((i - iniBeat) * 0.5f) - balance)) /*+ " i: "+ i +" iniB: "+iniBeat*/);
 
                 //if (((i - contIni) * 0.3f) - balance >= 3)
                 //    balance += 2.5f;
@@ -249,7 +249,7 @@ public class Zone : MonoBehaviour
         }
 
         // Añadir si se ha encontrado una zona
-        if (actualLength > 0)
+        if (bestLength > 0)
         {
             aux.setType(ZoneType.LOW);
             aux.setBeatLength(actualLength);
@@ -276,10 +276,6 @@ public class Zone : MonoBehaviour
     }
 
     // GETTERS
-    //public int getBeatIniHigh() { return beatIniHigh; }
-    //public int getBeatIniLow() { return beatIniLow; }
-    //public int getBeatEndHigh() { return beatEndHigh; }
-    //public int getBeatEndLow() { return beatEndLow; }
     public List<ZoneData> getZonesData() { return zData; }
     public List<int> getBeatsZonesIndex() { return beatsZones; }
 }

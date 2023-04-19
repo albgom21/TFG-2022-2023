@@ -215,7 +215,7 @@ public class AlObstacleGenerator : MonoBehaviour
         if (obstacleStructure == null)
         {
             obstacleStructure = InstantiateDefaultObstacle(posibleStructures, x, y);
-            Debug.Log("Default instanciado por no encontrar");
+            //Debug.Log("Default instanciado por no encontrar");
         }
 
         return obstacleStructure;
