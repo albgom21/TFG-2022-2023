@@ -30,12 +30,18 @@ public class ButtonFunc : MonoBehaviour
         createPaths();
 
         // Llamada a spleeter con 1er arg la canción y 2do arg el lugar donde deja las pistas generadas
-        if (!checkFiles(pathsSpleeter))
-            RunPythonScript("Assets/FeaturesExtraction/spleeter_ex.py", "./" + path, "./Assets/StreamingAssets/");
+        //if (!checkFiles(pathsSpleeter))
+        //    RunPythonScript(Application.streamingAssetsPath + "/FeaturesExtraction/Python/spleeter.py", "./" + path, "./Assets/StreamingAssets/");
 
+
+        // AÑADIR LA RUTA DONDE SE VAN A DEJAR LOS TXT QUE ES UN NUEVO PARAM
+        // CAMBIAR DE SITIO Y LAS RUTAS DE LOS .PY
+        // VER LAS RUTAS DE CREATE PATHS
+
+        //UnityEngine.Debug.Log("RUTA DEST: "+Application.streamingAssetsPath + "/Txt");
         // Si no existen los ficheros llamar a Python para la extracción de las características
         if (!checkFiles(pathsFeatures))
-            RunPythonScript("Assets/FeaturesExtraction/librosa_ex.py", path);
+            RunPythonScript(Application.streamingAssetsPath + "/FeaturesExtraction/Python/librosa_ex.py",  path);
 
         // Cargar escena del juego
         SceneManager.LoadScene(Constants.NAME_GAME_SCENE);
@@ -45,11 +51,12 @@ public class ButtonFunc : MonoBehaviour
     //----- AÑADIR MAS RUTAS ----
     private void createPaths()
     {
-        path = "Assets/StreamingAssets/" + songName + extension;  // Ruta donde se encuentra la canción seleccionada
-        checkPath = "Assets/FeaturesExtraction/Txt/" + songName;  // Ruta donde se encuentran las características de la canción
+        path = Application.streamingAssetsPath + "/" + songName + extension;     // Ruta donde se encuentra la canción seleccionada
+
+        checkPath = Application.streamingAssetsPath +"/" + songName;  // Ruta donde se encuentran las características de la canción
 
         pathsSpleeter = new string[] {                            // Lista de rutas que se esperan haber generado una vez se haya ejecutado spleeter
-            "Assets/StreamingAssets/" + songName + "_drums" + extension // Audio de las baterías de la canción
+            Application.streamingAssetsPath + "/"+ songName + "_drums" + extension // Audio de las baterías de la canción
         }.ToList();
 
         pathsFeatures = new string[]{   // Lista de rutas que se esperan haber generado una vez se haya ejecutado la extracción de características
@@ -58,13 +65,13 @@ public class ButtonFunc : MonoBehaviour
             checkPath + "_rmse.txt",
             checkPath + "_sr.txt",
             checkPath + "_duration.txt",
-            checkPath + "_onsetDetection.txt" 
+            checkPath + "_onsetDetection.txt"
         }.ToList();
     }
 
     // Ejecuta el archivo python que se encuentra en filePath con los argumentos arguments
     // En caso de error escribe en consola el error capturado así como la salida de consola del script
-    public void RunPythonScript(string filePath, string argument0, string argument1 = "")
+    public void RunPythonScript(string filePath, string argument0, string argument1="")
     {
         string pythonExecutablePath = "python";
 
@@ -111,7 +118,7 @@ public class ButtonFunc : MonoBehaviour
     // Comprueba si existen todos los ficheros de una lista de rutas
     // True -> existen todos los ficheros de la lista
     // False -> al menos un fichero de la lista no existe
-    private bool checkFiles(List<string> paths) 
+    private bool checkFiles(List<string> paths)
     {
         // Comprobar si existen todos los ficheros
         foreach (string s in paths)

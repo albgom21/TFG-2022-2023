@@ -15,10 +15,10 @@ public class ReadTxt : MonoBehaviour
     public bool pruebasDesdeMenu = false;
 
     // RUTAS
-    public string song = "200-BPM";         // T�tulo del audio analizado
+    public string song = "200-BPM";         // Titulo del audio analizado
     public string format = ".wav";
-    string path = "Assets/FeaturesExtraction/Txt/";            // Ruta dentro del proyecto donde se guardan los txt
-    string rutaBeats, rutaSC, rutaRMSE,     // Nombre de cada caracter�stica en los txt
+    string path;                            // Ruta dentro del proyecto donde se guardan los txt
+    string rutaBeats, rutaSC, rutaRMSE,     // Nombre de cada caracteristica en los txt
            rutaSamples, rutaSr, rutaDuration, rutaPlpBeats,
            rutaAgudosTiempo, rutaAgudosValoresNorm, rutaAgudos,
            rutaGravesTiempo, rutaGravesValoresNorm, rutaGraves,
@@ -56,6 +56,8 @@ public class ReadTxt : MonoBehaviour
         else   //Desde el men�
             song = GameManager.instance.GetSong();
 
+        path = Application.streamingAssetsPath + "/";
+        //Debug.Log("Path: " + path);
         // Crear las rutas de los txt
         rutaBeats = path + song + "_beats.txt";
         rutaPlpBeats = path + song + "_plpBeats.txt";
