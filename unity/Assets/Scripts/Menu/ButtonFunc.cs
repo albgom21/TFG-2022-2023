@@ -30,18 +30,12 @@ public class ButtonFunc : MonoBehaviour
         createPaths();
 
         // Llamada a spleeter con 1er arg la canción y 2do arg el lugar donde deja las pistas generadas
-        //if (!checkFiles(pathsSpleeter))
-        //    RunPythonScript(Application.streamingAssetsPath + "/FeaturesExtraction/Python/spleeter.py", "./" + path, "./Assets/StreamingAssets/");
+        if (!checkFiles(pathsSpleeter))
+            RunPythonScript(Application.streamingAssetsPath + "/FeaturesExtraction/Python/spleeter_ex.py", path, Application.streamingAssetsPath +"/");
 
-
-        // AÑADIR LA RUTA DONDE SE VAN A DEJAR LOS TXT QUE ES UN NUEVO PARAM
-        // CAMBIAR DE SITIO Y LAS RUTAS DE LOS .PY
-        // VER LAS RUTAS DE CREATE PATHS
-
-        //UnityEngine.Debug.Log("RUTA DEST: "+Application.streamingAssetsPath + "/Txt");
         // Si no existen los ficheros llamar a Python para la extracción de las características
         if (!checkFiles(pathsFeatures))
-            RunPythonScript(Application.streamingAssetsPath + "/FeaturesExtraction/Python/librosa_ex.py",  path);
+            RunPythonScript(Application.streamingAssetsPath + "/FeaturesExtraction/Python/librosa_ex.py", path);
 
         // Cargar escena del juego
         SceneManager.LoadScene(Constants.NAME_GAME_SCENE);
@@ -124,7 +118,7 @@ public class ButtonFunc : MonoBehaviour
         foreach (string s in paths)
             if (!File.Exists(s))
             {
-                UnityEngine.Debug.Log("NO ESTA GENERADO EL FICHERO" + s);
+                UnityEngine.Debug.Log("NO ESTA GENERADO EL FICHERO: " + s);
                 return false;
             }
 

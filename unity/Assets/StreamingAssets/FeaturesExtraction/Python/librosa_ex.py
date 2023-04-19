@@ -464,7 +464,11 @@ def onset_detection(path):
     # Obtener el nombre del archivo y su extensión
     filename = os.path.basename(path)
 
-    y,sr = load_Wave(dir + "/drums_" + filename)
+    # Obtiene el nombre del archivo sin extensión y su extensión
+    name, extension = os.path.splitext(filename)
+
+
+    y,sr = load_Wave(dir + "/" + name + "_drums" + extension)
     o_env = librosa.onset.onset_strength(y=y, sr=sr, aggregate=np.median)
     o_env = normalize(o_env)    
     onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
@@ -475,14 +479,14 @@ def onset_detection(path):
 
     # PROVISIONAL 
     # métodos para obtener los onsets del piano y del other
-    y,sr = load_Wave(dir + "/piano_" + filename)
+    y,sr = load_Wave(dir + "/" + name + "_piano" + extension)
     o_env = librosa.onset.onset_strength(y=y, sr=sr)
     o_env = normalize(o_env)    
     onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
     onset_piano = librosa.frames_to_time(onset_frames)
     onset_piano = onset_piano
 
-    y,sr = load_Wave(dir + "/other_" + filename)
+    y,sr = load_Wave(dir + "/" + name + "_other" + extension)
     o_env = librosa.onset.onset_strength(y=y, sr=sr)
     o_env = normalize(o_env)    
     onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
