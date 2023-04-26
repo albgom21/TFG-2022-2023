@@ -69,7 +69,7 @@ public class ObstacleGenerator : MonoBehaviour
 
         //List<int> beatsZonesIndex = zones.getBeatsZonesIndex();
 
-        multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
+        multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().GetPlayerSpeed();
         minDistanceBetweenObstacles = multiplierX / 2f;
 
         PruebaOnsets(beats);

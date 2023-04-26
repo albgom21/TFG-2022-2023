@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RestartMusic : MonoBehaviour
 {
-    private SelectMusic audio;
+    private new SelectMusic audio;
     private void Start()
     {
         audio = GetComponent<SelectMusic>();

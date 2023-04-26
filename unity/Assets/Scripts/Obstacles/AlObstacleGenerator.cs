@@ -75,7 +75,7 @@ public class AlObstacleGenerator : MonoBehaviour
 
         List<float> rmse = features.GetComponent<ReadTxt>().GetRMSE();
 
-        multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().getPlayerSpeed();
+        multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().GetPlayerSpeed();
 
         InitIndexes(beats);
         

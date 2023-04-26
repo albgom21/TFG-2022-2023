@@ -5,27 +5,24 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed;
-    [SerializeField] private float jumpForce;
+    [SerializeField] private float speed, jumpForce;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private Transform sprite;
-    [SerializeField] private GameObject obstacleGenerator;
-    [SerializeField] private GameObject spawnPrefab;
-    [SerializeField] private GameObject spawnPool;
+    [SerializeField] private GameObject obstacleGenerator, spawnPrefab, spawnPool;
     [SerializeField] private ParticleSystem particles;
     [SerializeField] private Crono crono;
     [SerializeField] private float maxFallingSpeed;
     private Rigidbody2D rb;
     private bool autoJump, jump, onGround;
     private PowerUpsManager powerUpsManager;
-    private struct spawnData
+    private struct SpawnData
     {
         public Vector3 pos;
         public GameObject obj;
         public double time;
         //Datos de los power Ups (así no hay que cambiar código en PlayerMovement cada vez que se añadan más powerUps)
         public PowerUpsManager.PowerUpsData powerUpsData;
-        public spawnData(Vector3 position, GameObject o, double t, PowerUpsManager.PowerUpsData puD)
+        public SpawnData(Vector3 position, GameObject o, double t, PowerUpsManager.PowerUpsData puD)
         {
             pos = position;
             obj = o;
@@ -33,10 +30,7 @@ public class PlayerMovement : MonoBehaviour
             powerUpsData = puD;
         }
     }
-    List<spawnData> spawns = new List<spawnData>();
-
-    //private RaycastHit2D raycast;
-    private float raycastDistance;
+    List<SpawnData> spawns = new();
 
     private void Awake()
     {
@@ -51,9 +45,8 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
         jump = autoJump = false; onGround = true;
-        spawns.Add(new spawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform), 0,
+        spawns.Add(new SpawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform), 0,
             new PowerUpsManager.PowerUpsData()));
-        raycastDistance = transform.localScale.y / 2.0f + 0.02f;
     }
 
     void Update()
@@ -63,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
         else if (!autoJump) jump = false;
 
         if (Input.GetMouseButtonDown(1))
-            spawns.Add(new spawnData(transform.position,
+            spawns.Add(new SpawnData(transform.position,
                                     Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform),
                                     crono.getActualTime(),
                                     powerUpsManager.getData() //Info de los powerUps
@@ -91,18 +84,16 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.J)) GameManager.instance.ChangeAutoJumpMode();
-
         if (Input.GetKeyDown(KeyCode.D)) GameManager.instance.ChangeDebugMode();
-
         if (onGround)
         {
             Unrotate();
-            particles.enableEmission = true;
+            particles.Play();
         }
         else
         {
             sprite.Rotate(Vector3.back * 1.5f); // ROTACIÓN
-            particles.enableEmission = false;
+            particles.Stop();
         }
         if (Input.GetKeyDown(KeyCode.M)) PlayerDeath();
     }
@@ -111,8 +102,20 @@ public class PlayerMovement : MonoBehaviour
     {
         if (jump) TryJump();
         if (rb.velocity.y < 0) onGround = false;
-
         if (rb.velocity.y < -maxFallingSpeed) rb.velocity = new Vector2(rb.velocity.x, -maxFallingSpeed);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Vector2 normal = collision.GetContact(0).normal;
+        if (normal == Vector2.down && rb.velocity.y > 0) PlayerDeath();
+        else if (normal == Vector2.up) onGround = true;
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        Vector2 normal = collision.GetContact(0).normal;
+        if (normal == Vector2.left) PlayerDeath();
     }
 
     void Unrotate()
@@ -122,35 +125,10 @@ public class PlayerMovement : MonoBehaviour
         sprite.rotation = Quaternion.Euler(rotation);
     }
 
-    public float getPlayerSpeed() { return speed; }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.down && rb.velocity.y > 0)
-        {
-            //Debug.Log("MUERTE EN ONCOLLISIONENTER DOWN con velocidad: " + rb.velocity.y);
-            PlayerDeath();
-        }
-        else if (normal == Vector2.up)
-        {
-            onGround = true;
-            //Debug.Log("VELOCIDAD TOCANDO SUELO: " + rb.velocity.y);
-
-        }
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.left) PlayerDeath();
-    }
-
-
     public void PlayerDeath()
     {
         GameManager.instance.SetDeath(true);
-        spawnData lastSpawn = spawns[spawns.Count - 1];
+        SpawnData lastSpawn = spawns[spawns.Count - 1];
         onGround = false;
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
@@ -174,13 +152,9 @@ public class PlayerMovement : MonoBehaviour
     public void Jump(float jumpForceMultiplier = 1.0f)
     {
         rb.velocity = Vector2.zero;
-        rb.AddForce(Vector2.up * jumpForce * jumpForceMultiplier, ForceMode2D.Impulse);
+        rb.AddForce(jumpForce * jumpForceMultiplier * Vector2.up, ForceMode2D.Impulse);
         autoJump = jump = onGround = false;
     }
-
     internal void AutoJump() { jump = true; autoJump = true; }
-
-    public float GetJumpForce() { return jumpForce; }
-
-    
+    public float GetPlayerSpeed() { return speed; }
 }
