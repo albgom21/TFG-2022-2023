@@ -468,7 +468,7 @@ def onset_detection(path):
     name, extension = os.path.splitext(filename)
 
 
-    y,sr = load_Wave(dir + "/" + name + "_drums" + extension)
+    y,sr = load_Wave(dir + "/" + name + "/" + name + "_drums.wav")
     o_env = librosa.onset.onset_strength(y=y, sr=sr, aggregate=np.median)
     o_env = normalize(o_env)    
     onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
@@ -479,14 +479,14 @@ def onset_detection(path):
 
     # PROVISIONAL 
     # métodos para obtener los onsets del piano y del other
-    y,sr = load_Wave(dir + "/" + name + "_piano" + extension)
+    y,sr = load_Wave(dir + "/" + name + "/" + name + "_piano.wav")
     o_env = librosa.onset.onset_strength(y=y, sr=sr)
     o_env = normalize(o_env)    
     onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
     onset_piano = librosa.frames_to_time(onset_frames)
     onset_piano = onset_piano
 
-    y,sr = load_Wave(dir + "/" + name + "_other" + extension)
+    y,sr = load_Wave(dir + "/" + name + "/" + name + "_other.wav")
     o_env = librosa.onset.onset_strength(y=y, sr=sr)
     o_env = normalize(o_env)    
     onset_frames = librosa.onset.onset_detect(onset_envelope=o_env, sr=sr)
@@ -709,7 +709,7 @@ def features_to_txt(path):
     onset, onset_piano, onset_other = onset_detection(path)
 
     name = os.path.splitext(path)[0]
-    np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
+    # np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
     np.savetxt(name + '_duration.txt', dur,fmt='%.0f')
     np.savetxt(name + '_sr.txt', np_sr, fmt='%.0f')
     np.savetxt(name + '_beats.txt', beats, fmt='%.3f')
@@ -728,7 +728,7 @@ def features_to_txt(path):
     # ruta_origen = './'
 
     # # Ruta de la carpeta de destino
-    # ruta_destino = '../'
+    # ruta_destino = './' + name + '/'
 
     # # Recorre los archivos de la carpeta de origen
     # for archivo in os.listdir(ruta_origen):
@@ -736,10 +736,8 @@ def features_to_txt(path):
     #     if archivo.endswith('.txt'):
     #         # Obtiene la ruta completa del archivo de origen
     #         ruta_archivo_origen = os.path.join(ruta_origen, archivo)
-    #         print("Origen: "+ruta_archivo_origen +"\n")
     #         # Obtiene la ruta completa del archivo de destino
     #         ruta_archivo_destino = os.path.join(ruta_destino, archivo)
-    #         print("Destino: "+ruta_archivo_destino +"\n")
     #         # Mueve el archivo de origen al archivo de destino
     #         os.replace(ruta_archivo_origen, ruta_archivo_destino)
 

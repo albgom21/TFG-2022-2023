@@ -8,7 +8,7 @@ using System;
 public class ReadTxt : MonoBehaviour
 {
     /*
-     Clase para leer las caracter�sticas del audio extraidas por el programa de Python
+     Clase para leer las caracteristicas del audio extraidas por el programa de Python
     */
 
     // DEBUG
@@ -25,7 +25,7 @@ public class ReadTxt : MonoBehaviour
            rutaOnset, rutaOnsetPiano, rutaOnsetOther; //LAS DOS ÚLTIMAS SON PROVISIONALES
 
 
-    // ESTRUCTURAS DE DATOS PARA GUARDAS LAS CARACTER�STICAS
+    // ESTRUCTURAS DE DATOS PARA GUARDAS LAS CARACTERISTICAS
     List<float> beats = new List<float>();      // Tiempo en seg cuando se producen los beats
     List<float> plpBeats = new List<float>();
     List<float> scopt = new List<float>();      // Valor del centroide espectral en los instantes en los que hay beats
@@ -53,10 +53,10 @@ public class ReadTxt : MonoBehaviour
             GameManager.instance.SetSong(song);
             GameManager.instance.SetExtension(format);
         }
-        else   //Desde el men�
+        else   //Desde el menu
             song = GameManager.instance.GetSong();
 
-        path = Application.streamingAssetsPath + "/";
+        path = Application.streamingAssetsPath + "/" + song + "/"; //Ruta donde se encuentran los txt con las caract
         //Debug.Log("Path: " + path);
         // Crear las rutas de los txt
         rutaBeats = path + song + "_beats.txt";
@@ -102,10 +102,10 @@ public class ReadTxt : MonoBehaviour
         //readMatriz(ref matriz_graves, rutaGraves);
     }
 
-    // Lee una caracter�sitca de audio que este en un txt, con una valor float por fila
+    // Lee una caracterisitca de audio que este en un txt, con una valor float por fila
     private void ReadFeature(ref List<float> lista, string ruta)
     {
-        // Lectura por l�neas y luego palabras
+        // Lectura por lineas y luego palabras
         if (File.Exists(ruta))
         {
             string[] lines = File.ReadAllLines(ruta);
@@ -115,10 +115,10 @@ public class ReadTxt : MonoBehaviour
         else Debug.LogError("El archivo de texto para leer una FEATURE no existe en la ruta especificada: " + ruta);
     }
 
-    // Lee una caracter�sitca de audio que este en un txt, siendo esta un �nico int
+    // Lee una caracterisitca de audio que este en un txt, siendo esta un �nico int
     private void ReadInt(ref int n, string ruta)
     {
-        // Lectura por l�neas y luego palabras
+        // Lectura por lineas y luego palabras
         if (File.Exists(ruta))
         {
             string[] lines = File.ReadAllLines(ruta);
@@ -127,10 +127,10 @@ public class ReadTxt : MonoBehaviour
         else Debug.LogError("El archivo de texto para leer un INT no existe en la ruta especificada: " + ruta);
     }
 
-    // Lee una caracter�sitca de audio que este en un txt, siendo esta un �nico float
+    // Lee una caracterisitca de audio que este en un txt, siendo esta un unico float
     private void ReadFloat(ref float n, string ruta)
     {
-        // Lectura por l�neas y luego palabras
+        // Lectura por lineas y luego palabras
         if (File.Exists(ruta))
         {
             string[] lines = File.ReadAllLines(ruta);
@@ -139,7 +139,7 @@ public class ReadTxt : MonoBehaviour
         else Debug.LogError("El archivo de texto para leer un FLOAT no existe en la ruta especificada: " + ruta);
     }
 
-    // Lee una caracter�sitca de audio que este en un txt, con la forma de una matriz bidimensional,
+    // Lee una caracterisitca de audio que este en un txt, con la forma de una matriz bidimensional,
     // las filas compuestas por un valor float separado por un espacio seguido del otro valor float
     // el cambio de fila viene dado por cambio de linea \n
     private void ReadMatriz(ref float[,] matriz, string ruta)
@@ -157,7 +157,7 @@ public class ReadTxt : MonoBehaviour
                 string[] numeros = lineas[i].Split(' ');
                 for (int j = 0; j < columnas; j++)
                 {
-                    if (numeros.Length != columnas) // L�nea vac�a o incompleta, salta esa iteraci�n del bucle
+                    if (numeros.Length != columnas) // Linea vacia o incompleta, salta esa iteracion del bucle
                         continue;
                     matriz[i, j] = float.Parse(numeros[j]) / 1000.0f;
                 }

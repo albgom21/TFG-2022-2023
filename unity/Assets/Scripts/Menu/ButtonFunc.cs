@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class ButtonFunc : MonoBehaviour
 {
     private string songName, extension;
-    private string path, checkPath;
+    private string songPath, checkPath, extractionPath;
     List<string> pathsSpleeter, pathsFeatures;
 
     public void PlayLvl()
@@ -31,11 +31,14 @@ public class ButtonFunc : MonoBehaviour
 
         // Llamada a spleeter con 1er arg la canción y 2do arg el lugar donde deja las pistas generadas
         if (!checkFiles(pathsSpleeter))
-            RunPythonScript(Application.streamingAssetsPath + "/FeaturesExtraction/Python/spleeter_ex.py", path, Application.streamingAssetsPath +"/");
+            RunPythonScript(Application.streamingAssetsPath + "/FeaturesExtraction/Python/spleeter_ex.py", songPath, extractionPath);
 
         // Si no existen los ficheros llamar a Python para la extracción de las características
         if (!checkFiles(pathsFeatures))
-            RunPythonScript(Application.streamingAssetsPath + "/FeaturesExtraction/Python/librosa_ex.py", path);
+        {
+            RunPythonScript(Application.streamingAssetsPath + "/FeaturesExtraction/Python/librosa_ex.py", songPath);
+            moveTxts(Application.streamingAssetsPath + "/", extractionPath);
+        }
 
         // Cargar escena del juego
         SceneManager.LoadScene(Constants.NAME_GAME_SCENE);
@@ -45,12 +48,14 @@ public class ButtonFunc : MonoBehaviour
     //----- AÑADIR MAS RUTAS ----
     private void createPaths()
     {
-        path = Application.streamingAssetsPath + "/" + songName + extension;     // Ruta donde se encuentra la canción seleccionada
+        songPath = Application.streamingAssetsPath + "/" + songName + extension;     // Ruta donde se encuentra la canción seleccionada
 
-        checkPath = Application.streamingAssetsPath +"/" + songName;  // Ruta donde se encuentran las características de la canción
+        extractionPath = Application.streamingAssetsPath + "/" + songName + "/";     // Ruta donde se encuentran los txt de la cancion
+
+        checkPath = extractionPath + songName;  // Ruta para formar los txt necesarios de características de la canción
 
         pathsSpleeter = new string[] {                            // Lista de rutas que se esperan haber generado una vez se haya ejecutado spleeter
-            Application.streamingAssetsPath + "/"+ songName + "_drums" + extension // Audio de las baterías de la canción
+            extractionPath + songName + "_drums.wav"// Audio de las baterías de la canción
         }.ToList();
 
         pathsFeatures = new string[]{   // Lista de rutas que se esperan haber generado una vez se haya ejecutado la extracción de características
@@ -65,7 +70,7 @@ public class ButtonFunc : MonoBehaviour
 
     // Ejecuta el archivo python que se encuentra en filePath con los argumentos arguments
     // En caso de error escribe en consola el error capturado así como la salida de consola del script
-    public void RunPythonScript(string filePath, string argument0, string argument1="")
+    public void RunPythonScript(string filePath, string argument0, string argument1 = "")
     {
         string pythonExecutablePath = "python";
 
@@ -127,6 +132,20 @@ public class ButtonFunc : MonoBehaviour
         return true;
     }
 
+    private void moveTxts(string pathOrg, string pathDst)
+    {
+        // Obtener la lista de archivos de la carpeta de origen que tienen extensión .txt
+        string[] archivos = Directory.GetFiles(pathOrg, "*.txt");
+
+        foreach (string archivo in archivos)
+        {
+            // Construir la ruta completa de la carpeta de destino, manteniendo el nombre del archivo
+            string archivoDestino = Path.Combine(pathDst, Path.GetFileName(archivo));
+
+            // Mover el archivo desde la carpeta de origen a la carpeta de destino
+            File.Move(archivo, archivoDestino);
+        }
+    }
     public void setExtension(string s)
     {
         extension = s;

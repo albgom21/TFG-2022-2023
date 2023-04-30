@@ -6,15 +6,12 @@ using ZoneCode;
 
 public class Zone : MonoBehaviour
 {
-    [SerializeField] private Material highSky;
-    [SerializeField] private Material lowSky;
     [SerializeField] private GameObject features;
     [SerializeField] private SpriteRenderer playerSprite;
     [SerializeField] private Color highColor;
     [SerializeField] private Color lowColor;
 
     private Color originalColor;
-    private Material originalSkyBox;
     private List<int> beatsZones = new List<int>();
     private double timeCount = 0;
     [SerializeField] Image water;
@@ -24,8 +21,6 @@ public class Zone : MonoBehaviour
 
     void Start()
     {
-        originalSkyBox = RenderSettings.skybox;
-
         List<float> beats = features.GetComponent<ReadTxt>().GetBeatsInTime();
         List<float> rmse = features.GetComponent<ReadTxt>().GetRMSE();
 
@@ -92,14 +87,12 @@ public class Zone : MonoBehaviour
     {
         if (type == ZoneType.HIGH)
         {
-            RenderSettings.skybox = highSky;
             playerSprite.color = highColor;
         }
         else if (type == ZoneType.LOW)
         {
             waterEnabled = true;
             FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Underwater", 1.0f);
-            RenderSettings.skybox = lowSky;
             playerSprite.color = lowColor;
         }
         GameManager.instance.ChangeZone(type);
@@ -109,7 +102,6 @@ public class Zone : MonoBehaviour
     {
         waterEnabled = false;
         FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Underwater", 0.0f);
-        RenderSettings.skybox = originalSkyBox;
         playerSprite.color = originalColor;
         if (death) water.fillAmount = 0;
         GameManager.instance.ChangeZone(ZoneType.STANDARD);
