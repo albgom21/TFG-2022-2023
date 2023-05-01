@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -22,7 +21,7 @@ public class PulseEffect : MonoBehaviour
 
     private void Update()
     {
-        // Meter lógica de los spawns y Constants.DELAY_TIME
+        // !!! Meter lógica de los spawns
         if (!GameManager.instance.GetEnd())
         {
             if (GameManager.instance.GetDeath())

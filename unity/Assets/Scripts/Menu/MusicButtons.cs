@@ -18,7 +18,7 @@ public class MusicButtons : MonoBehaviour
         // Obtener los nombres de las canciones de la carpeta "StreamingAssets"
         string[] filePaths = Directory.GetFiles(Application.dataPath + "/StreamingAssets", "*.mp3");
         filePaths = filePaths.Concat(Directory.GetFiles(Application.dataPath + "/StreamingAssets", "*.wav")).ToArray();
-        filePaths = filePaths.Concat(Directory.GetFiles(Application.dataPath + "/StreamingAssets", "*.aif")).ToArray();
+        filePaths = filePaths.Concat(Directory.GetFiles(Application.dataPath + "/StreamingAssets", "*.aiff")).ToArray();
         filePaths = filePaths.Concat(Directory.GetFiles(Application.dataPath + "/StreamingAssets", "*.wma")).ToArray();
         filePaths = filePaths.Concat(Directory.GetFiles(Application.dataPath + "/StreamingAssets", "*.flac")).ToArray();
         filePaths = filePaths.Concat(Directory.GetFiles(Application.dataPath + "/StreamingAssets", "*.ogg")).ToArray();
