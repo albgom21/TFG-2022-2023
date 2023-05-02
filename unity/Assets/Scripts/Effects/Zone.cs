@@ -6,38 +6,43 @@ using ZoneCode;
 
 public class Zone : MonoBehaviour
 {
-    [SerializeField] private GameObject features;
-    [SerializeField] private SpriteRenderer playerSprite;
-    [SerializeField] private Color highColor;
-    [SerializeField] private Color lowColor;
+    [SerializeField] private GameObject features;           // Caracteristicas extraidas
+    [SerializeField] private SpriteRenderer playerSprite;   // Sprite del jugador
+    [SerializeField] Image water;                           // Imagen para efecto agua en zona low
+    [SerializeField] private Color highColorPlayer;         // Color del sprite del jugador en zona high
+    [SerializeField] private Color lowColorPlayer;          // Color del sprite del jugador en zona low
 
-    private Color originalColor;
-    private List<int> beatsZones = new List<int>();
-    private double timeCount = 0;
-    [SerializeField] Image water;
-    public bool waterEnabled = false;
-    private List<ZoneData> zData = new List<ZoneData>();
+    private Color originalColorPlayer;                      // Color del sprite original del jugador
 
+    private double timeCount = 0;                           // Contador de tiempo
+
+    public bool waterEnabled = false;                       // Estado del efecto agua
+
+    private List<ZoneData> zData = new List<ZoneData>();    // Lista con los datos de las zonas
 
     void Start()
     {
+        // Obtener los datos de BPM y RMSE
         List<float> beats = features.GetComponent<ReadTxt>().GetBeatsInTime();
         List<float> rmse = features.GetComponent<ReadTxt>().GetRMSE();
 
+        // Busqueda de zonas con alto y bajo RMSE
         HighZone(beats, rmse);
         LowZone(beats, rmse);
 
-        originalColor = playerSprite.color;
+        originalColorPlayer = playerSprite.color;
     }
 
     private void Update()
     {
-        if (GameManager.instance.GetEnd()) return;
+        if (GameManager.instance.GetEnd()) return;   // Si el nivel ha terminado
 
-        if (GameManager.instance.GetDeath())
+        if (GameManager.instance.GetDeath())         // Si el jugador ha muerto
         {
-            EndZone(true);
-            timeCount = GameManager.instance.GetDeathTime();
+            EndZone(true);                                   // Finalizar la zona
+            timeCount = GameManager.instance.GetDeathTime(); // Obtener el tiempo de la muerte
+
+            // Desactivar el estado de los inicios y finales de las zonas segun donde se encuentre el jugador
             for (int i = 0; i < zData.Count; i++)
             {
                 ZoneData aux = zData[i];
@@ -50,12 +55,14 @@ public class Zone : MonoBehaviour
         }
 
         timeCount += Time.deltaTime;
+
+        // Si el jugador entra en las zonas activarlas o desactivarlas
         for (int i = 0; i < zData.Count; i++)
         {
             // Si no se ha pasado el portal de inicio y ha pasado el tiempo de activación
             if (!zData[i].getActivatedIni() && timeCount >= zData[i].getTimeIniZone() + Constants.DELAY_TIME)
             {
-                // Poner la zona según su tipo                                    
+                // Iniciar la zona según su tipo                                    
                 IniZone(zData[i].getType());
 
                 ZoneData aux = zData[i];
@@ -77,32 +84,34 @@ public class Zone : MonoBehaviour
                 break;
             }
         }
+
         // Efecto agua en zona LOW
         if (waterEnabled && water.fillAmount < 1) water.fillAmount += Time.deltaTime;
         else if (!waterEnabled && water.fillAmount > 0) water.fillAmount -= Time.deltaTime;
-
     }
 
+    // Activar la zona segun el tipo
     void IniZone(ZoneType type)
     {
         if (type == ZoneType.HIGH)
-        {
-            playerSprite.color = highColor;
-        }
+            playerSprite.color = highColorPlayer;
+
         else if (type == ZoneType.LOW)
         {
             waterEnabled = true;
             FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Underwater", 1.0f);
-            playerSprite.color = lowColor;
+            playerSprite.color = lowColorPlayer;
         }
+
         GameManager.instance.ChangeZone(type);
     }
 
+    // Desactivar la zona
     void EndZone(bool death = false)
     {
         waterEnabled = false;
         FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Underwater", 0.0f);
-        playerSprite.color = originalColor;
+        playerSprite.color = originalColorPlayer;
         if (death) water.fillAmount = 0;
         GameManager.instance.ChangeZone(ZoneType.STANDARD);
     }
@@ -114,9 +123,9 @@ public class Zone : MonoBehaviour
         float iniZone = -1,
               balance = 0;
 
-        int bestLength = -1;
-        int actualLength = 0;
-        int iniBeat = -1;
+        int bestLength = -1,
+            actualLength = 0,
+            iniBeat = -1;
 
         bool find = true;
         for (int i = 0; i < rmse.Count(); i++)
@@ -132,7 +141,6 @@ public class Zone : MonoBehaviour
             // Si ya se está en la zona y el balance cumple seguir agrandando la zona
             else if (iniZone >= 0 && balance >= ((i - iniBeat) * 0.80f) && rmse[i] >= 0.7f)
             {
-                //Debug.Log("Rmse: " + rmse[i] + " B: " + balance + " BU: " + ((i - contIni) * 0.80f));
                 if ((balance - ((i - iniBeat) * 0.80f)) >= 2)
                     balance -= 1.70f;
 
@@ -151,8 +159,6 @@ public class Zone : MonoBehaviour
             }
             else
             {
-                //if (actualLength != 0)
-                //    Debug.Log("Al h: " + actualLength);
                 actualLength = 0;
                 balance = 0;
                 find = true;
@@ -162,27 +168,26 @@ public class Zone : MonoBehaviour
         // Añadir si se ha encontrado una zona
         if (bestLength > 0)
         {
-            aux.setBeatLength(actualLength);
+            aux.setBeatLength(bestLength);
             aux.setActivatedIni(false);
             aux.setActivatedEnd(false);
             zData.Add(aux);
 
-            beatsZones.Add(zData[zData.Count - 1].getBeatIni());
-            beatsZones.Add(zData[zData.Count - 1].getBeatEnd());
-
-            //int cont = 0;
-            //foreach (ZoneData z in zData)
-            //{
-            //    if (z.getType() == ZoneType.HIGH)
-            //    {
-            //        cont++;
-            //        Debug.Log("Z high:" + cont + " ini: " + z.getTimeIniZone() + " end: " + z.getTimeEndZone());
-            //    }
-            //}
-            //Debug.Log("BEST High: " + bestLength);
-
-            //Debug.Log("Ini zona high: " + zData[zData.Count - 1].getTimeIniZone());
-            //Debug.Log("Fin zona high: " + zData[zData.Count - 1].getTimeEndZone());
+            // DEBUG
+            /* 
+            int cont = 0;
+            foreach (ZoneData z in zData)
+            {
+                if (z.getType() == ZoneType.HIGH)
+                {
+                    cont++;
+                    Debug.Log("Z high:" + cont + " ini: " + z.getTimeIniZone() + " end: " + z.getTimeEndZone());
+                }
+            }
+            Debug.Log("BEST High: " + bestLength);
+            Debug.Log("Ini zona high: " + zData[zData.Count - 1].getTimeIniZone());
+            Debug.Log("Fin zona high: " + zData[zData.Count - 1].getTimeEndZone());
+            */
         }
     }
 
@@ -193,10 +198,9 @@ public class Zone : MonoBehaviour
         float iniZone = -1,
               balance = 0;
 
-        int bestLength = -1;
-        int actualLength = 0;
-        int iniBeat = -1;
-
+        int bestLength = -1,
+            actualLength = 0,
+            iniBeat = -1;
 
         bool find = true;
         for (int i = 0; i < rmse.Count(); i++)
@@ -208,18 +212,12 @@ public class Zone : MonoBehaviour
                 iniZone = beats[i];
                 find = false;
                 balance += rmse[i];
-                //Debug.Log("iniZone: " + iniZone + " i: "+ i);
             }
             // Si ya se está en la zona y el balance cumple seguir agrandando la zona
             else if (iniZone >= 0 && balance <= ((i - iniBeat) * 0.3f) && (((i - iniBeat) * 0.5f) >= balance) && ((((i - iniBeat) * 0.3f) - balance) < 5) && (rmse[i] <= 0.7f))
             {
-                //Debug.Log("ampliando zona: " + iniZone + " i: " + i);
                 actualLength++;
                 balance += rmse[i];
-                //Debug.Log(" B: " + balance + " BU: " + ((i - iniBeat) * 0.3f) + " BU2: " + ((((i - iniBeat) * 0.5f) - balance)) /*+ " i: "+ i +" iniB: "+iniBeat*/);
-
-                //if (((i - contIni) * 0.3f) - balance >= 3)
-                //    balance += 2.5f;
 
                 // Si es la mayor longitud hasta ahora guardar la zona
                 if (actualLength > bestLength)
@@ -244,30 +242,29 @@ public class Zone : MonoBehaviour
         if (bestLength > 0)
         {
             aux.setType(ZoneType.LOW);
-            aux.setBeatLength(actualLength);
+            aux.setBeatLength(bestLength);
             aux.setActivatedIni(false);
             aux.setActivatedEnd(false);
             zData.Add(aux);
 
-            beatsZones.Add(zData[zData.Count - 1].getBeatIni());
-            beatsZones.Add(zData[zData.Count - 1].getBeatEnd());
-
-            //int cont = 0;
-            //foreach (ZoneData z in zData)
-            //{
-            //    if (z.getType() == ZoneType.LOW)
-            //    {
-            //        cont++;
-            //        Debug.Log("Z low:" + cont + " ini: " + z.getTimeIniZone() + " end: " + z.getTimeEndZone());
-            //    }
-            //}
-            //Debug.Log("BEST low: " + bestLength);
-            //Debug.Log("Ini zona low: " + zData[zData.Count - 1].getTimeIniZone());
-            //Debug.Log("Fin zona low: " + zData[zData.Count - 1].getTimeEndZone());
+            // DEBUG
+            /*
+            int cont = 0;
+            foreach (ZoneData z in zData)
+            {
+                if (z.getType() == ZoneType.LOW)
+                {
+                    cont++;
+                    Debug.Log("Z low:" + cont + " ini: " + z.getTimeIniZone() + " end: " + z.getTimeEndZone());
+                }
+            }
+            Debug.Log("BEST low: " + bestLength);
+            Debug.Log("Ini zona low: " + zData[zData.Count - 1].getTimeIniZone());
+            Debug.Log("Fin zona low: " + zData[zData.Count - 1].getTimeEndZone());
+            */
         }
     }
 
     // GETTERS
     public List<ZoneData> getZonesData() { return zData; }
-    public List<int> getBeatsZonesIndex() { return beatsZones; }
 }

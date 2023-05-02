@@ -4,18 +4,18 @@ using UnityEngine;
 
 namespace ZoneCode
 {
-    public enum ZoneType { HIGH, LOW, STANDARD };
+    public enum ZoneType { HIGH, LOW, STANDARD }; // Tipos de zona
     public struct ZoneData
     {
-        ZoneType type;
+        ZoneType type;               // Tipo de zona
 
-        int beatLength;
-        int beatIni;
-        int beatEnd;
-        float timeIniZone;
-        float timeEndZone;
-        public bool activatedIni;
-        bool activatedEnd;
+        int beatLength;              // Longitud de la zona en numero de beats
+        int beatIni;                 // Numero de beat en el que comienza la zona
+        int beatEnd;                 // Numero de beat en el que termina la zona
+        float timeIniZone;           // Inicio de la zona en segundos
+        float timeEndZone;           // Fin de la zona en segundos
+        public bool activatedIni;    // Si se ha activado el inicio de la zona
+        bool activatedEnd;           // Si se ha activado el final de la zona
 
         public ZoneData(ZoneType t, int blength, int bIni, int bEnd, float tIni, float tEnd, bool actIni, bool actEnd)
         {

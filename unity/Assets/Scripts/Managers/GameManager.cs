@@ -8,7 +8,6 @@ using ZoneCode;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    private int coins;
     private double deathTime;
     private bool death = false;
     private bool end = false;
@@ -32,11 +31,9 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        coins = 0;
         deathTime = 0;
     }
 
-    public void AddCoin() { coins++; }
     public bool GetDeath() { return death; }
     public void SetDeath(bool b) { death = b; }
     public bool GetEnd() { return end; }
