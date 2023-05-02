@@ -1,0 +1,17 @@
+Para poder ejecutar el proyecto en Windows debes seguir los siguientes pasos:
+1. Si no tienes instalado Python 3.10, instalalo mediante el siguiente enlace: https://apps.microsoft.com/store/detail/python-310/9PJPW5LDXLZ5?hl=es-es&gl=es
+2. Una vez instalado Python 3.10, ejecuta el archivo setup.bat haciendo doble click sobre él.
+3. Tras ejecutar el setup.bat, debes añadir 2 rutas en las variables de entorno de tu sistema Windows, para ello:
+	Haz clic derecho en el botón "Inicio" de Windows y selecciona "Sistema".
+	En la ventana que aparece, haz clic en "Configuración avanzada del sistema" en el panel derecho.
+	Se abrirá una nueva ventana, haz clic en "Variables de entorno".
+	En la sección "Variables del sistema", busca la variable "Path" y haz clic en "Editar".
+	Se abrirá una nueva ventana donde podrás agregar una nueva ruta. Haz clic en "Nuevo" y escribe las siguiente dos rutas:
+		Para obtener las dos rutas necesarias:
+			-Navega dentro de la carpeta ffmpeg, dentro a la carpeta bin y copia esa ruta para añadirla.
+			-Abre un cmd (busca cmd en la barra de busqueda de Windows) y escribe: where spleeter, tras esto se mostrará la ruta que hay que añadir,
+			eliminando la parte final de spleteer.exe, quedaría algo así:
+			C:\Users\nombreUsuario\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts\spleeter.exe
+		
+	Haz clic en "Aceptar" para guardar los cambios.
+4. Reinicia el ordenador.
