@@ -9,9 +9,8 @@ Para poder ejecutar el proyecto en Windows debes seguir los siguientes pasos:
 	Se abrirá una nueva ventana donde podrás agregar una nueva ruta. Haz clic en "Nuevo" y escribe las siguiente dos rutas:
 		Para obtener las dos rutas necesarias:
 			-Navega dentro de la carpeta ffmpeg, dentro a la carpeta bin y copia esa ruta para añadirla.
-			-Abre un cmd (busca cmd en la barra de busqueda de Windows) y escribe: where spleeter, tras esto se mostrará la ruta que hay que añadir,
-			eliminando la parte final de spleteer.exe, quedaría algo así:
-			C:\Users\nombreUsuario\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts\spleeter.exe
+			-Busca en el explorador de archivos de Windows "Python310", navega a la carpeta Scripts y copia esa ruta para añadirla.
+			 Ejemplo:
+			C:\Users\nombreUsuario\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts\
 		
-	Haz clic en "Aceptar" para guardar los cambios.
-4. Reinicia el ordenador.
+	Haz clic en "Aceptar" en todas las ventanas para guardar los cambios.
