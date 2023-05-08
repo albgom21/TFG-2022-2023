@@ -88,12 +88,12 @@ public class PlayerMovement : MonoBehaviour
         if (onGround)
         {
             Unrotate();
-            particles.Play();
+            particles.enableEmission = true;
         }
         else
         {
             sprite.Rotate(Vector3.back * 1.5f); // ROTACIÓN
-            particles.Stop();
+            particles.enableEmission = false;
         }
         if (Input.GetKeyDown(KeyCode.M)) PlayerDeath();
     }
