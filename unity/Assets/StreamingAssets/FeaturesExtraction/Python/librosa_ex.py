@@ -642,7 +642,7 @@ def percussive(filename):
     plt.title('Harmonic + Percussive')
     plt.show()
 
-def beats(filename):
+def beatsPlp(filename):
     y, sr = librosa.load(filename)
     onset_env = librosa.onset.onset_strength(y=y, sr=sr)
     pulse = librosa.beat.plp(onset_envelope=onset_env, sr=sr)
