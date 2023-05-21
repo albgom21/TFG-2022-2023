@@ -12,7 +12,7 @@ public class RestartMusic : MonoBehaviour
 
     public void restartMusic(int t)
     {
-        audio.Stop();
+        //audio.Stop();
         audio.playTime(t);
         //audio.Play();
     }

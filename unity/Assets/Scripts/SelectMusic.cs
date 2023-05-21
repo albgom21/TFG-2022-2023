@@ -159,16 +159,7 @@ class SelectMusic : MonoBehaviour
     }
     public void playTime(int t)
     {
-        eventInstance = FMODUnity.RuntimeManager.CreateInstance(EventName);
-
-        // Pin the key string in memory and pass a pointer through the user data
-        GCHandle stringHandle = GCHandle.Alloc(fileName);
-        eventInstance.setUserData(GCHandle.ToIntPtr(stringHandle));
-
-        eventInstance.setCallback(callback);
         eventInstance.setTimelinePosition(t);
-        eventInstance.start();
-        eventInstance.release();
 
         eventInstance.setPitch(Time.timeScale);
     }

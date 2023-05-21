@@ -6935,7 +6935,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pruebasDesdeMenu: 0
-  song: 200-BPM
+  song: besos
   format: .wav
 --- !u!4 &1277446152
 Transform:
