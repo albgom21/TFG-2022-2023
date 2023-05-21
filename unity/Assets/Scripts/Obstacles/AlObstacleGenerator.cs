@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using System.IO;
 //using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Analytics;
 using ZoneCode;
+
 
 public class AlObstacleGenerator : MonoBehaviour
 {
@@ -38,7 +40,6 @@ public class AlObstacleGenerator : MonoBehaviour
     private List<int> importantIndexes; //Lista de index con TODOS los structs especiales (powerUps, cambios de zona etc)
 
     [SerializeField] private GameObject endPrefab;
-    [SerializeField] private GameObject groundToDestroy;
 
     // Pools
     [SerializeField] private Transform obstaclePool;
@@ -61,6 +62,12 @@ public class AlObstacleGenerator : MonoBehaviour
     private int lowZoneStartIndex, lowZoneEndIndex;
     private int highZoneStartIndex, highZoneEndIndex;
 
+
+    //Guardado / Cargado de niveles
+    string rutaNivelCreado;
+    List<int> obstacleIndexes; //Índices de los obstáculos en orden para el guardado del nivel
+    bool levelAlreadyCreated = false;
+
     void Start()
     {
         lowColor = new Color(0.0f, 1.0f, 0.6344354f, 1.0f);  // GREEN-BLUE
@@ -77,23 +84,29 @@ public class AlObstacleGenerator : MonoBehaviour
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().GetPlayerSpeed();
 
-        InitIndexes(beats);
+        if (LevelIsAlreadyCreated())
+        {
+            LoadLevel();
+            LoadObstacles(beats);
+        }
+        else
+        {
+            InitIndexes(beats);
+            GenerateObstacles(beats, rmse);
+            SaveLevel();
+        }
         
-        GenerateObstacles(beats, rmse);
-
-        Destroy(groundToDestroy);
-
         PositionPlayer();
     }
 
     private void GenerateObstacles(List<float> beats, List<float> rmse)
     {
-        //bool portal = false;
         //Coordenadas del obstáculo y del previo
         float coordX, coordY, prevX;
         coordX = coordY = prevX = 0.0f;
 
         ObstacleStructureData thisObstacle = null;
+        obstacleIndexes = new List<int>();
 
         for (int i = 0; i < beats.Count(); i++)
         {
@@ -135,7 +148,6 @@ public class AlObstacleGenerator : MonoBehaviour
             if (lastObstacle == null || spaceBetweenBeats > lastObstacle.getPostX())
             {
                 
-
                 //CREACIÓN DEL OBSTÁCULO
 
                 //Si este index es justo el anterior a donde va a haber uno importante, quiero instanciar uno vacío (Default).
@@ -206,6 +218,7 @@ public class AlObstacleGenerator : MonoBehaviour
                 Destroy(obstacle); //Si no lo es, lo destruye, volverá al while y creará otro.
                 obstacleStructure = null;
             }
+            else obstacleIndexes.Add(rnd);
 
             intentos++;
         }
@@ -224,9 +237,16 @@ public class AlObstacleGenerator : MonoBehaviour
     //Instancia dentro de los posiblesStructures el por defecto (0) en las coordenadas x,y
     private ObstacleStructureData InstantiateDefaultObstacle(GameObject[] posibleStructures, float x, float y)
     {
-        ChangeGroundColor(posibleStructures, 0, lowColorChange, highColorChange);
-        GameObject defaultObstacle = Instantiate(posibleStructures[0], new Vector3(x, y, 0), transform.rotation, obstaclePool);
-        return defaultObstacle.GetComponent<ObstacleStructureData>();
+        return InstantiateConcreteObstacle(posibleStructures, 0, x, y);
+    }
+
+    //Instancia dentro de los posiblesStructures el índice index en concreto en las coordenadas x,y
+    private ObstacleStructureData InstantiateConcreteObstacle(GameObject[] posibleStructures, int index, float x, float y)
+    {
+        ChangeGroundColor(posibleStructures, index, lowColorChange, highColorChange);
+        GameObject concreteObstacle = Instantiate(posibleStructures[index], new Vector3(x, y, 0), transform.rotation, obstaclePool);
+        obstacleIndexes.Add(0);
+        return concreteObstacle.GetComponent<ObstacleStructureData>();
     }
 
     // Cambia el color del suelo a todos los "Ground" de un obstaculo struct según la zona
@@ -446,8 +466,8 @@ public class AlObstacleGenerator : MonoBehaviour
     {
         importantIndexes = new List<int>();
         InitZonesIndexes();
-
         GeneratePowerUpsIndexes(beats);
+
     }
 
     //Inicializa los Index de zonas
@@ -493,10 +513,178 @@ public class AlObstacleGenerator : MonoBehaviour
     //Cambia la dificultad dependiendo del rmse de este momento
     private int ChooseDifficulty(float rmse)
     {
-        if (rmse < 0.6)    return 1;
+        if (rmse < 0.6)     return 1;
         if (rmse < 0.8)     return 2;
         if (rmse < 0.9)     return 3;
         if (rmse < 0.98)    return 4;
         return 5; //Si rmse >= 0.98
+    }
+
+    private bool LevelIsAlreadyCreated()
+    {
+        string songName = GameManager.instance.GetSong();
+        rutaNivelCreado = Application.streamingAssetsPath + "/" + songName  + "/" + songName + "_levelInfo.txt";
+        return File.Exists(rutaNivelCreado);
+    }
+
+    private void SaveLevel()
+    {
+        //-------------------------GUARDADO DE LOS INDEXES DE LOS POWER-UPS---------------------------------------
+
+        //GRAVITY
+        File.AppendAllText(rutaNivelCreado, (gravityStartIndex.ToString() + "\n"));
+        File.AppendAllText(rutaNivelCreado, (gravityEndIndex.ToString() + "\n"));
+
+        //SLOWMOTION
+        File.AppendAllText(rutaNivelCreado, (slowMotionIndexes.Count + "\n"));
+        
+        for(int i = 0; i < slowMotionIndexes.Count; ++i) File.AppendAllText(rutaNivelCreado, (slowMotionIndexes[i] + "\n"));
+
+        //LOW RES
+        File.AppendAllText(rutaNivelCreado, (lowResIndexes.Count + "\n"));
+
+        for (int i = 0; i < lowResIndexes.Count; ++i) File.AppendAllText(rutaNivelCreado, (lowResIndexes[i] + "\n"));
+
+
+        //------------------------GUARDADO DE LOS OBSTÁCULOS---------------------------------------------------
+
+        for (int i = 0; i < obstacleIndexes.Count; ++i) File.AppendAllText(rutaNivelCreado, (obstacleIndexes[i] + "\n"));
+    }
+
+    private void LoadLevel()
+    {
+        string[] lines = File.ReadAllLines(rutaNivelCreado);
+        int lineaActual = 0;
+        obstacleIndexes = new List<int>();
+
+        //--------------------------------------ZONAS-------------------------------------
+        importantIndexes = new List<int>();
+        InitZonesIndexes();
+
+        //---------------------------CARGADO DE INDEXES DE POWER-UPS-------------------------------------
+
+        //GRAVITY
+        gravityStartIndex = int.Parse(lines[lineaActual]);
+        importantIndexes.Add(gravityStartIndex);
+        lineaActual++;
+
+        gravityEndIndex = int.Parse(lines[lineaActual]);
+        importantIndexes.Add(gravityEndIndex);
+        lineaActual++;
+
+        //SLOW MOTION
+        slowMotionIndexes = new List<int>();
+
+        int numSlowMotions = int.Parse(lines[lineaActual]);
+        lineaActual++;
+
+        for (int i = 0; i < numSlowMotions; ++i)
+        {
+            int newIndex = int.Parse(lines[lineaActual]);
+            slowMotionIndexes.Add(newIndex);
+            importantIndexes.Add(newIndex);
+            lineaActual++;
+        }
+
+        //LOW RES
+        lowResIndexes = new List<int>();
+
+        int numLowRes = int.Parse(lines[lineaActual]);
+        lineaActual++;
+
+        for (int i = 0; i < numLowRes; ++i)
+        {
+            int newIndex = int.Parse(lines[lineaActual]);
+            lowResIndexes.Add(newIndex);
+            importantIndexes.Add(newIndex);
+            lineaActual++;
+        }
+
+        //--------------------------------CARGADO DE OBSTÁCULOS-------------------------------------
+        for (int i = lineaActual; i < lines.Length; ++i)
+        {
+            obstacleIndexes.Add(int.Parse(lines[i]));
+        }
+    }
+
+    private void LoadObstacles(List<float> beats)
+    {
+        //Coordenadas del obstáculo y del previo
+        float coordX, coordY, prevX;
+        coordX = coordY = prevX = 0.0f;
+
+        ObstacleStructureData thisObstacle = null;
+        int thisObstacleIndex = 0;
+
+        for (int i = 0; i < beats.Count(); i++)
+        {
+            groundPrefab.GetComponent<SpriteRenderer>().color = Color.white;
+            foreach (ZoneData z in zonesData)
+            {
+                /*Debug.Log("N: " + cont);
+                Debug.Log("TYPE: " + z.getType());
+                Debug.Log("B INI: " + z.getBeatIni());
+                Debug.Log("B END: " + z.getBeatEnd());
+                Debug.Log("T INI: " + z.getTimeIniZone());
+                Debug.Log("T END: " + z.getTimeEndZone());*/
+
+                if (i >= z.getBeatIni() && i <= z.getBeatEnd())
+                {
+                    if (z.getType() == ZoneType.LOW)
+                    {
+                        groundPrefab.GetComponent<SpriteRenderer>().color = lowColor;
+                        lowColorChange = true;
+                    }
+                    else if (z.getType() == ZoneType.HIGH)
+                    {
+                        groundPrefab.GetComponent<SpriteRenderer>().color = highColor;
+                        highColorChange = true;
+                    }
+
+                    break;
+                }
+                lowColorChange = false;
+                highColorChange = false;
+
+            }
+
+            coordX = beats[i] * multiplierX; //coordenada X del obstáculo.
+
+            //Espacio entre el CENTRO del anterior obstáculo y este
+            float spaceBetweenBeats = coordX - prevX;
+
+
+            if (lastObstacle == null || spaceBetweenBeats > lastObstacle.getPostX())
+            {
+
+                //CREACIÓN DEL OBSTÁCULO
+                thisObstacle = InstantiateConcreteObstacle(getPosibleStructures(i), obstacleIndexes[thisObstacleIndex], coordX, coordY);
+                thisObstacleIndex++;
+
+
+                //CREACIÓN DEL SUELO
+                //El suelo tendrá que ir desde el FINAL (no el centro) del anterior obstáculo hasta el PRINCIPIO de este
+                float floorStart, floorEnd;
+
+                if (lastObstacle == null) floorStart = -2.0f * multiplierX; //Solo ocurre con el primer obstáculo, el cual no tiene anterior
+                else floorStart = prevX + lastObstacle.getPostX();
+
+                floorEnd = coordX - thisObstacle.getPrevX();
+
+                GenerateFloor(floorStart, floorEnd, coordY);
+            }
+
+            //Preparando la siguiente iteración
+            if (thisObstacle != null)
+            {
+                prevX = coordX;
+                coordY += thisObstacle.getUnlevel();
+                lastObstacle = thisObstacle;
+                thisObstacle = null; //Si es el último, quiero que se guarde para la creación del END
+            }
+        }
+
+        //END
+        GenerateEnd();
     }
 }
