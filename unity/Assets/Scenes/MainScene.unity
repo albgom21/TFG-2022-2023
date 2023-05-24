@@ -5594,7 +5594,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b17c76fb0831bd4b8a8e1b0e9def0af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoJumpEnabled: 1
+  autoJumpEnabled: 0
+  timeToCreateRespawn: 10
 --- !u!4 &424069684
 Transform:
   m_ObjectHideFlags: 0
@@ -6180,7 +6181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98b69bcd3c68954b9105788efef37ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugMode: 1
+  debugMode: 0
 --- !u!4 &931255590
 Transform:
   m_ObjectHideFlags: 0

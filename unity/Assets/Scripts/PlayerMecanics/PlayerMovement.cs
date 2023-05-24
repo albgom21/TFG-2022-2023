@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Crono crono;
     [SerializeField] private float maxFallingSpeed;
     private Rigidbody2D rb;
-    private bool autoJump, jump, onGround;
+    private bool autoJump, jump, onGround, createSpawn;
     private PowerUpsManager powerUpsManager;
     private struct SpawnData
     {
@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
         int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().GetScopt()[2] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY());
         rb = GetComponent<Rigidbody2D>();
         transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
-        jump = autoJump = false; onGround = true;
+        jump = autoJump = createSpawn = false; onGround = true;
         spawns.Add(new SpawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform), 0,
             new PowerUpsManager.PowerUpsData()));
     }
@@ -55,12 +55,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space)) jump = true;
         else if (!autoJump) jump = false;
 
-        if (Input.GetMouseButtonDown(1))
-            spawns.Add(new SpawnData(transform.position,
-                                    Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform),
-                                    crono.getActualTime(),
-                                    powerUpsManager.getData() //Info de los powerUps
-                                    ));
+        if (Input.GetMouseButtonDown(1)) createSpawn = true;
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -96,6 +91,17 @@ public class PlayerMovement : MonoBehaviour
             particles.enableEmission = false;
         }
         if (Input.GetKeyDown(KeyCode.M)) PlayerDeath();
+
+        if (createSpawn && onGround)
+        {
+            spawns.Add(new SpawnData(transform.position,
+                                    Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform),
+                                    crono.getActualTime(),
+                                    powerUpsManager.getData() //Info de los powerUps
+                                    ));
+            createSpawn = false;
+        }
+            
     }
 
     private void FixedUpdate()
@@ -161,4 +167,6 @@ public class PlayerMovement : MonoBehaviour
     }
     internal void AutoJump() { jump = true; autoJump = true; }
     public float GetPlayerSpeed() { return speed; }
+
+    public void CreateRespawn() { createSpawn = true; }
 }

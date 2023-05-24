@@ -8,16 +8,33 @@ public class AutoJumpManager : MonoBehaviour
     [SerializeField] private bool autoJumpEnabled;
     private List<GameObject> autoJumpInstances;
     private Color autoJumpOnColor, autoJumpOffColor;
-    private GameObject player;
+    private PlayerMovement player;
+    [SerializeField] private float timeToCreateRespawn;
+    private float timeCounter;
+    
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         if (GameManager.instance != null)
             GameManager.instance.SetAutoJumpManager(this);
         autoJumpInstances = new List<GameObject>();
         autoJumpOnColor = Color.green;
         autoJumpOffColor = Color.red;
+        timeCounter = 0.0f;
+    }
+
+    private void Update()
+    {
+        if (autoJumpEnabled)
+        {
+            timeCounter += Time.deltaTime;
+            if (timeCounter >= timeToCreateRespawn)
+            {
+                player.CreateRespawn();
+                timeCounter = 0.0f;
+            }
+        }
     }
 
     public bool GetAutoJumpEnabled() { return autoJumpEnabled; }
