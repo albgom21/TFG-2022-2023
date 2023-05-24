@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private DebugManager debugManager;
     private PowerUpsManager powerUpsManager;
     private LightManager lightManager;
+    private ReadTxt featureManager;
     private ZoneType zoneType;
 
     void Awake()
@@ -52,6 +53,7 @@ public class GameManager : MonoBehaviour
     public void SetDebugManager(DebugManager d) { debugManager = d; }
     public void SetPowerUpsManager(PowerUpsManager p) { powerUpsManager = p; }
     public void SetLightManager(LightManager l) { lightManager = l; }
+    public void SetFeatureManager(ReadTxt r) { featureManager = r; }
 
     public PowerUpsManager GetPowerUpsManager() { return powerUpsManager; }
 
@@ -60,6 +62,7 @@ public class GameManager : MonoBehaviour
 
     public void ChangeDebugMode() { debugManager.changeDebugMode(); }
 
+    public ReadTxt GetFeatureManager() { return featureManager; }
 
 
     //AutoJump
@@ -101,11 +104,5 @@ public class GameManager : MonoBehaviour
             backgroundColor = new Color(0, 0.64f, 1f, 0.3f);
         }
         lightManager.SetLightColor(lightColor, backgroundColor);
-    }
-
-    public void AddTorchGM(Light2D l)
-    {
-        if (lightManager == null) Debug.LogError("Light Manager is null");
-        else lightManager.AddTorchLight(l);
     }
 }

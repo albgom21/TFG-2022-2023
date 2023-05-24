@@ -16,6 +16,7 @@ public class LightManager : MonoBehaviour
     private double time;
     private float offset;
     private Color newBackgroundColor, newLightColor;
+
     private void Awake()
     {
         GameManager.instance.SetLightManager(this);
@@ -27,7 +28,8 @@ public class LightManager : MonoBehaviour
         for (int j = 0; j < onset.Count; j++) onset[j] += Constants.DELAY_TIME;
         i = 0;
         time = 0;
-        intensity = maxIntensity = backgroundLight.intensity;
+        intensity = backgroundLight.intensity;
+        maxIntensity = 1;
         onsetCount = onset.Count;
         newBackgroundColor = new Color(0, 0.64f, 1f, 0.3f);
         newLightColor = Color.blue;
@@ -57,27 +59,14 @@ public class LightManager : MonoBehaviour
             i++;
         }
         backgroundLight.intensity = intensity;
-        //if (torchesLights.Count > 0) torchesLights[0].intensity = intensity;
-        for (int i = 0; i < torchesLights.Count; i++)
-        {
-            torchesLights[i].intensity = intensity;
-        }
         intensity -= maxIntensity * (Time.deltaTime / offset);
         UpdateLightColors();
     }
-
-
 
     public void SetLightColor(Color lightColor, Color backgroundColor)
     {
         newLightColor = lightColor;
         newBackgroundColor = backgroundColor;
-    }
-
-    public void AddTorchLight(Light2D light)
-    {
-        light.color = Color.yellow;
-        torchesLights.Add(light);
     }
 
     private void UpdateLightColors()
@@ -88,11 +77,6 @@ public class LightManager : MonoBehaviour
                 Mathf.Lerp(backgroundRenderer.color.b, newBackgroundColor.b, Time.deltaTime * 1.5f), backgroundRenderer.color.a);
         if (backgroundLight != null && backgroundLight.color != newLightColor)
         {
-            //foreach (Light2D l in torchesLights)
-            //    l.color = new Color(Mathf.Lerp(l.color.r, newLightColor.r, Time.deltaTime * 1.5f),
-            //        Mathf.Lerp(l.color.g, newLightColor.g, Time.deltaTime * 1.5f),
-            //        Mathf.Lerp(l.color.b, newLightColor.b, Time.deltaTime * 1.5f), backgroundLight.color.a);
-
             backgroundLight.color = new Color(Mathf.Lerp(backgroundLight.color.r, newLightColor.r, Time.deltaTime * 1.5f),
                 Mathf.Lerp(backgroundLight.color.g, newLightColor.g, Time.deltaTime * 1.5f),
                 Mathf.Lerp(backgroundLight.color.b, newLightColor.b, Time.deltaTime * 1.5f), backgroundLight.color.a);

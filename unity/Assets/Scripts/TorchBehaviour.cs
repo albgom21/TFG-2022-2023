@@ -1,12 +1,44 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class TorchBehaviour : MonoBehaviour
 {
+    public SpriteRenderer sprite;
+    public ReadTxt input;
+
+    private float timeCount = 0;
+    private Light2D light;
+    List<float> beats;
+    int cont = 0;
+
     void Start()
     {
-        Light2D l = gameObject.GetComponent<Light2D>();
-        if (l == null) Debug.LogError("Trying to add torch light with no Light2D component");
-        else GameManager.instance.AddTorchGM(l);
+        input = GameManager.instance.GetFeatureManager();
+        light = gameObject.GetComponent<Light2D>();
+        beats = input.GetBeatsInTime();
+        timeCount = Constants.DELAY_TIME;
+    }
+
+    private void Update()
+    {
+        if (!GameManager.instance.GetEnd())
+        {
+            if (GameManager.instance.GetDeath())
+            {
+                timeCount = Constants.DELAY_TIME;
+                cont = 0;
+            }
+
+            timeCount += Time.deltaTime;
+
+            if (cont < beats.Count && timeCount >= beats[cont])
+            {
+                light.intensity = 1f;
+                cont++;
+            }
+
+            light.intensity -= 1.5f * Time.deltaTime;
+        }
     }
 }

@@ -100,6 +100,7 @@ public class ReadTxt : MonoBehaviour
 
         //readMatriz(ref matriz_agudos, rutaAgudos);
         //readMatriz(ref matriz_graves, rutaGraves);
+        GameManager.instance.SetFeatureManager(this);
     }
 
     // Lee una caracterisitca de audio que este en un txt, con una valor float por fila

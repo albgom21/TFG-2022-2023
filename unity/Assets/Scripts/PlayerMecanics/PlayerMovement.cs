@@ -115,7 +115,11 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionStay2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.left) PlayerDeath();
+        if (normal == Vector2.left)
+        {
+            float offset = Math.Abs(transform.position.y - collision.transform.position.y);
+            if (offset < 0.9f) PlayerDeath();
+        }
     }
 
     void Unrotate()
