@@ -716,6 +716,7 @@ MonoBehaviour:
   endPrefab: {fileID: 3341490454293171990, guid: a98f6690fef6b9b42a038382ecab267e, type: 3}
   obstaclePool: {fileID: 1962388977}
   groundPool: {fileID: 1052714808}
+  saveOrLoadLevel: 0
 --- !u!1 &312908907
 GameObject:
   m_ObjectHideFlags: 0

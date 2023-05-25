@@ -4,18 +4,39 @@ using UnityEngine;
 
 public class Trampoline : MonoBehaviour
 {
-    public float jumpForce;
-    //[SerializeField] private float jumpForce;
+    [SerializeField] private float jumpForce;
     [SerializeField] private bool interactive;
+    private PlayerMovement playerMov;
+    private bool alreadyJumped = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        PlayerMovement mov = collision.gameObject.GetComponent<PlayerMovement>();
-        if (mov != null)
-        {
-            if (interactive && !(Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space))) return;
-            mov.Jump(jumpForce);
-        }
+        playerMov = collision.gameObject.GetComponent<PlayerMovement>();
+        alreadyJumped = false;
+
+        TrampolineJump();
     }
 
-    public void setJumpForce(int newJF) { jumpForce = newJF; }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        TrampolineJump();
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        alreadyJumped = false;
+    }
+
+    private void TrampolineJump()
+    {
+        if (playerMov != null && !alreadyJumped)
+        {
+            bool wantToJump = playerMov.GetAutoJump() || Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space);
+
+            if (!interactive || wantToJump)
+            {
+                playerMov.Jump(jumpForce);
+                alreadyJumped = true;
+            }
+        }
+    }
 }

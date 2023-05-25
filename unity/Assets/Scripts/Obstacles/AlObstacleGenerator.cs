@@ -64,9 +64,9 @@ public class AlObstacleGenerator : MonoBehaviour
 
 
     //Guardado / Cargado de niveles
+    [SerializeField] private bool saveOrLoadLevel;
     string rutaNivelCreado;
     List<int> obstacleIndexes; //Índices de los obstáculos en orden para el guardado del nivel
-    bool levelAlreadyCreated = false;
 
     void Start()
     {
@@ -84,7 +84,7 @@ public class AlObstacleGenerator : MonoBehaviour
 
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().GetPlayerSpeed();
 
-        if (LevelIsAlreadyCreated())
+        if (saveOrLoadLevel && LevelIsAlreadyCreated())
         {
             LoadLevel();
             LoadObstacles(beats);
@@ -93,7 +93,7 @@ public class AlObstacleGenerator : MonoBehaviour
         {
             InitIndexes(beats);
             GenerateObstacles(beats, rmse);
-            SaveLevel();
+            if (saveOrLoadLevel) SaveLevel();
         }
         
         PositionPlayer();
