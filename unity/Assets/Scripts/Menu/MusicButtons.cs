@@ -10,9 +10,11 @@ public class MusicButtons : MonoBehaviour
 {
     public GameObject buttonPrefab;
     public Transform buttonContainer;
-    public string[] songNames;
-    public string[] extension;
+    private string[] songNames;
+    private string[] extension;
 
+    [SerializeField]
+    private Color deleteInactive;
     void Start()
     {
         // Obtener los nombres de las canciones de la carpeta "StreamingAssets"
@@ -36,10 +38,17 @@ public class MusicButtons : MonoBehaviour
         for (int i = 0; i < songNames.Length; i++)
         {
             // Crear un nuevo objeto de botón utilizando el prefab
-            GameObject buttonObject = Instantiate(buttonPrefab, buttonContainer);
+            GameObject instance = Instantiate(buttonPrefab, buttonContainer);
+
+            Image buttonChildImage = instance.transform.GetChild(1).GetComponent<Image>();
             // Asignar el nombre de la canción al botón
-            buttonObject.GetComponentInChildren<TextMeshProUGUI>().text = songNames[i];
-            buttonObject.GetComponentInChildren<ButtonFunc>().setExtension(extension[i]);
+            instance.GetComponentInChildren<TextMeshProUGUI>().text = songNames[i];
+            instance.GetComponentInChildren<ButtonFunc>().setExtension(extension[i]);
+
+            // Comprobar si existe el archivo de guardado y poner color en funcion de si existe o no
+            string rutaNivelCreado = Application.streamingAssetsPath + "/" + songNames[i] + "/" + songNames[i] + "_levelInfo.txt";
+            if (!File.Exists(rutaNivelCreado))
+                buttonChildImage.GetComponent<Image>().color = deleteInactive;
         }
     }
 }

@@ -13,7 +13,11 @@ public class ButtonFunc : MonoBehaviour
     private string songName, extension;
     private string songPath, checkPath, extractionPath;
     List<string> pathsSpleeter, pathsFeatures;
+    
+    public Image img;
 
+    [SerializeField]
+    private Color deleteInactive;
     public void PlayLvl()
     {
         // Activar imagen de carga
@@ -146,6 +150,20 @@ public class ButtonFunc : MonoBehaviour
             File.Move(archivo, archivoDestino);
         }
     }
+
+    public void deleteLvl()
+    {
+        songName = GetComponent<TextMeshProUGUI>().text;
+
+        string filePath = Application.streamingAssetsPath + "/" + songName + "/" + songName + "_levelInfo.txt";
+        if (File.Exists(filePath))
+        {
+            // Si existe el fichero de guardado cambiar de color el boton y borrar el fichero
+            img.color = deleteInactive;
+            File.Delete(filePath);
+        }
+    }
+
     public void setExtension(string s)
     {
         extension = s;

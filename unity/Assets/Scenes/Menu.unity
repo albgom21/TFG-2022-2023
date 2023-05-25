@@ -682,7 +682,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -1.1411, y: -455.25586}
+  m_AnchoredPosition: {x: -50, y: -455.25586}
   m_SizeDelta: {x: 798.9604, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1085803941
@@ -1327,5 +1327,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonPrefab: {fileID: 84480421992438368, guid: 0a1b415b8410b1b46864232edc034ee2, type: 3}
   buttonContainer: {fileID: 1085803940}
-  songNames: []
-  extension: []
+  deleteInactive: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
