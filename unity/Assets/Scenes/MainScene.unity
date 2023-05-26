@@ -6081,7 +6081,7 @@ GameObject:
   - component: {fileID: 701783389}
   m_Layer: 5
   m_Name: Pause Menu
-  m_TagString: EndMenu
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7256,8 +7256,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3293994bb4fe55d4b8442a1c3ca0db48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pruebasDesdeMenu: 1
-  song: bzrp
+  pruebasDesdeMenu: 0
+  song: 200-BPM
   format: .wav
 --- !u!4 &1277446152
 Transform:

@@ -30,7 +30,7 @@ public class Trampoline : MonoBehaviour
     {
         if (playerMov != null && !alreadyJumped)
         {
-            bool wantToJump = playerMov.GetAutoJump() || Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space);
+            bool wantToJump = playerMov.GetAutoJump() || Input.GetMouseButton(0);
 
             if (!interactive || wantToJump)
             {
