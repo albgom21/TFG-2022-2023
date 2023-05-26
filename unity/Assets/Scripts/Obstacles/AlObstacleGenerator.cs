@@ -164,7 +164,7 @@ public class AlObstacleGenerator : MonoBehaviour
                 //El suelo tendrá que ir desde el FINAL (no el centro) del anterior obstáculo hasta el PRINCIPIO de este
                 float floorStart, floorEnd;
 
-                if (lastObstacle == null) floorStart = -2.0f * multiplierX; //Solo ocurre con el primer obstáculo, el cual no tiene anterior
+                if (lastObstacle == null) floorStart = -Constants.DELAY_TIME * multiplierX; //Solo ocurre con el primer obstáculo, el cual no tiene anterior
                 else floorStart = prevX + lastObstacle.getPostX();
 
                 floorEnd = coordX - thisObstacle.getPrevX();
@@ -666,7 +666,7 @@ public class AlObstacleGenerator : MonoBehaviour
                 //El suelo tendrá que ir desde el FINAL (no el centro) del anterior obstáculo hasta el PRINCIPIO de este
                 float floorStart, floorEnd;
 
-                if (lastObstacle == null) floorStart = -2.0f * multiplierX; //Solo ocurre con el primer obstáculo, el cual no tiene anterior
+                if (lastObstacle == null) floorStart = -Constants.DELAY_TIME * multiplierX; //Solo ocurre con el primer obstáculo, el cual no tiene anterior
                 else floorStart = prevX + lastObstacle.getPostX();
 
                 floorEnd = coordX - thisObstacle.getPrevX();

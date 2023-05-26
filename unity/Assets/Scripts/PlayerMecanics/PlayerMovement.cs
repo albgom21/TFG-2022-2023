@@ -51,6 +51,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.instance.GetDeath()) GameManager.instance.SetDeath(false);
+
         transform.position += Vector3.right * speed * Time.deltaTime;
         if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space)) jump = true;
         else if (!autoJump) jump = false;
@@ -74,8 +76,8 @@ public class PlayerMovement : MonoBehaviour
                 var obj = spawns[i].obj;
                 Destroy(obj);
                 spawns.RemoveAt(i);
-                PlayerDeath();
             }
+            PlayerDeath();
         }
 
         if (Input.GetKeyDown(KeyCode.J)) GameManager.instance.ChangeAutoJumpMode();
@@ -87,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            sprite.Rotate(Vector3.back * 1.5f); // ROTACIÓN
+            sprite.Rotate(Vector3.back * 360.0f * Time.deltaTime); // ROTACIÓN
             particles.enableEmission = false;
         }
         if (Input.GetKeyDown(KeyCode.M)) PlayerDeath();
@@ -101,7 +103,6 @@ public class PlayerMovement : MonoBehaviour
                                     ));
             createSpawn = false;
         }
-            
     }
 
     private void FixedUpdate()
@@ -137,15 +138,17 @@ public class PlayerMovement : MonoBehaviour
 
     public void PlayerDeath()
     {
+        onGround = true; jump = false; autoJump = false; createSpawn = false;
+
         GameManager.instance.SetDeath(true);
         SpawnData lastSpawn = spawns[spawns.Count - 1];
-        onGround = false;
+        
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
         transform.position = lastSpawn.pos;
+
         GameManager.instance.SetDeathTime(lastSpawn.time);
         crono.setActualTime(lastSpawn.time);
-
         GetComponent<RestartMusic>().restartMusic((int)(lastSpawn.time * 1000.0));
 
         //Resetear el estado de los powerUps

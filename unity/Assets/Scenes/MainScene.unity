@@ -716,7 +716,7 @@ MonoBehaviour:
   endPrefab: {fileID: 3341490454293171990, guid: a98f6690fef6b9b42a038382ecab267e, type: 3}
   obstaclePool: {fileID: 1962388977}
   groundPool: {fileID: 1052714808}
-  saveOrLoadLevel: 0
+  saveOrLoadLevel: 1
 --- !u!1 &312908907
 GameObject:
   m_ObjectHideFlags: 0
@@ -6935,8 +6935,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3293994bb4fe55d4b8442a1c3ca0db48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pruebasDesdeMenu: 0
-  song: besos
+  pruebasDesdeMenu: 1
+  song: bzrp
   format: .wav
 --- !u!4 &1277446152
 Transform:
@@ -7003,7 +7003,6 @@ GameObject:
   - component: {fileID: 1332534595}
   - component: {fileID: 1332534594}
   - component: {fileID: 1332534596}
-  - component: {fileID: 1332534597}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -7143,20 +7142,6 @@ MonoBehaviour:
       Data4: 1005660459
     Path: event:/Music
   zones: {fileID: 290854745}
---- !u!114 &1332534597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1332534587}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 945bdabd8bc61364dbdcc1ee4e9af0ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  alturaComienzoAgua: 5
-  alturaAguaMaxima: 2
 --- !u!1 &1376168084
 GameObject:
   m_ObjectHideFlags: 0

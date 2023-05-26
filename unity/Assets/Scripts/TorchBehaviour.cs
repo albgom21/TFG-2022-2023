@@ -7,7 +7,7 @@ public class TorchBehaviour : MonoBehaviour
     public SpriteRenderer sprite;
     public ReadTxt input;
 
-    private float timeCount = 0;
+    private float timeCount = 0.0f;
     private Light2D light;
     List<float> beats;
     int cont = 0;
@@ -26,8 +26,8 @@ public class TorchBehaviour : MonoBehaviour
         {
             if (GameManager.instance.GetDeath())
             {
-                timeCount = Constants.DELAY_TIME;
-                cont = 0;
+                timeCount = (float) GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
+                cont = GameManager.instance.GetLastBeatBeforeDeath();
             }
 
             timeCount += Time.deltaTime;

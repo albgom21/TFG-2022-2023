@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     private double deathTime;
     private bool death = false;
+    private int lastBeatBeforeDeath;
     private bool end = false;
     private string song, extension;
 
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
     private PowerUpsManager powerUpsManager;
     private LightManager lightManager;
     private ReadTxt featureManager;
-    private ZoneType zoneType;
+    //private ZoneType zoneType;
 
     void Awake()
     {
@@ -32,7 +33,7 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        deathTime = 0;
+        deathTime = lastBeatBeforeDeath = 0;
     }
 
     public bool GetDeath() { return death; }
@@ -41,7 +42,23 @@ public class GameManager : MonoBehaviour
     public void SetEnd(bool b) { end = b; }
 
     public double GetDeathTime() { return deathTime; }
-    public void SetDeathTime(double t) { deathTime = t; }
+
+    public int GetLastBeatBeforeDeath() { return lastBeatBeforeDeath; }
+    public void SetDeathTime(double t) {
+        deathTime = t;
+        UpdateLastBeatBeforeDeath();
+    }
+
+    private void UpdateLastBeatBeforeDeath()
+    {
+        List<float> beats = featureManager.GetBeatsInTime();
+
+        float deathTimeWithDelay = (float) deathTime - Constants.DELAY_TIME;
+
+        lastBeatBeforeDeath = 0;
+        while (lastBeatBeforeDeath < beats.Count && deathTimeWithDelay > beats[lastBeatBeforeDeath]) lastBeatBeforeDeath++;
+
+    }
 
     public void SetSong(string s) { song = s; }
     public string GetSong() { return song; }
@@ -86,7 +103,7 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Light Manager is null");
             return;
         }
-        zoneType = type;
+        //zoneType = type;
         Color lightColor, backgroundColor;
         if (type == ZoneType.HIGH)
         {

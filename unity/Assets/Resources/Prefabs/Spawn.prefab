@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1685863512033718591}
   - component: {fileID: -7105674069528179612}
-  - component: {fileID: -4793897835369898698}
   - component: {fileID: 1733741847139878012}
   m_Layer: 0
   m_Name: Spawn
@@ -86,18 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-4793897835369898698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8476976511320236115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d81ba9df787a6334eaf79ca86fac96d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &1733741847139878012
 BoxCollider2D:
   m_ObjectHideFlags: 0

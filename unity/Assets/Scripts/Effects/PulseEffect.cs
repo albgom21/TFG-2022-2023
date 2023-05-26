@@ -26,8 +26,8 @@ public class PulseEffect : MonoBehaviour
         {
             if (GameManager.instance.GetDeath())
             {
-                timeCount = Constants.DELAY_TIME;
-                cont = 0;
+                timeCount = (float) GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
+                cont = GameManager.instance.GetLastBeatBeforeDeath();
             }
 
             timeCount += Time.deltaTime;
