@@ -21,14 +21,10 @@ public class EndBehaviour : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        PlayerMovement pm = collision.gameObject.GetComponent<PlayerMovement>();
-        if (pm != null)
-        {
-            foreach (RectTransform b in botones)
-                b.gameObject.SetActive(true);
-            music.stopMusic();
-            pm.gameObject.SetActive(false);
-            GameManager.instance.SetEnd(true);
-        }           
+        foreach (RectTransform b in botones)
+            b.gameObject.SetActive(true);
+        music.StopMusic();
+        Time.timeScale = 0f;
+        GameManager.instance.SetEnd(true);
     }
 }

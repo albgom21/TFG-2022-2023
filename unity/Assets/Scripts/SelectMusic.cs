@@ -47,9 +47,6 @@ class SelectMusic : MonoBehaviour
 
     [SerializeField]
     Zone zones;
-
-    //Parametros
-    UnderWaterEffect underWaterEffect;
    
 #if UNITY_EDITOR
     void Reset()
@@ -60,7 +57,6 @@ class SelectMusic : MonoBehaviour
     private void Awake()
     {
         fileName = GameManager.instance.GetSong() + GameManager.instance.GetExtension();
-        underWaterEffect = GetComponent<UnderWaterEffect>();
     }
 
     void Start()
@@ -157,7 +153,7 @@ class SelectMusic : MonoBehaviour
     {
         PlayMusic(fileName);
     }
-    public void playTime(int t)
+    public void PlayTime(int t)
     {
         eventInstance.setTimelinePosition(t);
 
@@ -166,7 +162,12 @@ class SelectMusic : MonoBehaviour
 
     public void Stop()
     {
-        eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        eventInstance.setPaused(true);
+    }
+
+    public void Resume()
+    {
+        eventInstance.setPaused(false);
     }
 
     public FMOD.Studio.EventInstance getEventInstance()
