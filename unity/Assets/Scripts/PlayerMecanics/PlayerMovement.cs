@@ -41,9 +41,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         powerUpsManager = GameManager.instance.GetPowerUpsManager();
-        int startingY = (int)(obstacleGenerator.GetComponent<ObstacleGenerator>().getFeatures().GetComponent<ReadTxt>().GetScopt()[2] * obstacleGenerator.GetComponent<ObstacleGenerator>().getMultiplierY());
         rb = GetComponent<Rigidbody2D>();
-        transform.SetPositionAndRotation(new Vector3(transform.position.x, startingY, transform.position.z), transform.rotation);
         jump = autoJump = createSpawn = false; onGround = true;
         spawns.Add(new SpawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform), 0,
             new PowerUpsManager.PowerUpsData()));

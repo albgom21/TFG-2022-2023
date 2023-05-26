@@ -372,7 +372,7 @@ public class AlObstacleGenerator : MonoBehaviour
         slowMotionIndexes = new List<int>();
 
         int numSlowMotions = Random.Range(1, 4); //Va a haber entre 1 y 3 (el 4 es excluído) slowMotions
-        int marginBetweenSMPowerUps = 25; //Mínimo tiene que haber 15 beats entre un SlowMotion y otro
+        int marginBetweenSMPowerUps = 25; //Mínimo tiene que haber 25 beats entre un SlowMotion y otro
 
         for (int i = 0; i < numSlowMotions; ++i) //Para cada slowMotion que se vaya a crear
         {
@@ -445,7 +445,7 @@ public class AlObstacleGenerator : MonoBehaviour
     private void PositionPlayer()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        player.transform.position = new Vector3(-2.0f * multiplierX, player.transform.position.y, player.transform.position.z);
+        player.transform.position = new Vector3(-Constants.DELAY_TIME * multiplierX, 1, player.transform.position.z);
     }
 
     //Inicializa los arrays de estructuras
