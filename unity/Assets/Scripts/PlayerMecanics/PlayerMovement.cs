@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
         if (GameManager.instance.GetDeath()) GameManager.instance.SetDeath(false);
 
         transform.position += Vector3.right * speed * Time.deltaTime;
-        if (Input.GetMouseButton(0) || Input.GetKeyDown(KeyCode.Space)) jump = true;
+        if (Input.GetMouseButton(0)) jump = true;
         else if (!autoJump) jump = false;
 
         if (Input.GetMouseButtonDown(1)) createSpawn = true;
