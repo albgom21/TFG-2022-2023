@@ -170,6 +170,11 @@ class SelectMusic : MonoBehaviour
         eventInstance.setPaused(false);
     }
 
+    public void SetVolume(float v)
+    {
+        eventInstance.setVolume(v);
+    }
+
     public FMOD.Studio.EventInstance getEventInstance()
     {
         return eventInstance;

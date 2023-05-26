@@ -6,7 +6,7 @@ public class RestartMusic : MonoBehaviour
 {
     private new SelectMusic audio;
 
-    private void Start()
+    private void Awake()
     {
         audio = GetComponent<SelectMusic>();
     }
@@ -24,5 +24,10 @@ public class RestartMusic : MonoBehaviour
     public void ResumeMusic()
     {
         audio.Resume();
+    }
+
+    public void SetVolume(float v)
+    {
+        audio.SetVolume(v);
     }
 }
