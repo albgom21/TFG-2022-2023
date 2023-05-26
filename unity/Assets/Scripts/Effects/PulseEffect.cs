@@ -8,7 +8,7 @@ public class PulseEffect : MonoBehaviour
     public SpriteRenderer sprite;
     public ReadTxt input;
 
-    private float timeCount = 0;
+    private float timeCount;
     private Color color;
     List<float> beats;
     int cont = 0;
@@ -17,11 +17,11 @@ public class PulseEffect : MonoBehaviour
     {
         color = sprite.color;
         beats = input.GetBeatsInTime();
+        timeCount = -Constants.DELAY_TIME;
     }
 
     private void Update()
     {
-        // !!! Meter lógica de los spawns
         if (!GameManager.instance.GetEnd())
         {
             if (GameManager.instance.GetDeath())

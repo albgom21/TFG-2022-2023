@@ -7,7 +7,7 @@ public class TorchBehaviour : MonoBehaviour
     public SpriteRenderer sprite;
     public ReadTxt input;
 
-    private float timeCount = 0.0f;
+    private float timeCount;
     private Light2D light;
     List<float> beats;
     int cont = 0;
