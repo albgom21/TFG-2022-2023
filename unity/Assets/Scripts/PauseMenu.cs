@@ -15,7 +15,7 @@ public class PauseMenu : MonoBehaviour
     private void Awake()
     {
         pauseMenu.active = false;
-        music = GameObject.FindGameObjectWithTag("Player").GetComponent<RestartMusic>();
+        music = GameObject.FindGameObjectWithTag("Player")?.GetComponent<RestartMusic>();
     }
     
     private void Update()
@@ -36,7 +36,7 @@ public class PauseMenu : MonoBehaviour
                                      
         isPaused = true;             // Estado de pausa
                                      
-        music.StopMusic();           // Parar la musica
+        music?.StopMusic();           // Parar la musica
                                      
         pauseMenu.active = true;     // Mostrar menu de pausa
     }
@@ -47,7 +47,7 @@ public class PauseMenu : MonoBehaviour
 
         isPaused = false;            // Estado de pausa
 
-        music.ResumeMusic();          // Reactivar la musica
+        music?.ResumeMusic();          // Reactivar la musica
 
         pauseMenu.active = false;    // Quitar menu de pausa
 
