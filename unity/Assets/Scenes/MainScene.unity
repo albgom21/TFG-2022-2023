@@ -7256,7 +7256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3293994bb4fe55d4b8442a1c3ca0db48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pruebasDesdeMenu: 0
+  pruebasDesdeMenu: 1
   song: 200-BPM
   format: .wav
 --- !u!4 &1277446152
