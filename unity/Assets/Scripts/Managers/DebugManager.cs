@@ -57,5 +57,4 @@ public class DebugManager : MonoBehaviour
     public void addObstacleIndexTextInstance(GameObject newAutoJump) { obstacleIndexTextInstances.Add(newAutoJump); }
 
     public void setCronoInstance(Text t) { cronoInstance = t; }
-
 }

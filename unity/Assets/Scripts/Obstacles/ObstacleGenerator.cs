@@ -2,19 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using System.IO;
-//using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Analytics;
 using ZoneCode;
 
 
 public class ObstacleGenerator : MonoBehaviour
-{
-
-    // PRUEBAS Graves Y Agudos
-    //[SerializeField] private GameObject badPrefab;
-    //[SerializeField] private GameObject coinPrefab;
-
+{       
     [SerializeField] private GameObject features;
     [SerializeField] private Zone zones;
 
@@ -171,14 +165,6 @@ public class ObstacleGenerator : MonoBehaviour
 
                 GenerateFloor(floorStart, floorEnd, coordY);
             }
-            //if (portal)
-            //{
-            //    Instantiate(waterPrefab, new Vector3(x, y, 0), transform.rotation, obstaclePool);
-            //    Ground0_1(prevX, y, distance, width, height);
-            //    portal = false;
-            //    continue;
-            //}
-
 
             //Preparando la siguiente iteración
             if (thisObstacle != null)

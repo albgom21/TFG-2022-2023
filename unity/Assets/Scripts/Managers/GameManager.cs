@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
     private PowerUpsManager powerUpsManager;
     private LightManager lightManager;
     private ReadTxt featureManager;
-    //private ZoneType zoneType;
 
     void Awake()
     {
@@ -103,7 +102,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Light Manager is null");
             return;
         }
-        //zoneType = type;
         Color lightColor, backgroundColor;
         if (type == ZoneType.HIGH)
         {

@@ -10,10 +10,7 @@ public class OldObstacleGenerator : MonoBehaviour
         obstacle, spike, doubleSpike, tripleSpike, trampolineSpike, trampoline, interactiveTrampoline
     }
 
-    // PRUEBAS Graves Y Agudos
-    //[SerializeField] private GameObject badPrefab;
     [SerializeField] private GameObject portalPrefab;
-    //[SerializeField] private GameObject coinPrefab;
 
     [SerializeField] private GameObject features;
     [SerializeField] private Zone zones;

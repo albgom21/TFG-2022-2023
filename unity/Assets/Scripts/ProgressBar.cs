@@ -9,6 +9,7 @@ public class ProgressBar : MonoBehaviour
 
     [SerializeField]
     private Crono crono;
+
     [SerializeField]
     private ReadTxt features;
 
@@ -22,6 +23,7 @@ public class ProgressBar : MonoBehaviour
     {
         slider.maxValue = duration;
     }
+
     public void changeProgress(float duration)
     {
         slider.value = duration;

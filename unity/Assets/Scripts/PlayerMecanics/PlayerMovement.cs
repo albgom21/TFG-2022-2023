@@ -166,10 +166,9 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(jumpForce * jumpForceMultiplier * Vector2.up, ForceMode2D.Impulse);
         autoJump = jump = onGround = false;
     }
-    internal void AutoJump() { jump = true; autoJump = true; }
 
+    internal void AutoJump() { jump = true; autoJump = true; }
     public bool GetAutoJump() { return autoJump; }
     public float GetPlayerSpeed() { return speed; }
-
     public void CreateRespawn() { createSpawn = true; }
 }

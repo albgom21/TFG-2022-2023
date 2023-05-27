@@ -6,7 +6,6 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float offsetX, offsetY, maxSpeed;
     float posZ;
 
-
     void Start()
     {
         posZ = transform.position.z;

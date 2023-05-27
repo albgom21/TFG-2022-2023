@@ -43,13 +43,13 @@ public class PowerUp : MonoBehaviour
                 powerUpsManager.ChangeGravity();
                 break;
             case powerUpTypes.SlowMotion:
-                powerUpsManager.SlowMotionOn(5.0f); // HACER REFACTOR DE ESTA VARIABLE 
+                powerUpsManager.SlowMotionOn(Constants.POWER_UP_TIME); // HACER REFACTOR DE ESTA VARIABLE 
                 break;
             case powerUpTypes.LowRes:
-                powerUpsManager.LowResOn(5.0f);
+                powerUpsManager.LowResOn(Constants.POWER_UP_TIME);
                 break;
             default:
-                Debug.Log("KA PASAO POWER UP SIN TIPO O KHÉ");
+                Debug.Log("POWER UP SIN TIPO");
                 break;
         }
     }

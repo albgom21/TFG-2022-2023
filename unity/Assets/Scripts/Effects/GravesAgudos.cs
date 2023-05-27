@@ -35,7 +35,6 @@ public class GravesAgudos : MonoBehaviour
     private void ChangeSizeAgudo()
     {
         img_agudo.transform.localScale = new Vector3(agudosValoresNorm[contA], agudosValoresNorm[contA], img_agudo.transform.localScale.z);
-        //Debug.Log("x: " + agudosValoresNorm[contA]);
         contA++;
     }
 

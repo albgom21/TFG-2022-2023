@@ -43,7 +43,7 @@ public class ReadTxt : MonoBehaviour
     float[,] matriz_graves;                     // Tiempo y valor en db de los graves
 
     int sr;                                     // Sample rate (Frecuencia de muestreo)    
-    float duration;                             // Duraci�n en segundos del audio
+    float duration;                             // Duracion en segundos del audio
 
     void Awake()
     {
@@ -98,8 +98,6 @@ public class ReadTxt : MonoBehaviour
         ReadFeature(ref onset_piano, rutaOnsetPiano);
         ReadFeature(ref onset_other, rutaOnsetOther);
 
-        //readMatriz(ref matriz_agudos, rutaAgudos);
-        //readMatriz(ref matriz_graves, rutaGraves);
         GameManager.instance.SetFeatureManager(this);
     }
 
@@ -184,8 +182,8 @@ public class ReadTxt : MonoBehaviour
     public List<float> GetAgudosValoresNorm() { return agudosValoresNorm; }
     public List<float> GetGravesValoresNorm() { return gravesValoresNorm; }
     public List<float> GetOnset() { return onset; }
-    public List<float> GetOnsetPiano() { return onset_piano; } //PROVISIONAL
-    public List<float> GetOnsetOther() { return onset_other; } //PROVISIONAL
+    public List<float> GetOnsetPiano() { return onset_piano; }
+    public List<float> GetOnsetOther() { return onset_other; }
     public int GetSr() { return sr; }
     public float GetDuration() { return duration; }
     public float[,] GetAgudos() { return matriz_agudos; }

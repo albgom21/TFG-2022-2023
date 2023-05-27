@@ -11,5 +11,4 @@ public class BeatSync : MonoBehaviour
         debugManager.addSyncInstance(this.gameObject);
         this.GetComponent<MeshRenderer>().enabled = debugManager.getDebugMode();
     }
-
 }
