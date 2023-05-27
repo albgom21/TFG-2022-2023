@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
 
     public FMOD.Studio.EventInstance GetMusicInstance()
     {
-        SelectMusic music = GameObject.FindGameObjectWithTag("Player").GetComponent<SelectMusic>();
+        MainMusic music = GameObject.FindGameObjectWithTag("Player").GetComponent<MainMusic>();
         if (!music) Debug.Log("Se está intentando llamar a la canción cuando no hay ni player");
 
         return music.getEventInstance();

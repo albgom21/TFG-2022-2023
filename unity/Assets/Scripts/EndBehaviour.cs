@@ -5,12 +5,12 @@ using UnityEngine;
 public class EndBehaviour : MonoBehaviour
 {
     private GameObject menu;
-    private RestartMusic music;
+    private ControlMusic music;
     RectTransform[] botones;
     private void Start()
     {
         menu = GameObject.FindGameObjectWithTag("EndMenu");
-        music = GameObject.FindGameObjectWithTag("Player").GetComponent<RestartMusic>();
+        music = GameObject.FindGameObjectWithTag("Player").GetComponent<ControlMusic>();
 
         // Obtener los hijos del objeto padre
         botones = menu.GetComponentsInChildren<RectTransform>();

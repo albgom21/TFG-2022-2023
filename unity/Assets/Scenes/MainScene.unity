@@ -892,7 +892,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 307103658}
-  - component: {fileID: 307103657}
   - component: {fileID: 307103659}
   m_Layer: 0
   m_Name: ObstacleGenerator
@@ -901,36 +900,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &307103657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 307103656}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82bad54695dc7db4598eb74aebca47e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  portalPrefab: {fileID: 8476976511320236115, guid: 93d753d03b222164f908a797fd311150, type: 3}
-  features: {fileID: 1277446150}
-  zones: {fileID: 290854745}
-  groundPrefab: {fileID: 2973858885463788473, guid: 39b046f95bfe0cd41ac6c70c86a52018, type: 3}
-  groundStartPrefab: {fileID: 2973858885463788473, guid: 1ecb77c0dcf3e4f469dca523a8219198, type: 3}
-  endPrefab: {fileID: 3341490454293171990, guid: a98f6690fef6b9b42a038382ecab267e, type: 3}
-  obstacles:
-  - {fileID: 2973858885463788473, guid: 8ac23f72d5917fc46bd20a5151c9d284, type: 3}
-  - {fileID: 8476976511320236115, guid: acda2dbb31aa1a64fbb74f1e2e172c5e, type: 3}
-  - {fileID: 4061323180711763171, guid: 68ba5c6e935a5144286f9a1159c11873, type: 3}
-  - {fileID: 4061323180711763171, guid: ff52ad3971e5fdd4cb80006e3c9f6392, type: 3}
-  - {fileID: 6501727687131121628, guid: 87df644389d66714e98cd4f30875990e, type: 3}
-  - {fileID: 8476976511320236115, guid: 3753bcdb8d45f7a4a8ae72c230545bb0, type: 3}
-  - {fileID: 8476976511320236115, guid: 52f3c2c8035466946a2c28d46fa1981f, type: 3}
-  obstaclePool: {fileID: 1962388977}
-  groundPool: {fileID: 1052714808}
-  multiplierY: 10
-  TIPODEOBSTACULOS: 0
 --- !u!4 &307103658
 Transform:
   m_ObjectHideFlags: 0
@@ -6941,7 +6910,7 @@ MonoBehaviour:
   playerTr: {fileID: 1332534592}
   offsetX: 8
   offsetY: 3
-  maxSpeed: 10
+  maxSpeed: 8
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7618,7 +7587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pruebasDesdeMenu: 1
-  song: 200-BPM
+  song: bzrp
   format: .wav
 --- !u!4 &1277446152
 Transform:
@@ -7682,8 +7651,7 @@ GameObject:
   - component: {fileID: 1332534589}
   - component: {fileID: 1332534588}
   - component: {fileID: 1332534590}
-  - component: {fileID: 1332534595}
-  - component: {fileID: 1332534594}
+  - component: {fileID: 1332534597}
   - component: {fileID: 1332534596}
   m_Layer: 0
   m_Name: Player
@@ -7780,30 +7748,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1332534594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1332534587}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd65d5d39b3af5441b6f9b5f6876d7fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1332534595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1332534587}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ab4b4cbafd3b894ea93cbbc243e2b07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1332534596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7824,6 +7768,18 @@ MonoBehaviour:
       Data4: 1005660459
     Path: event:/Music
   zones: {fileID: 290854745}
+--- !u!114 &1332534597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1332534587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf969221cf45b924a9116e0c505d1674, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1351524234
 GameObject:
   m_ObjectHideFlags: 0
@@ -9076,7 +9032,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3dc7d8baa7cca049b58d7cabc30a716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  music: {fileID: 1332534594}
+  music: {fileID: 0}
 --- !u!1 &1803907316
 GameObject:
   m_ObjectHideFlags: 0

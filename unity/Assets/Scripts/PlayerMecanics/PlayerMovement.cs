@@ -147,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
 
         GameManager.instance.SetDeathTime(lastSpawn.time);
         crono.setActualTime(lastSpawn.time);
-        GetComponent<RestartMusic>().ResetMusic((int)(lastSpawn.time * 1000.0));
+        GetComponent<ControlMusic>().ResetMusic((int)(lastSpawn.time * 1000.0));
 
         //Resetear el estado de los powerUps
         powerUpsManager.ResetData(lastSpawn.powerUpsData);
