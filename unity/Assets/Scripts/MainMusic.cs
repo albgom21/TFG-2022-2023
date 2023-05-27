@@ -152,7 +152,15 @@ class MainMusic : MonoBehaviour
     public void Play()
     {
         PlayMusic(fileName);
+        if (PlayerPrefs.HasKey("Volumen"))
+            SetVolume(PlayerPrefs.GetFloat("Volumen"));
+        else
+        {
+            PlayerPrefs.SetFloat("Volumen", Constants.VOLUME);
+            SetVolume(Constants.VOLUME); // Valor por defecto si no hay uno guardado
+        }
     }
+
     public void PlayTime(int t)
     {
         eventInstance.setTimelinePosition(t);

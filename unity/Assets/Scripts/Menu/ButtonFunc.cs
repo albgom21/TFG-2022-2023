@@ -20,6 +20,9 @@ public class ButtonFunc : MonoBehaviour
     private Color deleteInactive;
     public void PlayLvl()
     {
+        // Sonido clic
+        FMODUnity.RuntimeManager.PlayOneShot("event:/MenuSelection");
+
         // Activar imagen de carga
         GameObject.FindGameObjectWithTag("LoadingImage").GetComponent<Image>().enabled = true;
 
@@ -64,7 +67,6 @@ public class ButtonFunc : MonoBehaviour
 
         pathsFeatures = new string[]{   // Lista de rutas que se esperan haber generado una vez se haya ejecutado la extracción de características
             checkPath + "_beats.txt",
-            checkPath + "_scopt.txt",
             checkPath + "_rmse.txt",
             checkPath + "_sr.txt",
             checkPath + "_duration.txt",
@@ -153,6 +155,9 @@ public class ButtonFunc : MonoBehaviour
 
     public void deleteLvl()
     {
+        // Sonido clic
+        FMODUnity.RuntimeManager.PlayOneShot("event:/MenuSelection");
+
         songName = GetComponent<TextMeshProUGUI>().text;
 
         string filePath = Application.streamingAssetsPath + "/" + songName + "/" + songName + "_levelInfo.txt";

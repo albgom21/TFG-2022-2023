@@ -39,6 +39,9 @@ public class PauseMenu : MonoBehaviour
         music?.StopMusic();          // Parar la musica
                                      
         pauseMenu.active = true;     // Mostrar menu de pausa
+
+        // Sonido clic
+        FMODUnity.RuntimeManager.PlayOneShot("event:/MenuSelection");
     }
 
     public void resumeGame()
@@ -51,11 +54,17 @@ public class PauseMenu : MonoBehaviour
 
         pauseMenu.active = false;    // Quitar menu de pausa
 
+        // Sonido clic
+        FMODUnity.RuntimeManager.PlayOneShot("event:/MenuSelection"); 
     }
+
     public void closeApp()
     {
+        // Sonido clic
+        FMODUnity.RuntimeManager.PlayOneShot("event:/MenuSelection");
+
         #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+        UnityEditor.EditorApplication.isPlaying = false;
         #else
             Application.Quit();
         #endif

@@ -18,26 +18,15 @@ public class ReadTxt : MonoBehaviour
     public string song = "200-BPM";         // Titulo del audio analizado
     public string format = ".wav";
     string path;                            // Ruta dentro del proyecto donde se guardan los txt
-    string rutaBeats, rutaSC, rutaRMSE,     // Nombre de cada caracteristica en los txt
-           rutaSamples, rutaSr, rutaDuration, rutaPlpBeats,
-           rutaAgudosTiempo, rutaAgudosValoresNorm, rutaAgudos,
-           rutaGravesTiempo, rutaGravesValoresNorm, rutaGraves,
-           rutaOnset, rutaOnsetPiano, rutaOnsetOther; //LAS DOS ÚLTIMAS SON PROVISIONALES
+    string rutaBeats, rutaRMSE,     // Nombre de cada caracteristica en los txt
+           rutaSr, rutaDuration, rutaOnset;
 
 
     // ESTRUCTURAS DE DATOS PARA GUARDAS LAS CARACTERISTICAS
     List<float> beats = new List<float>();      // Tiempo en seg cuando se producen los beats
     List<float> plpBeats = new List<float>();
-    List<float> scopt = new List<float>();      // Valor del centroide espectral en los instantes en los que hay beats
     List<float> rmse = new List<float>();       // Valor del RMSE en los instantes en los que hay beats
-    List<float> samples = new List<float>();    // Valor de las muestras del audio
-    List<float> agudosTiempo = new List<float>();
-    List<float> gravesTiempo = new List<float>();
-    List<float> agudosValoresNorm = new List<float>();
-    List<float> gravesValoresNorm = new List<float>();
     List<float> onset = new List<float>();
-    List<float> onset_piano = new List<float>(); //PROVISIONAL PARA PRUEBAS
-    List<float> onset_other = new List<float>(); //PROVISIONAL PARA PRUEBAS
 
     float[,] matriz_agudos;                     // Tiempo y valor en db de los agudos
     float[,] matriz_graves;                     // Tiempo y valor en db de los graves
@@ -58,45 +47,20 @@ public class ReadTxt : MonoBehaviour
 
         path = Application.streamingAssetsPath + "/" + song + "/"; //Ruta donde se encuentran los txt con las caract
         //Debug.Log("Path: " + path);
+
         // Crear las rutas de los txt
         rutaBeats = path + song + "_beats.txt";
-        rutaPlpBeats = path + song + "_plpBeats.txt";
-        rutaSC = path + song + "_scopt.txt";
         rutaRMSE = path + song + "_rmse.txt";
-        rutaSamples = path + song + "_samples.txt";
         rutaSr = path + song + "_sr.txt";
         rutaDuration = path + song + "_duration.txt";
-
-        rutaAgudosTiempo = path + song + "_agudosTiempo.txt";
-        rutaAgudosValoresNorm = path + song + "_agudosValorNorm.txt";
-        rutaAgudos = path + song + "_agudos.txt";
-
-        rutaGravesTiempo = path + song + "_gravesTiempo.txt";
-        rutaGravesValoresNorm = path + song + "_gravesValorNorm.txt";
-        rutaGraves = path + song + "_graves.txt";
-
         rutaOnset = path + song + "_onsetDetection.txt";
-        //PROVISIONAL
-        rutaOnsetPiano = path + song + "_onsetPiano.txt";
-        rutaOnsetOther = path + song + "_onsetOther.txt";
 
         // Leer y almacenar las caracteristicas del audio
         ReadFeature(ref beats, rutaBeats);
-        //readFeature(ref plpBeats, rutaPlpBeats);
-        ReadFeature(ref scopt, rutaSC);
         ReadFeature(ref rmse, rutaRMSE);
-        //readFeature(ref samples, rutaSamples);
-        ReadFeature(ref agudosTiempo, rutaAgudosTiempo);
-        ReadFeature(ref agudosValoresNorm, rutaAgudosValoresNorm);
-
-        ReadFeature(ref gravesTiempo, rutaGravesTiempo);
-        ReadFeature(ref gravesValoresNorm, rutaGravesValoresNorm);
         ReadFeature(ref onset, rutaOnset);
         ReadInt(ref sr, rutaSr);
         ReadFloat(ref duration, rutaDuration);
-
-        ReadFeature(ref onset_piano, rutaOnsetPiano);
-        ReadFeature(ref onset_other, rutaOnsetOther);
 
         GameManager.instance.SetFeatureManager(this);
     }
@@ -174,16 +138,8 @@ public class ReadTxt : MonoBehaviour
     // Getters
     public List<float> GetBeatsInTime() { return beats; }
     public List<float> GetPlpBeatsInTime() { return plpBeats; }
-    public List<float> GetScopt() { return scopt; }
     public List<float> GetRMSE() { return rmse; }
-    public List<float> GetSamples() { return samples; }
-    public List<float> GetAgudosTiempo() { return agudosTiempo; }
-    public List<float> GetGravesTiempo() { return gravesTiempo; }
-    public List<float> GetAgudosValoresNorm() { return agudosValoresNorm; }
-    public List<float> GetGravesValoresNorm() { return gravesValoresNorm; }
     public List<float> GetOnset() { return onset; }
-    public List<float> GetOnsetPiano() { return onset_piano; }
-    public List<float> GetOnsetOther() { return onset_other; }
     public int GetSr() { return sr; }
     public float GetDuration() { return duration; }
     public float[,] GetAgudos() { return matriz_agudos; }

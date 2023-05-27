@@ -684,62 +684,47 @@ def features_to_txt(path):
     # Beats
     bpm, beats = get_beats_in_timeline(samples, sr)
 
-    # Spectral centroid
-    sc = spectral_centroid_v1(samples, sr)
-    scopt = matriz_coord_beats(sc, beats)
-
     # Rmse
     r = rmse(samples)
     ropt = matriz_coord_beats(r, beats)
     rnorm = normalize(ropt)
 
+    # Spectral centroid
+    # sc = spectral_centroid_v1(samples, sr)
+    # scopt = matriz_coord_beats(sc, beats)
+
     # Graves
-    g = graves(samples, sr)
-    g = filtroSeg(g, 0.5)
-    gTiempo = g[:, 0]
-    gValorNorm = normalize(g[:, 1])
+    # g = graves(samples, sr)
+    # g = filtroSeg(g, 0.5)
+    # gTiempo = g[:, 0]
+    # gValorNorm = normalize(g[:, 1])
 
     # Agudos 
-    a = agudos(samples, sr)
-    a = filtroSeg(a, 0.5)
-    aTiempo = a[:, 0]
-    aValorNorm = normalize(a[:, 1])
+    # a = agudos(samples, sr)
+    # a = filtroSeg(a, 0.5)
+    # aTiempo = a[:, 0]
+    # aValorNorm = normalize(a[:, 1])
 
     # Golpes de batería (onset)
     onset, onset_piano, onset_other = onset_detection(path)
 
     name = os.path.splitext(path)[0]
-    # np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
     np.savetxt(name + '_duration.txt', dur,fmt='%.0f')
     np.savetxt(name + '_sr.txt', np_sr, fmt='%.0f')
     np.savetxt(name + '_beats.txt', beats, fmt='%.3f')
     np.savetxt(name + '_rmse.txt', rnorm, fmt='%.3f')
-    np.savetxt(name + '_scopt.txt', scopt, fmt='%.3f')
-    np.savetxt(name + '_gravesTiempo.txt', gTiempo, fmt='%.3f')
-    np.savetxt(name + '_gravesValorNorm.txt', gValorNorm, fmt='%.3f')
-    np.savetxt(name + '_agudosTiempo.txt', aTiempo, fmt='%.3f')
-    np.savetxt(name + '_agudosValorNorm.txt', aValorNorm, fmt='%.3f')
-    np.savetxt(name + '_onsetDetection.txt', onset, fmt='%.3f')
-    #PROVISIONAL
-    np.savetxt(name + '_onsetPiano.txt', onset_piano, fmt='%.3f')
-    np.savetxt(name + '_onsetOther.txt', onset_other, fmt='%.3f')
+    np.savetxt(name + '_onsetDetection.txt', onset, fmt='%.3f')        
 
-    # # Ruta de la carpeta de origen
-    # ruta_origen = './'
+    # np.savetxt(name + '_samples.txt', samples, fmt='%.3f')
+    # np.savetxt(name + '_scopt.txt', scopt, fmt='%.3f')
+    # np.savetxt(name + '_gravesTiempo.txt', gTiempo, fmt='%.3f')
+    # np.savetxt(name + '_gravesValorNorm.txt', gValorNorm, fmt='%.3f')
+    # np.savetxt(name + '_agudosTiempo.txt', aTiempo, fmt='%.3f')
+    # np.savetxt(name + '_agudosValorNorm.txt', aValorNorm, fmt='%.3f')
+    # np.savetxt(name + '_onsetPiano.txt', onset_piano, fmt='%.3f')
+    # np.savetxt(name + '_onsetOther.txt', onset_other, fmt='%.3f')
 
-    # # Ruta de la carpeta de destino
-    # ruta_destino = './' + name + '/'
 
-    # # Recorre los archivos de la carpeta de origen
-    # for archivo in os.listdir(ruta_origen):
-    #     # Verifica que el archivo sea un archivo de texto
-    #     if archivo.endswith('.txt'):
-    #         # Obtiene la ruta completa del archivo de origen
-    #         ruta_archivo_origen = os.path.join(ruta_origen, archivo)
-    #         # Obtiene la ruta completa del archivo de destino
-    #         ruta_archivo_destino = os.path.join(ruta_destino, archivo)
-    #         # Mueve el archivo de origen al archivo de destino
-    #         os.replace(ruta_archivo_origen, ruta_archivo_destino)
 
 #--------------------FUNCIONES QUE PUEDEN SER BORRADAS-------------------------------
 '''
@@ -814,5 +799,5 @@ def main(path):
     features_to_txt(path)
 
 main(sys.argv[1]) #Si se llama desde Unity o desde consola
-# main("D:/Alberto/Desarrollo de Videojuegos/4º/TFG/TFG-2022-2023/unity/Assets/StreamingAssets/electro.wav") #Si se llama ejecutando con F5
+# main("RUTA ABSOLUTA") #Si se llama ejecutando con F5
 #depuracion_onset("bzrp.wav")

@@ -49,14 +49,14 @@ public class OldObstacleGenerator : MonoBehaviour
 
         float width = transform.localScale.x;
         float height = transform.localScale.y;
-        List<float> beats = TIPODEOBSTACULOS switch
-        {
-            1 => features.GetComponent<ReadTxt>().GetOnsetPiano(),
-            2 => features.GetComponent<ReadTxt>().GetOnsetOther(),
-            _ => features.GetComponent<ReadTxt>().GetBeatsInTime(),
-        };
+        //List<float> beats = TIPODEOBSTACULOS switch
+        //{
+        //    1 => features.GetComponent<ReadTxt>().GetOnsetPiano(),
+        //    2 => features.GetComponent<ReadTxt>().GetOnsetOther(),
+        //    _ => features.GetComponent<ReadTxt>().GetBeatsInTime(),
+        //};
 
-        List<float> scopt = features.GetComponent<ReadTxt>().GetScopt();
+        //List<float> scopt = features.GetComponent<ReadTxt>().GetScopt();
         //zonesData = zones.getZonesData();
         // PRUEBAS Graves Y Agudos
         //List<float> agudosTiempo = features.GetComponent<ReadTxt>().getAgudosTiempo();
@@ -69,7 +69,7 @@ public class OldObstacleGenerator : MonoBehaviour
         multiplierX = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().GetPlayerSpeed();
         minDistanceBetweenObstacles = multiplierX / 2f;
 
-        PruebaOnsets(beats);
+        //PruebaOnsets(beats);
 
         #region pruebas GyA
         // PRUEBAS Graves Y Agudos
