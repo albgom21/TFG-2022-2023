@@ -113,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Vector2 normal = collision.GetContact(0).normal;
-        if (normal == Vector2.down && rb.velocity.y > 0) PlayerDeath();
+        if (normal == Vector2.down && rb.velocity.y > 0) PlayerDeath(true);
         else if (normal == Vector2.up) onGround = true;
     }
 
@@ -123,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
         if (normal == Vector2.left)
         {
             float offset = Math.Abs(transform.position.y - collision.transform.position.y);
-            if (offset < 0.9f) PlayerDeath();
+            if (offset < 0.9f) PlayerDeath(true);
         }
     }
 
@@ -134,11 +134,14 @@ public class PlayerMovement : MonoBehaviour
         sprite.rotation = Quaternion.Euler(rotation);
     }
 
-    public void PlayerDeath()
+    public void PlayerDeath(bool soundEffect = false)
     {
+        if (soundEffect) FMODUnity.RuntimeManager.PlayOneShot("event:/PlayerDead");
+
         onGround = true; jump = false; autoJump = false; createSpawn = false;
 
         GameManager.instance.SetDeath(true);
+
         SpawnData lastSpawn = spawns[spawns.Count - 1];
         
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
@@ -151,6 +154,8 @@ public class PlayerMovement : MonoBehaviour
 
         //Resetear el estado de los powerUps
         powerUpsManager.ResetData(lastSpawn.powerUpsData);
+
+        GameManager.instance.GetLightManager().PlayerDeath();
     }
     
     //Intenta saltar (comprobando si estás en el suelo)

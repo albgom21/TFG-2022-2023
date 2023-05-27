@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{df0a0849-6f6a-4d98-a5d0-f1d2f007fa62}">
+		<property name="assetPath">
+			<value>Musicas/PlayerDead2.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.2089795918367347</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{0207d274-2195-446d-b66f-44fafed8ea08}</destination>
+		</relationship>
+	</object>
+</objects>

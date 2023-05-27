@@ -7,6 +7,6 @@ public class KillPlayer : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         PlayerMovement pm = collision.gameObject.GetComponent<PlayerMovement>();
-        if (pm != null) pm.PlayerDeath();
+        if (pm != null) pm.PlayerDeath(true);
     }
 }

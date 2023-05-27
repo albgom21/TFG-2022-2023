@@ -11,23 +11,20 @@ public class LightManager : MonoBehaviour
     [SerializeField] private SpriteRenderer backgroundRenderer;
     private float intensity, maxIntensity;
     private List<float> onset;
-    private List<Light2D> torchesLights;
     private int i, onsetCount;
-    private double time;
+    private float time;
     private float offset;
     private Color newBackgroundColor, newLightColor;
 
     private void Awake()
     {
         GameManager.instance.SetLightManager(this);
-        torchesLights = new List<Light2D>();
     }
     void Start()
     {
         onset = input.GetOnset();
-        for (int j = 0; j < onset.Count; j++) onset[j] += Constants.DELAY_TIME;
         i = 0;
-        time = 0;
+        time = -Constants.DELAY_TIME;
         intensity = backgroundLight.intensity;
         maxIntensity = 1;
         onsetCount = onset.Count;
@@ -38,12 +35,6 @@ public class LightManager : MonoBehaviour
     private void Update()
     {
         if (GameManager.instance.GetEnd()) return;
-        if (GameManager.instance.GetDeath())
-        {
-            time = GameManager.instance.GetDeathTime();
-            i = 0;
-            while (onset[i] < time) i++;
-        }
 
         time += Time.deltaTime;
 
@@ -81,5 +72,12 @@ public class LightManager : MonoBehaviour
                 Mathf.Lerp(backgroundLight.color.g, newLightColor.g, Time.deltaTime * 1.5f),
                 Mathf.Lerp(backgroundLight.color.b, newLightColor.b, Time.deltaTime * 1.5f), backgroundLight.color.a);
         }
+    }
+
+    public void PlayerDeath()
+    {
+        time = (float) GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
+        i = 0;
+        while (onset[i] < time) i++;
     }
 }

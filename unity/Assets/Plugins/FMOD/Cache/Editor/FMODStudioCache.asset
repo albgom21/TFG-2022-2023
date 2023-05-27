@@ -15,10 +15,10 @@ MonoBehaviour:
   Path: ../FMOD/ProyectoFmod/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638163163893166542
+  lastModified: 638208171435017095
   FileSizes:
   - Name: Desktop
-    Value: 998
+    Value: 1094
   Exists: 1
 --- !u!114 &-7239688635830222700
 MonoBehaviour:
@@ -68,6 +68,36 @@ MonoBehaviour:
   IsGlobal: 1
   Labels: []
   Exists: 1
+--- !u!114 &-6243567256587875493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/PlayerDead
+  m_EditorClassIdentifier: 
+  Path: event:/PlayerDead
+  Guid:
+    Data1: -152246911
+    Data2: 1169820430
+    Data3: -1565734219
+    Data4: 1035167107
+  Banks:
+  - {fileID: 4236473184428288406}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: 1480624022892533141}
+  - {fileID: 6436498107224557216}
+  - {fileID: -1536419657322557032}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 620
 --- !u!114 &-5005023143138083606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,6 +194,33 @@ MonoBehaviour:
   IsGlobal: 1
   Labels: []
   Exists: 1
+--- !u!114 &-2379743080579599253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/MenuSelection
+  m_EditorClassIdentifier: 
+  Path: event:/MenuSelection
+  Guid:
+    Data1: 1730997973
+    Data2: 1183618823
+    Data3: -819892861
+    Data4: 1417604719
+  Banks:
+  - {fileID: 4236473184428288406}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 156
 --- !u!114 &-2352769852790566634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,6 +241,30 @@ MonoBehaviour:
   ID:
     data1: 603318696
     data2: 3247746894
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &-1536419657322557032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PlayerDead/Reverb
+  m_EditorClassIdentifier: 
+  Name: Reverb
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 1101896077
+    data2: 1282880331
   Type: 0
   IsGlobal: 1
   Labels: []
@@ -217,7 +298,7 @@ MonoBehaviour:
   - {fileID: 2085106078082836605}
   MinDistance: 1
   MaxDistance: 20
-  Length: 302000
+  Length: 602000
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +318,8 @@ MonoBehaviour:
   EditorEvents:
   - {fileID: -1465764669733535214}
   - {fileID: 1510850140409146660}
+  - {fileID: -6243567256587875493}
+  - {fileID: -2379743080579599253}
   EditorParameters:
   - {fileID: -3255610275654834125}
   - {fileID: -2798298855956296765}
@@ -245,8 +328,32 @@ MonoBehaviour:
   - {fileID: 2813485004033085234}
   StringsBanks:
   - {fileID: -8282175085137117510}
-  cacheTime: 638168463383003826
+  cacheTime: 638208171436607868
   cacheVersion: 131593
+--- !u!114 &1480624022892533141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PlayerDead/Quality
+  m_EditorClassIdentifier: 
+  Name: Quality
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 1
+  ID:
+    data1: 2205031200
+    data2: 2420999056
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
 --- !u!114 &1510850140409146660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,7 +423,7 @@ MonoBehaviour:
   Path: ../FMOD/ProyectoFmod/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638163163893156579
+  lastModified: 638208171435007118
   FileSizes:
   - Name: Desktop
     Value: 1540
@@ -336,10 +443,10 @@ MonoBehaviour:
   Path: ../FMOD/ProyectoFmod/Build/Desktop/MyBank.bank
   Name: MyBank
   StudioPath: bank:/MyBank
-  lastModified: 638168463383003826
+  lastModified: 638208171436607868
   FileSizes:
   - Name: Desktop
-    Value: 176896
+    Value: 196672
   Exists: 1
 --- !u!114 &4474961541526584791
 MonoBehaviour:
@@ -361,6 +468,30 @@ MonoBehaviour:
   ID:
     data1: 2205031200
     data2: 2420999056
+  Type: 0
+  IsGlobal: 1
+  Labels: []
+  Exists: 1
+--- !u!114 &6436498107224557216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PlayerDead/Underwater
+  m_EditorClassIdentifier: 
+  Name: Underwater
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 603318696
+    data2: 3247746894
   Type: 0
   IsGlobal: 1
   Labels: []
