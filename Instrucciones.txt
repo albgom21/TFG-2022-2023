@@ -1,3 +1,5 @@
+-- INSTALACIÓN --
+
 Para poder ejecutar el proyecto en Windows debes seguir los siguientes pasos:
 1. Establecer el idioma de Windows al Español.
 2. Si no tienes instalado Python 3.10, instalalo mediante el siguiente enlace: https://apps.microsoft.com/store/detail/python-310/9PJPW5LDXLZ5?hl=es-es&gl=es
@@ -18,3 +20,15 @@ Para poder ejecutar el proyecto en Windows debes seguir los siguientes pasos:
 	
 5. Hacer doble clic en el archivo LongPaths.reg y ejecutarlo.
 6. Reiniciar el sistema.
+
+
+-- CONTROLES DEL VIDEOJUEGO--
+
+• Clic izquierdo: salto.
+• Clic derecho: coloca un checkpoint.
+• Tecla Z: 	elimina el último spawn.
+• Tecla M: 	provoca la muerte del jugador.
+• Tecla R: 	provoca el reinicio total del nivel.
+• Tecla D: 	activa / desactiva el modo desarrollador.
+• Tecla J: 	activa / desactiva el modo automátivo del juego.
+• Tecla Escape: activa el menú de pausa.
