@@ -142,7 +142,6 @@ public class PlayerMovement : MonoBehaviour
         transform.position = lastSpawn.pos;
 
         GameManager.instance.SetDeathTime(lastSpawn.time);
-        Debug.Log("LAST SPAWN.TIME = " + lastSpawn.time);
         crono.setActualTime(lastSpawn.time);
         GetComponent<ControlMusic>().ResetMusic((int)(lastSpawn.time * 1000.0));
 

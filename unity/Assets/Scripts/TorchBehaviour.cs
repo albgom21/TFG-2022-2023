@@ -11,7 +11,6 @@ public class TorchBehaviour : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log(this);
         GameManager.instance.AddTorch(this);
     }
 
