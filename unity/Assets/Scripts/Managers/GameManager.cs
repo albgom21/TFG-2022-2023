@@ -36,7 +36,17 @@ public class GameManager : MonoBehaviour
     }
 
     public bool GetDeath() { return death; }
-    public void SetDeath(bool b) { death = b; }
+    public void SetDeath(bool b) { 
+        death = b;
+        if (death)
+        {
+            GameObject[] torches = GameObject.FindGameObjectsWithTag("Torch");
+            foreach (GameObject t in torches){
+                TorchBehaviour behaviour = t.GetComponent<TorchBehaviour>();
+                if (behaviour != null) behaviour.TorchSyncro();
+            }
+        }
+    }
     public bool GetEnd() { return end; }
     public void SetEnd(bool b) { end = b; }
 

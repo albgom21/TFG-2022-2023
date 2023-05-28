@@ -23,11 +23,6 @@ public class TorchBehaviour : MonoBehaviour
     private void Update()
     {
         if (GameManager.instance.GetEnd()) return;
-        if (GameManager.instance.GetDeath())
-        {
-            timeCount = (float)GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
-            cont = GameManager.instance.GetLastBeatBeforeDeath();
-        }
 
         timeCount += Time.deltaTime;
 
@@ -38,5 +33,12 @@ public class TorchBehaviour : MonoBehaviour
         }
 
         light.intensity -= 1.5f * Time.deltaTime;
+    }
+
+    public void TorchSyncro()
+    {
+        Debug.Log("SINCRO");
+        timeCount = (float)GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
+        cont = GameManager.instance.GetLastBeatBeforeDeath();
     }
 }
