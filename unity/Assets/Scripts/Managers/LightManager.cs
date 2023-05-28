@@ -74,7 +74,7 @@ public class LightManager : MonoBehaviour
         }
     }
 
-    public void PlayerDeath()
+    public void SyncroAfterPlayerDeath()
     {
         time = (float) GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
         i = 0;

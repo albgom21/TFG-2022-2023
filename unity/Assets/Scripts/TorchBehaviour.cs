@@ -4,19 +4,21 @@ using UnityEngine.Rendering.Universal;
 
 public class TorchBehaviour : MonoBehaviour
 {
-    public SpriteRenderer sprite;
-    public ReadTxt input;
-
     private float timeCount;
     private Light2D light;
     List<float> beats;
     int cont = 0;
 
+    private void Awake()
+    {
+        Debug.Log(this);
+        GameManager.instance.AddTorch(this);
+    }
+
     void Start()
     {
-        input = GameManager.instance.GetFeatureManager();
         light = gameObject.GetComponent<Light2D>();
-        beats = input.GetBeatsInTime();
+        beats = GameManager.instance.GetFeatureManager().GetBeatsInTime();
         timeCount = -Constants.DELAY_TIME;
     }
 
@@ -35,7 +37,7 @@ public class TorchBehaviour : MonoBehaviour
         light.intensity -= 1.5f * Time.deltaTime;
     }
 
-    public void TorchSyncro()
+    public void SyncroAfterPlayerDeath()
     {
         timeCount = (float)GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
         cont = GameManager.instance.GetLastBeatBeforeDeath();

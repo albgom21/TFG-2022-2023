@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,16 +10,21 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     private double deathTime;
-    private bool death = false;
     private int lastBeatBeforeDeath;
     private bool end = false;
     private string song, extension;
 
-    private AutoJumpManager autoJumpManager;
-    private DebugManager debugManager;
+    // Managers
+    private Zone zoneManager;
     private PowerUpsManager powerUpsManager;
     private LightManager lightManager;
+    private AutoJumpManager autoJumpManager;
+    private DebugManager debugManager;
     private ReadTxt featureManager;
+
+    private List<TorchBehaviour> torches;
+    private PulseEffect pulseEffect;
+    private Crono crono;
 
     void Awake()
     {
@@ -30,30 +36,29 @@ public class GameManager : MonoBehaviour
 
         else Destroy(gameObject);
     }
+
     private void Start()
     {
         deathTime = lastBeatBeforeDeath = 0;
+        torches = new List<TorchBehaviour>();
     }
 
-    public bool GetDeath() { return death; }
-    public void SetDeath(bool b) { 
-        death = b;
-        if (death)
-        {
-            GameObject[] torches = GameObject.FindGameObjectsWithTag("Torch");
-            foreach (GameObject t in torches){
-                TorchBehaviour behaviour = t.GetComponent<TorchBehaviour>();
-                if (behaviour != null) behaviour.TorchSyncro();
-            }
-        }
+    public void PlayerDeath()
+    {
+        foreach (TorchBehaviour torchBehaviour in torches)
+            if (torchBehaviour != null) torchBehaviour.SyncroAfterPlayerDeath();
+        zoneManager.SyncroAfterPlayerDeath();
+        lightManager.SyncroAfterPlayerDeath();
+        pulseEffect.SyncroAfterPlayerDeath();
+        crono.SyncroAfterPlayerDeath();
     }
     public bool GetEnd() { return end; }
     public void SetEnd(bool b) { end = b; }
 
     public double GetDeathTime() { return deathTime; }
-
     public int GetLastBeatBeforeDeath() { return lastBeatBeforeDeath; }
-    public void SetDeathTime(double t) {
+    public void SetDeathTime(double t)
+    {
         deathTime = t;
         UpdateLastBeatBeforeDeath();
     }
@@ -62,11 +67,10 @@ public class GameManager : MonoBehaviour
     {
         List<float> beats = featureManager.GetBeatsInTime();
 
-        float deathTimeWithDelay = (float) deathTime - Constants.DELAY_TIME;
+        float deathTimeWithDelay = (float)deathTime - Constants.DELAY_TIME;
 
         lastBeatBeforeDeath = 0;
         while (lastBeatBeforeDeath < beats.Count && deathTimeWithDelay > beats[lastBeatBeforeDeath]) lastBeatBeforeDeath++;
-
     }
 
     public void SetSong(string s) { song = s; }
@@ -75,14 +79,20 @@ public class GameManager : MonoBehaviour
     public string GetExtension() { return extension; }
 
     // Manager Setters
+    public void SetZoneManager(Zone z) { zoneManager = z; }
     public void SetAutoJumpManager(AutoJumpManager a) { autoJumpManager = a; }
     public void SetDebugManager(DebugManager d) { debugManager = d; }
     public void SetPowerUpsManager(PowerUpsManager p) { powerUpsManager = p; }
     public void SetLightManager(LightManager l) { lightManager = l; }
     public void SetFeatureManager(ReadTxt r) { featureManager = r; }
 
-    public PowerUpsManager GetPowerUpsManager() { return powerUpsManager; }
+    // More Setters
+    public void SetPulseEffect(PulseEffect p) { pulseEffect = p; }
+    public void SetCrono(Crono c) { crono = c; }
+    public void AddTorch(TorchBehaviour t) { torches.Add(t); }
 
+    // Manager Getters
+    public PowerUpsManager GetPowerUpsManager() { return powerUpsManager; }
     public LightManager GetLightManager() { return lightManager; }
 
     //Debug mode
@@ -95,7 +105,6 @@ public class GameManager : MonoBehaviour
 
     //AutoJump
     public AutoJumpManager GetAutoJumpManager() { return autoJumpManager; }
-
 
     public void ChangeAutoJumpMode() { autoJumpManager.ChangeAutoJumpMode(); }
 
@@ -132,4 +141,5 @@ public class GameManager : MonoBehaviour
         }
         lightManager.SetLightColor(lightColor, backgroundColor);
     }
+
 }

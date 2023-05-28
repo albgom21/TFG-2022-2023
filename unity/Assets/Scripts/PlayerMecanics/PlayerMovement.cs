@@ -14,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxFallingSpeed;
     private Rigidbody2D rb;
     private bool autoJump, jump, onGround, createSpawn;
-    private PowerUpsManager powerUpsManager;
     private struct SpawnData
     {
         public Vector3 pos;
@@ -34,13 +33,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        GameManager.instance.SetDeath(false);
         GameManager.instance.SetEnd(false);
     }
 
     void Start()
     {
-        powerUpsManager = GameManager.instance.GetPowerUpsManager();
         rb = GetComponent<Rigidbody2D>();
         jump = autoJump = createSpawn = false; onGround = true;
         spawns.Add(new SpawnData(transform.position, Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform), 0,
@@ -49,8 +46,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.instance.GetDeath()) GameManager.instance.SetDeath(false);
-
         transform.position += Vector3.right * speed * Time.deltaTime;
         if (Input.GetMouseButton(0)) jump = true;
         else if (!autoJump) jump = false;
@@ -97,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
             spawns.Add(new SpawnData(transform.position,
                                     Instantiate(spawnPrefab, transform.position, transform.rotation, spawnPool.transform),
                                     crono.getActualTime(),
-                                    powerUpsManager.getData() //Info de los powerUps
+                                    GameManager.instance.GetPowerUpsManager().getData() //Info de los powerUps
                                     ));
             createSpawn = false;
         }
@@ -140,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
 
         onGround = true; jump = false; autoJump = false; createSpawn = false;
 
-        GameManager.instance.SetDeath(true);
+        GameManager.instance.PlayerDeath();
 
         SpawnData lastSpawn = spawns[spawns.Count - 1];
         
@@ -149,13 +144,12 @@ public class PlayerMovement : MonoBehaviour
         transform.position = lastSpawn.pos;
 
         GameManager.instance.SetDeathTime(lastSpawn.time);
+        Debug.Log("LAST SPAWN.TIME = " + lastSpawn.time);
         crono.setActualTime(lastSpawn.time);
         GetComponent<ControlMusic>().ResetMusic((int)(lastSpawn.time * 1000.0));
 
         //Resetear el estado de los powerUps
-        powerUpsManager.ResetData(lastSpawn.powerUpsData);
-
-        GameManager.instance.GetLightManager().PlayerDeath();
+        GameManager.instance.GetPowerUpsManager().ResetData(lastSpawn.powerUpsData);
     }
     
     //Intenta saltar (comprobando si estás en el suelo)
