@@ -6121,7 +6121,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 540836486}
-  input: {fileID: 1277446151}
 --- !u!212 &540836486
 SpriteRenderer:
   m_ObjectHideFlags: 0
