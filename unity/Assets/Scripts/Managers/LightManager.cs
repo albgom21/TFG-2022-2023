@@ -35,7 +35,13 @@ public class LightManager : MonoBehaviour
     private void Update()
     {
         if (GameManager.instance.GetEnd()) return;
-
+        if (GameManager.instance.GetDeath())
+        {
+            time = (float)GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
+            i = 0;
+            while (onset[i] < time) i++;
+            return;
+        }
         time += Time.deltaTime;
 
         if (i < onsetCount && time >= onset[i])
@@ -72,12 +78,5 @@ public class LightManager : MonoBehaviour
                 Mathf.Lerp(backgroundLight.color.g, newLightColor.g, Time.deltaTime * 1.5f),
                 Mathf.Lerp(backgroundLight.color.b, newLightColor.b, Time.deltaTime * 1.5f), backgroundLight.color.a);
         }
-    }
-
-    public void PlayerDeath()
-    {
-        time = (float) GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
-        i = 0;
-        while (onset[i] < time) i++;
     }
 }

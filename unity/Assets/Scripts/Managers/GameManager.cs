@@ -73,8 +73,6 @@ public class GameManager : MonoBehaviour
 
     public PowerUpsManager GetPowerUpsManager() { return powerUpsManager; }
 
-    public LightManager GetLightManager() { return lightManager; }
-
     //Debug mode
     public DebugManager GetDebugManager() { return debugManager; }
 

@@ -17,28 +17,27 @@ public class TorchBehaviour : MonoBehaviour
         input = GameManager.instance.GetFeatureManager();
         light = gameObject.GetComponent<Light2D>();
         beats = input.GetBeatsInTime();
-        timeCount = Constants.DELAY_TIME;
+        timeCount = -Constants.DELAY_TIME;
     }
 
     private void Update()
     {
-        if (!GameManager.instance.GetEnd())
+        if (GameManager.instance.GetEnd()) return;
+        if (GameManager.instance.GetDeath())
         {
-            if (GameManager.instance.GetDeath())
-            {
-                timeCount = (float) GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
-                cont = GameManager.instance.GetLastBeatBeforeDeath();
-            }
-
-            timeCount += Time.deltaTime;
-
-            if (cont < beats.Count && timeCount >= beats[cont])
-            {
-                light.intensity = 1f;
-                cont++;
-            }
-
-            light.intensity -= 1.5f * Time.deltaTime;
+            timeCount = (float)GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
+            cont = GameManager.instance.GetLastBeatBeforeDeath();
+            return;
         }
+
+        timeCount += Time.deltaTime;
+
+        if (cont < beats.Count && timeCount >= beats[cont])
+        {
+            light.intensity = 1f;
+            cont++;
+        }
+
+        light.intensity -= 1.5f * Time.deltaTime;
     }
 }
