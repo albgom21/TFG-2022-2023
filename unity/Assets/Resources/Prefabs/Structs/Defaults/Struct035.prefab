@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unlevel: -1
-  prevX: 2.5
+  prevX: 2
   postX: 1
   difficulty1To5: 2
   obstacleEnabled: 1
