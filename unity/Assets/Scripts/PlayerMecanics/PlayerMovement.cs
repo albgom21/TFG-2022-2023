@@ -49,6 +49,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.instance.GetDeath()) GameManager.instance.SetDeath(false);
+
         transform.position += Vector3.right * speed * Time.deltaTime;
         if (Input.GetMouseButton(0)) jump = true;
         else if (!autoJump) jump = false;
@@ -101,10 +103,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        if (GameManager.instance.GetDeath()) GameManager.instance.SetDeath(false);
-    }
     private void FixedUpdate()
     {
         if (jump) TryJump();
@@ -139,17 +137,25 @@ public class PlayerMovement : MonoBehaviour
     public void PlayerDeath(bool soundEffect = false)
     {
         if (soundEffect) FMODUnity.RuntimeManager.PlayOneShot("event:/PlayerDead");
+
         onGround = true; jump = false; autoJump = false; createSpawn = false;
-        SpawnData lastSpawn = spawns[spawns.Count - 1];        
+
         GameManager.instance.SetDeath(true);
-        GameManager.instance.SetDeathTime(lastSpawn.time);
+
+        SpawnData lastSpawn = spawns[spawns.Count - 1];
+        
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
         transform.position = lastSpawn.pos;
+
+        GameManager.instance.SetDeathTime(lastSpawn.time);
         crono.setActualTime(lastSpawn.time);
         GetComponent<ControlMusic>().ResetMusic((int)(lastSpawn.time * 1000.0));
 
         //Resetear el estado de los powerUps
         powerUpsManager.ResetData(lastSpawn.powerUpsData);
+
+        GameManager.instance.GetLightManager().PlayerDeath();
     }
     
     //Intenta saltar (comprobando si estás en el suelo)
