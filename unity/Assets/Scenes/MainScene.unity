@@ -6904,8 +6904,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTr: {fileID: 1332534592}
   offsetX: 8
-  offsetY: 8
-  maxSpeed: 3
+  offsetY: 5
 --- !u!114 &963194232
 MonoBehaviour:
   m_ObjectHideFlags: 0
