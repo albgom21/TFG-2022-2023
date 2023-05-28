@@ -54,8 +54,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unlevel: 0
-  prevX: 2.5
-  postX: 5
+  prevX: 3
+  postX: 5.5
   difficulty1To5: 5
   obstacleEnabled: 1
 --- !u!1001 &1252144551411241665
@@ -327,7 +327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2973858885463788420, guid: 39b046f95bfe0cd41ac6c70c86a52018, type: 3}
       propertyPath: m_LocalScale.x
-      value: 7.5
+      value: 8.5
       objectReference: {fileID: 0}
     - target: {fileID: 2973858885463788420, guid: 39b046f95bfe0cd41ac6c70c86a52018, type: 3}
       propertyPath: m_LocalPosition.x
