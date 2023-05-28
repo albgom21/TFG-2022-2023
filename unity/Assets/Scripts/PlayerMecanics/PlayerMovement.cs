@@ -135,8 +135,6 @@ public class PlayerMovement : MonoBehaviour
 
         onGround = true; jump = false; autoJump = false; createSpawn = false;
 
-        GameManager.instance.PlayerDeath();
-
         SpawnData lastSpawn = spawns[spawns.Count - 1];
         
         gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
@@ -150,6 +148,8 @@ public class PlayerMovement : MonoBehaviour
 
         //Resetear el estado de los powerUps
         GameManager.instance.GetPowerUpsManager().ResetData(lastSpawn.powerUpsData);
+
+        GameManager.instance.PlayerDeath();
     }
     
     //Intenta saltar (comprobando si estás en el suelo)
