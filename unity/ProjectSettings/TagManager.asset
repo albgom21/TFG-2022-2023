@@ -50,3 +50,6 @@ TagManager:
   - name: Torches
     uniqueID: 1216382685
     locked: 0
+  - name: Player
+    uniqueID: 3062702437
+    locked: 0

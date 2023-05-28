@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1216382685
   m_SortingLayer: 1
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ca59387a4229aa74f9eeb89bc4ce6fdd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -206,7 +206,7 @@ MonoBehaviour:
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: dd868048
-  m_LightCookieSprite: {fileID: 21300000, guid: c593e416215ad9346aaed2184fb15ba3, type: 3}
+  m_LightCookieSprite: {fileID: 21300000, guid: bb35759c7291ecc40be356e57513b47f, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
   m_AlphaBlendOnOverlap: 0
@@ -219,30 +219,24 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_Vertices:
-  - position: {x: 0.5, y: 0.47, z: 0}
+  - position: {x: 0.34, y: 0.5, z: 0}
     color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 1, y: 0.97}
-  - position: {x: 0.48, y: -0.5, z: 0}
+    uv: {x: 0.84, y: 1}
+  - position: {x: 0.23, y: -0.5, z: 0}
     color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 0.98, y: 0}
-  - position: {x: 0.5, y: -0.46, z: 0}
+    uv: {x: 0.73, y: 0}
+  - position: {x: 0.34, y: -0.46, z: 0}
     color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 1, y: 0.04}
-  - position: {x: 0.45, y: 0.5, z: 0}
+    uv: {x: 0.84, y: 0.04}
+  - position: {x: -0.27, y: -0.5, z: 0}
     color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 0.95, y: 1}
-  - position: {x: -0.46, y: -0.5, z: 0}
+    uv: {x: 0.22999997, y: 0}
+  - position: {x: -0.34, y: 0.5, z: 0}
     color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 0.04, y: 0}
-  - position: {x: -0.48, y: 0.5, z: 0}
+    uv: {x: 0.16, y: 1}
+  - position: {x: -0.34, y: -0.27, z: 0}
     color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 0.02, y: 1}
-  - position: {x: -0.5, y: 0.46, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 0, y: 0.96}
-  - position: {x: -0.5, y: -0.48, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 1}
-    uv: {x: 0, y: 0.02}
+    uv: {x: 0.16, y: 0.22999997}
   - position: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
@@ -261,22 +255,10 @@ MonoBehaviour:
   - position: {x: 0, y: 0, z: 0}
     color: {r: 0, g: 0, b: 0, a: 0}
     uv: {x: 0, y: 0}
-  - position: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-    uv: {x: 0, y: 0}
-  - position: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-    uv: {x: 0, y: 0}
-  - position: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-    uv: {x: 0, y: 0}
-  - position: {x: 0, y: 0, z: 0}
-    color: {r: 0, g: 0, b: 0, a: 0}
-    uv: {x: 0, y: 0}
-  m_Triangles: 070006000400050004000600030004000500010004000300000001000300020001000000
+  m_Triangles: 050004000300000003000400010003000000020001000000
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.5, y: 0.5, z: 0}
+    m_Extent: {x: 0.34, y: 0.5, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
