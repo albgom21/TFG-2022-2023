@@ -20,6 +20,12 @@ public class Zone : MonoBehaviour
 
     private List<ZoneData> zData = new List<ZoneData>();    // Lista con los datos de las zonas
 
+
+    private void Awake()
+    {
+        GameManager.instance.SetZoneManager(this);
+    }
+
     void Start()
     {
         // Obtener los datos de BPM y RMSE
@@ -36,23 +42,6 @@ public class Zone : MonoBehaviour
     private void Update()
     {
         if (GameManager.instance.GetEnd()) return;   // Si el nivel ha terminado
-
-        if (GameManager.instance.GetDeath())         // Si el jugador ha muerto
-        {
-            EndZone(true);                                   // Finalizar la zona
-            timeCount = GameManager.instance.GetDeathTime(); // Obtener el tiempo de la muerte
-
-            // Desactivar el estado de los inicios y finales de las zonas segun donde se encuentre el jugador
-            for (int i = 0; i < zData.Count; i++)
-            {
-                ZoneData aux = zData[i];
-                if (timeCount < zData[i].getTimeIniZone() + Constants.DELAY_TIME || (timeCount > zData[i].getTimeIniZone() + Constants.DELAY_TIME && timeCount < zData[i].getTimeEndZone() + Constants.DELAY_TIME))
-                    aux.setActivatedIni(false);
-                if (timeCount < zData[i].getTimeEndZone() + Constants.DELAY_TIME || (timeCount > zData[i].getTimeIniZone() + Constants.DELAY_TIME && timeCount < zData[i].getTimeEndZone() + Constants.DELAY_TIME))
-                    aux.setActivatedEnd(false);
-                zData[i] = aux;
-            }
-        }
 
         timeCount += Time.deltaTime;
 
@@ -267,4 +256,21 @@ public class Zone : MonoBehaviour
 
     // GETTERS
     public List<ZoneData> getZonesData() { return zData; }
+
+    public void SyncroAfterPlayerDeath()
+    {
+        EndZone(true);                                   // Finalizar la zona
+        timeCount = GameManager.instance.GetDeathTime(); // Obtener el tiempo de la muerte
+
+        // Desactivar el estado de los inicios y finales de las zonas segun donde se encuentre el jugador
+        for (int i = 0; i < zData.Count; i++)
+        {
+            ZoneData aux = zData[i];
+            if (timeCount < zData[i].getTimeIniZone() + Constants.DELAY_TIME || (timeCount > zData[i].getTimeIniZone() + Constants.DELAY_TIME && timeCount < zData[i].getTimeEndZone() + Constants.DELAY_TIME))
+                aux.setActivatedIni(false);
+            if (timeCount < zData[i].getTimeEndZone() + Constants.DELAY_TIME || (timeCount > zData[i].getTimeIniZone() + Constants.DELAY_TIME && timeCount < zData[i].getTimeEndZone() + Constants.DELAY_TIME))
+                aux.setActivatedEnd(false);
+            zData[i] = aux;
+        }
+    }
 }
