@@ -10,6 +10,7 @@ TagManager:
   - EndMenu
   - Ground
   - LoadingImage
+  - Torch
   layers:
   - Default
   - TransparentFX

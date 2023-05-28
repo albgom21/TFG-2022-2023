@@ -37,7 +37,6 @@ public class TorchBehaviour : MonoBehaviour
 
     public void TorchSyncro()
     {
-        Debug.Log("SINCRO");
         timeCount = (float)GameManager.instance.GetDeathTime() - Constants.DELAY_TIME;
         cont = GameManager.instance.GetLastBeatBeforeDeath();
     }

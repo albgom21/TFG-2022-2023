@@ -174,10 +174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69310943c61c6f345997348b71ae8bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderTexts:
-  - {fileID: 8400000, guid: ed94d149e8e300b4bbd5f709b7d80717, type: 2}
-  - {fileID: 8400000, guid: fd4eedf89fb72ed438d9cdf2bcec6f20, type: 2}
-  - {fileID: 8400000, guid: d64fb4995db5dc94198c6787139045c5, type: 2}
 --- !u!114 &8646593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6823,7 +6819,6 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194229}
   - component: {fileID: 963194232}
-  - component: {fileID: 963194230}
   - component: {fileID: 963194233}
   - component: {fileID: 963194234}
   - component: {fileID: 963194235}
@@ -6909,22 +6904,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTr: {fileID: 1332534592}
   offsetX: 8
-  offsetY: 3
-  maxSpeed: 8
---- !u!114 &963194230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdd03864ffd28604392db7b17194830e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lowRes: {fileID: 8400000, guid: ed94d149e8e300b4bbd5f709b7d80717, type: 2}
-  rawImage: {fileID: 0}
+  offsetY: 8
+  maxSpeed: 3
 --- !u!114 &963194232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7587,7 +7568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pruebasDesdeMenu: 1
-  song: bzrp 53
+  song: 200-BPM
   format: .wav
 --- !u!4 &1277446152
 Transform:
@@ -8349,10 +8330,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69310943c61c6f345997348b71ae8bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderTexts:
-  - {fileID: 8400000, guid: ed94d149e8e300b4bbd5f709b7d80717, type: 2}
-  - {fileID: 8400000, guid: fd4eedf89fb72ed438d9cdf2bcec6f20, type: 2}
-  - {fileID: 8400000, guid: d64fb4995db5dc94198c6787139045c5, type: 2}
 --- !u!114 &1497773960
 MonoBehaviour:
   m_ObjectHideFlags: 0
