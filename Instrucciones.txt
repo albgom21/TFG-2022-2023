@@ -32,3 +32,8 @@ Para poder ejecutar el proyecto en Windows debes seguir los siguientes pasos:
 • Tecla D: 	activa / desactiva el modo desarrollador.
 • Tecla J: 	activa / desactiva el modo automátivo del juego.
 • Tecla Escape: activa el menú de pausa.
+
+
+-- AÑADIR NUEVAS CANCIONES --
+
+Introducir los archivos de audio en la ruta Build\OnBeat_Data\StreamingAssets
